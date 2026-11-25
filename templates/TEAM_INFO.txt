@@ -12,10 +12,10 @@
 # ==================================================================
 
 # ---------------- TEAM DETAILS ----------------
-# TEAM_NUMBER and BRANCH_NAME are given to you at registration.
-TEAM_NUMBER: {{TEAM_NUMBER}}
-BRANCH_NAME: {{BRANCH_NAME}}
 TEAM_NAME:
+
+# Branch name you typed when clicking "Propose changes" (use your team name, e.g. code-crafters)
+BRANCH_NAME:
 
 # Problem statement you selected: 1, 2, 3, 4 or 5
 PROBLEM_STATEMENT_NUMBER:

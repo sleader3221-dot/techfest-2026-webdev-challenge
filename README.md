@@ -2,65 +2,75 @@
 
 > **Think creatively. Build independently. Use AI responsibly.**
 
-This is the official submission repository for the challenge. Every team submits its work here, on its own branch.
+This is the submission repository for the challenge. Every team uploads its work here.
 
 | | |
 |---|---|
-| **Event date** | Thursday, 26 November 2026 |
+| **Date** | Thursday, 26 November 2026 |
 | **Reporting** | 9:30 AM |
 | **Competition** | 10:00 AM – 1:30 PM |
-| **Teams** | Max 30 teams · 1 to 3 members each |
-| **Ideation upload deadline** | **11:00 AM** |
-| **Final submission deadline** | **1:30 PM** (sharp) |
+| **Ideation upload** | by **11:00 AM** |
+| **Final submission** | by **1:30 PM** |
 
 ---
 
-## Participants: start here
+## How to submit
 
-**[Step-by-step submission guide (docs/SUBMISSION_GUIDE.md)](docs/SUBMISSION_GUIDE.md)**: read it before the event.
+**Full step-by-step guide: [docs/SUBMISSION_GUIDE.md](docs/SUBMISSION_GUIDE.md)**
 
-Short version:
+All you need is a GitHub account. Everything is done in the browser.
 
-1. At registration you get a **team number**. Your branch is **`team-NN`** (e.g. `team-07`).
-2. On GitHub, switch to your branch. Your folder `submissions/team-NN/` is already there.
-3. **By 11:00 AM:** fill in `ideation/IDEATION.md` and add any images to `ideation/`.
-4. **By 1:30 PM:** upload the two required items:
+1. Go to the [`submissions`](submissions/) folder → **Add file → Upload files**.
+2. Upload your files into a folder named after your team: `submissions/<your-team-name>/`.
+3. Click **Propose changes**, then **Create pull request**. That's your submission. ✅
 
-| # | Item | File |
-|---|------|------|
-| **A** | Team information: team name, every member's name, USN, email, phone, branch name | `TEAM_INFO.txt` (already in your folder; edit it) |
-| **B** | **ONE ZIP** with the complete website plus a `WORKFLOW.md` describing your development workflow | `team-NN.zip` |
+### What to upload
 
-5. Look for the **green ✔** next to your latest commit. A **red ✘** means something is missing. Click it to see what to fix.
+**By 11:00 AM: Ideation**
+- `IDEATION.md` (or a PDF / PPT) with your website title, solution description, key features, and any images or references → [template](templates/IDEATION.md)
 
-Never upload to `main`, and never touch another team's folder.
+**By 1:30 PM: Final submission (2 files)**
 
-## Repository layout
+| # | File | Content |
+|---|------|---------|
+| 1 | `TEAM_INFO.txt` | Team name, every member's **name, USN, email**, leader's **phone**, branch name → [template](templates/TEAM_INFO.txt) |
+| 2 | `<team-name>.zip` | **One ZIP** with the complete website (code, images, assets) **plus** `WORKFLOW.md` describing how you built it → [workflow template](templates/WORKFLOW.md) |
+
+Your folder ends up looking like this:
 
 ```
-├── README.md                      ← you are here
-├── competition.json               ← event configuration (dates, deadlines, limits)
+submissions/
+└── code-crafters/
+    ├── IDEATION.md          (+ any images)
+    ├── TEAM_INFO.txt
+    └── code-crafters.zip
+```
+
+---
+
+## For judges
+
+- **Pull requests** tab: one or more pull requests per team, each with its upload time.
+- Open a pull request → **Files changed** to see the team's files. Download the ZIP with **View file → Download raw file**.
+- Optional: merge all pull requests after 1:30 PM so every submission shows up in the [`submissions`](submissions/) folder.
+
+## Repository contents
+
+```
+├── README.md                 ← this page
 ├── docs/
-│   ├── SUBMISSION_GUIDE.md        ← participants: how to submit (step by step)
-│   ├── RULES.md                   ← rules summary, incl. AI-usage rules
-│   ├── ORGANIZER_GUIDE.md         ← organizers: setup, event-day runbook, judging
-│   └── official/                  ← official guidelines (.docx) and briefing (.pptx)
-├── templates/
-│   ├── TEAM_INFO.txt              ← team information file template
-│   ├── IDEATION.md                ← Phase 1 ideation template
-│   ├── WORKFLOW.md                ← workflow doc to put INSIDE your ZIP
-│   └── github_usernames.csv       ← organizers: access list template
-├── submissions/                   ← team folders live on the team-NN branches
-├── tools/                         ← validation and organizer automation (Python 3.9+, no dependencies)
-└── .github/workflows/             ← automatic submission check on every push
+│   ├── SUBMISSION_GUIDE.md   ← how to upload, step by step
+│   ├── RULES.md              ← rules and AI-usage summary
+│   └── official/             ← official guidelines (.docx) and briefing (.pptx)
+├── templates/                ← TEAM_INFO.txt, IDEATION.md, WORKFLOW.md
+└── submissions/              ← teams upload here
 ```
 
-## Rules at a glance
+## Key rules
 
-- Choose **one** of the five problem statements announced at 10:00 AM.
-- Use **one** AI platform per team, free versions only (ChatGPT, Claude or Gemini).
-- In Phase 2 you may send **at most 5 AI prompts**, and only for concepts, syntax, logic and debugging.
-- **Do not use AI to generate the website or its source code.** Doing so leads to **immediate disqualification**.
-- Late or incomplete submissions may not be evaluated. The judges' decisions are final.
+- Choose **one** of the five problem statements.
+- Use **one** AI platform per team, free versions only: ChatGPT, Claude or Gemini.
+- In the development phase you may send at most **5 AI prompts**, and only for concepts, syntax and debugging.
+- **AI-generated websites or source code lead to disqualification.**
 
 Full rules: [docs/RULES.md](docs/RULES.md)

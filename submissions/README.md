@@ -1,16 +1,12 @@
 # Submissions
 
-**Do not upload anything on the `main` branch.**
-
-Every team has its own branch (`team-01` … `team-30`). Each branch already contains your folder:
+Upload your files into a folder named after your team, e.g. `submissions/code-crafters/`:
 
 ```
-submissions/team-NN/
-├── TEAM_INFO.txt          ← A. Team information file (edit it)
-├── ideation/
-│   ├── IDEATION.md        ← Phase 1 ideation (edit it, add images here)
-│   └── *.png / *.pdf      ← optional sketches, references, slides
-└── team-NN.zip            ← B. The single ZIP (upload by 1:30 PM)
+code-crafters/
+├── IDEATION.md          (by 11:00 AM, plus any images)
+├── TEAM_INFO.txt        (by 1:30 PM)
+└── code-crafters.zip    (by 1:30 PM: website + WORKFLOW.md)
 ```
 
-Step-by-step instructions: [docs/SUBMISSION_GUIDE.md](../docs/SUBMISSION_GUIDE.md)
+Click **Add file → Upload files** above. Step-by-step help: [../docs/SUBMISSION_GUIDE.md](../docs/SUBMISSION_GUIDE.md)

@@ -16,7 +16,7 @@ The official documents are in [`docs/official/`](official/). If anything here di
 
 | Time | Activity | Deliverable |
 |---|---|---|
-| 9:30 – 10:00 | Reporting & registration | Get your team number / branch |
+| 9:30 – 10:00 | Reporting & registration | |
 | 10:00 – 10:45 | **Phase 1: Ideation & Brainstorming** (45 min) | |
 | 10:45 – 11:00 | Ideation submission & transition | **Ideation upload (mandatory)** |
 | 11:00 – 1:30 | **Phase 2: Website Development** (2 h 30 min) | |
@@ -56,8 +56,8 @@ Use any stack you know: HTML, CSS, JavaScript, Node.js, frameworks, libraries, e
 
 | | Required content |
 |---|---|
-| **A. Team information file** (`TEAM_INFO.txt`) | Team name · names of all members · team leader's name · leader's contact information · GitHub branch name. This repository also collects every member's USN and email. |
-| **B. ONE ZIP file** (`team-NN.zip`) | Complete website files: source code, assets, images and other resources, **plus the team's development workflow** (`WORKFLOW.md`). It must let the judges access, inspect and evaluate the website. |
+| **A. Team information file** (`TEAM_INFO.txt`) | Team name · names, USNs and emails of all members · team leader's name and phone · GitHub branch name |
+| **B. ONE ZIP file** (`<team-name>.zip`) | Complete website files: source code, assets, images and other resources, **plus the team's development workflow** (`WORKFLOW.md`). It must let the judges access, inspect and evaluate the website. |
 
 ## General
 

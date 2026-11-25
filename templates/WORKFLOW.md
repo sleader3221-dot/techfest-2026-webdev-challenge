@@ -11,7 +11,6 @@
 
 | Field | Value |
 |-------|-------|
-| Team number | _team-NN_ |
 | Team name | _..._ |
 | Website title | _..._ |
 | Problem statement # | _..._ |
