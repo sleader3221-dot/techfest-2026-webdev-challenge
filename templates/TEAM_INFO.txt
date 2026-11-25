@@ -1,0 +1,43 @@
+# ==================================================================
+#  TECH FEST 2026 - IDEATION-BASED WEB DEVELOPMENT CHALLENGE
+#  TEAM INFORMATION FILE  (Final Submission - Item A)
+# ------------------------------------------------------------------
+#  HOW TO FILL:
+#   * Write your answer AFTER the colon on each line.
+#   * Do NOT change, delete or rename the words BEFORE the colon.
+#   * Lines starting with # are instructions and are ignored.
+#   * A team has 1 to 3 members. If you have fewer than 3,
+#     leave the MEMBER 3 (and MEMBER 2) lines empty.
+#   * Use your real college USN and an email you check today.
+# ==================================================================
+
+# ---------------- TEAM DETAILS ----------------
+# TEAM_NUMBER and BRANCH_NAME are given to you at registration.
+TEAM_NUMBER: {{TEAM_NUMBER}}
+BRANCH_NAME: {{BRANCH_NAME}}
+TEAM_NAME:
+
+# Problem statement you selected: 1, 2, 3, 4 or 5
+PROBLEM_STATEMENT_NUMBER:
+WEBSITE_TITLE:
+
+# The ONE AI platform your team used (free version): ChatGPT, Claude, Gemini or None
+AI_PLATFORM_USED:
+
+# ---------------- MEMBER 1 = TEAM LEADER (required) ----------------
+LEADER_NAME:
+LEADER_USN:
+LEADER_EMAIL:
+LEADER_PHONE:
+
+# ---------------- MEMBER 2 (leave empty if not applicable) ----------------
+MEMBER2_NAME:
+MEMBER2_USN:
+MEMBER2_EMAIL:
+MEMBER2_PHONE:
+
+# ---------------- MEMBER 3 (leave empty if not applicable) ----------------
+MEMBER3_NAME:
+MEMBER3_USN:
+MEMBER3_EMAIL:
+MEMBER3_PHONE:

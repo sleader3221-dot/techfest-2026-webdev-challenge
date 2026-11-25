@@ -1,0 +1,14 @@
+# Organizer output - contains participants' personal data. NEVER commit.
+evaluation/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

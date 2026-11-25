@@ -1,0 +1,48 @@
+name: Validate submission
+
+# Runs automatically every time a team pushes to its branch (team-01 ... team-30).
+# The result appears as a green tick / red cross next to the commit, and a full
+# report is shown on the run's "Summary" page. GitHub's server time of this run is
+# an independent record of WHEN the submission was received.
+
+on:
+  push:
+    branches: ["team-*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Check team submission
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Use the official validator from main (cannot be modified by teams)
+        run: |
+          git fetch --no-tags origin main
+          git checkout origin/main -- tools/ templates/ competition.json
+
+      - name: Validate submission
+        env:
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          python tools/validate_submission.py \
+            --branch "$GITHUB_REF_NAME" \
+            --base origin/main \
+            --push-before "${PUSH_BEFORE:-0}"
