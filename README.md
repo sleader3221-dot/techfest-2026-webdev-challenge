@@ -20,8 +20,8 @@ This is the submission repository for the challenge. Every team uploads its work
 
 All you need is a GitHub account. Everything is done in the browser.
 
-1. Go to the [`submissions`](submissions/) folder → **Add file → Upload files**.
-2. Upload your files into a folder named after your team: `submissions/<your-team-name>/`.
+1. On your computer, put your files in a folder named after your team (e.g. `code-crafters`).
+2. Go to the [`submissions`](submissions/) folder → **Add file → Upload files** → **drag the whole folder in**.
 3. Click **Propose changes**, then **Create pull request**. That's your submission. ✅
 
 ### What to upload

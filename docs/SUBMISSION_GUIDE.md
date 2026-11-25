@@ -9,11 +9,11 @@ You only need a free GitHub account (https://github.com/signup) and a browser. Y
 1. Download the template [`templates/IDEATION.md`](../templates/IDEATION.md) (open it → **Download raw file**) and fill it in:
    website title, problem, solution, key features, pages, tech stack, references.
    A PDF or PPT with the same content is also fine.
-2. Open the repository → open the **`submissions`** folder → **Add file → Upload files**.
-3. **Name your team folder.** In the path box at the top (`submissions/`), type your team name followed by `/`,
-   for example `code-crafters/`. GitHub creates the folder.
-   *(If no path box appears: upload files whose names start with your team name, e.g. `code-crafters-ideation.pdf`.)*
-4. Drag in `IDEATION.md` and any images.
+2. On your computer, make a folder named after your team, e.g. **`code-crafters`**, and put `IDEATION.md`
+   and any images in it.
+3. Open the repository → open the **`submissions`** folder → **Add file → Upload files**.
+4. **Drag the whole `code-crafters` folder** (the folder itself, not just the files inside it) onto the upload area.
+   GitHub keeps the folder name. Use Chrome or Edge.
 5. Click **Propose changes**. If GitHub asks for a branch name, use your team name (e.g. `code-crafters`).
    Then click **Create pull request** → **Create pull request**.
 
@@ -31,8 +31,8 @@ You only need a free GitHub account (https://github.com/signup) and a browser. Y
    - Keep it **under 25 MB**, the browser upload limit.
 
 ### Upload
-Same steps as above: `submissions` → **Add file → Upload files** → type the **same** team folder name
-(`code-crafters/`) → drop in `TEAM_INFO.txt` and `code-crafters.zip` → **Propose changes** → **Create pull request**.
+Put `TEAM_INFO.txt` and `code-crafters.zip` in your `code-crafters` folder (same name as before), then repeat:
+`submissions` → **Add file → Upload files** → **drag the whole folder** → **Propose changes** → **Create pull request**.
 
 > It's fine if your team ends up with more than one pull request (one for ideation, one for the final).
 > Judges look at all of them.
