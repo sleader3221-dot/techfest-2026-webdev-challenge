@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairFix – Know the fair price for every home service</title>
+  <meta name="description" content="FairFix: neighbourhood price book for home services. Know the fair price for plumbing, electrical, carpentry, and AC repair from your neighbours.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d5a43'/%3E%3Cpath d='M7 15.5L16 8l9 7.5v8.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 7 24v-8.5z' fill='none' stroke='%23faf8f5' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 18.5l2.5 2.5 4.5-5' fill='none' stroke='%23faf8f5' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts with fallback -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Chart.js pinned 4.4.1 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<!-- ████ GLOBAL NAV (shown for app pages) ████ -->
+<nav id="app-nav" style="display:none">
+  <div class="nav-inner">
+    <!-- Logo -->
+    <a class="nav-logo" href="#" onclick="App.switchRole();return false;" aria-label="FairFix home">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="currentColor"/>
+        <path d="M7.5 15.5L16 8.5l8.5 7v8a1.5 1.5 0 0 1-1.5 1.5H9a1.5 1.5 0 0 1-1.5-1.5v-8z" stroke="#faf8f5" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M12.5 18.5l2.4 2.4 4.6-4.9" stroke="#faf8f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>FairFix</span>
+    </a>
+    <span class="nav-circle" aria-label="Neighbourhood circle">RAMAIAH-BLK-A</span>
+    <span class="nav-role-badge" id="nav-role-badge" style="display:none" aria-live="polite"></span>
+    <!-- Hamburger -->
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+    <ul class="nav-links" id="nav-links" role="list"></ul>
+  </div>
+</nav>
+
+<!-- Toast container -->
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ████████████████████████████████████████
+     PAGE: LANDING
+     ████████████████████████████████████████ -->
+<div id="page-landing" class="page active">
+
+  <!-- Landing navbar -->
+  <nav class="landing-nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#page-landing" aria-label="FairFix home">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="28" height="28">
+          <rect width="32" height="32" rx="8" fill="currentColor"/>
+          <path d="M7.5 15.5L16 8.5l8.5 7v8a1.5 1.5 0 0 1-1.5 1.5H9a1.5 1.5 0 0 1-1.5-1.5v-8z" stroke="#faf8f5" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M12.5 18.5l2.4 2.4 4.6-4.9" stroke="#faf8f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>FairFix</span>
+      </a>
+      <span class="nav-circle">RAMAIAH-BLK-A</span>
+
+      <ul class="landing-nav-links" id="landing-nav-links">
+        <li><a href="#checker">Price Check</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#trust">Trust</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#about">About Us</a></li>
+      </ul>
+
+      <div class="landing-nav-cta">
+        <button class="btn btn-secondary btn-sm" id="btn-customer">Customer</button>
+        <button class="btn btn-primary btn-sm" id="btn-provider">Provider</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO + CENTRAL 3D SHOWCASE + OVERCHARGE CHECKER -->
+  <section class="hero-band" id="checker">
+    <div class="container">
+      <div class="hero-copy hero-copy-center">
+        <div class="hero-eyebrow">🏘 Neighbourhood Price Book · RAMAIAH-BLK-A</div>
+        <h1>The quote was <span class="hero-strike">₹1,200</span>.<br>The neighbours paid <em>₹450</em>.</h1>
+        <p class="hero-sub">FairFix collects real prices from your neighbours for plumbing, electrical, carpentry and AC repair — so you always know the fair rate before you bargain.</p>
+        <div class="hero-actions" style="justify-content:center">
+          <button class="btn btn-primary btn-lg" onclick="document.getElementById('btn-customer').click()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
+            Continue as Customer
+          </button>
+          <button class="btn btn-secondary btn-lg" onclick="document.getElementById('btn-provider').click()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l5.654-4.654m5.655-4.656 2.496-3.03c.317-.384.74-.626 1.208-.766m0 0a3 3 0 1 1 1.666 2.646"/></svg>
+            Continue as Provider
+          </button>
+        </div>
+      </div>
+
+      <!-- Central 3D Interactive Stage + Live Checker -->
+      <div class="hero-stage-grid">
+        <!-- MAJOR CENTRAL 3D DIORAMA -->
+        <div class="hero-3d-viewport" id="hero-3d-viewport" aria-label="Interactive 3D neighbourhood price book preview">
+          <div class="hero-3d-stage" id="hero-3d-stage">
+            <!-- Ambient 3D shadow plane -->
+            <div class="stage-shadow-plane"></div>
+
+            <!-- Layer 1: Main 3D Price Book Card -->
+            <div class="stage-card-base">
+              <div class="stage-card-top">
+                <div>
+                  <div class="stage-kicker">RAMAIAH-BLK-A · LIVE RATE CARD</div>
+                  <div class="stage-title">AC General Service</div>
+                </div>
+                <span class="badge badge-success">57 reports</span>
+              </div>
+              <div class="stage-price-row">
+                <div>
+                  <div class="stage-label">Neighbour Median</div>
+                  <div class="stage-median">₹620</div>
+                </div>
+                <div class="stage-split">
+                  <div class="stage-split-bar">
+                    <span style="width:74%;background:var(--accent)"></span>
+                    <span style="width:16%;background:var(--accent-light)"></span>
+                    <span style="width:10%;background:var(--border-strong)"></span>
+                  </div>
+                  <div class="stage-split-meta">74% Labour · 16% Parts · 10% Visit</div>
+                </div>
+              </div>
+              <div class="stage-range">
+                <div class="stage-range-track">
+                  <div class="stage-range-fill"></div>
+                  <div class="stage-range-dot"></div>
+                </div>
+                <div class="stage-range-labels">
+                  <span>₹580 low</span>
+                  <span>Fair zone</span>
+                  <span>₹700 high</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Layer 2: Floating 3D Savings Comparison Pill -->
+            <div class="stage-float-savings">
+              <span class="stage-quote-old">Quoted ₹1,200</span>
+              <span class="stage-arrow">→</span>
+              <span class="stage-quote-fair">Fair ₹620</span>
+              <span class="stage-save-pill">Save ₹580</span>
+            </div>
+
+            <!-- Layer 3: Floating 3D Trust Chip (top-right) -->
+            <div class="stage-float-chip stage-chip-tr">
+              <span class="chip-dot"></span>
+              <span>94% Would Call Again</span>
+            </div>
+
+            <!-- Layer 4: Floating 3D Floor Chip (bottom-left) -->
+            <div class="stage-float-chip stage-chip-bl">
+              <span>🛡</span>
+              <span>Outliers Filtered &amp; Verified</span>
+            </div>
+          </div>
+          <div class="stage-hint">Move cursor over card to inspect in 3D</div>
+        </div>
+
+        <!-- Live Overcharge Checker -->
+        <div class="landing-checker-wrap">
+          <div class="card-raised hero-checker-card">
+            <div class="hero-checker-head">
+              <h3>Was I overcharged?</h3>
+              <span class="badge badge-accent">Live Check</span>
+            </div>
+            <p style="margin-bottom:14px;font-size:0.875rem">Enter a service, job and quote to compare with neighbours.</p>
+            <div class="form-row" style="margin-bottom:10px">
+              <div class="form-group">
+                <label class="form-label" for="lc-service">Service <span class="required">*</span></label>
+                <select id="lc-service" class="form-control"><option value="">— Service —</option></select>
+                <input type="text" id="lc-service-custom" class="form-control" placeholder="Or type custom service..." aria-label="Custom service">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lc-job">Job <span class="required">*</span></label>
+                <select id="lc-job" class="form-control"><option value="">— Job —</option></select>
+                <input type="text" id="lc-job-custom" class="form-control" placeholder="Or type custom job..." aria-label="Custom job">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:12px">
+              <label class="form-label" for="lc-quote">Quote Received (₹) <span class="required">*</span></label>
+              <input type="number" id="lc-quote" class="form-control" placeholder="e.g. 1200" min="1">
+            </div>
+            <button class="btn btn-primary btn-full" id="lc-check">Check Fair Price →</button>
+            <div id="lc-result"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="landing-section" id="how-it-works">
+    <div class="container">
+      <div class="text-center mb-20">
+        <h2>How FairFix works</h2>
+        <p>Three steps to a fair deal, every time.</p>
+      </div>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">1</div>
+          <h3>Neighbours report real prices</h3>
+          <p>After every job, residents log what they paid — including labour, materials and visit charge — in under 2 minutes.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">2</div>
+          <h3>You see the fair range</h3>
+          <p>FairFix shows the median price, the low-high range, and flags unusual reports — so you know exactly what to expect before calling anyone.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">3</div>
+          <h3>Post a request and bargain</h3>
+          <p>Post a job request with your offer. Providers see the neighbourhood median beside your bid, so negotiations start from a fair baseline.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TRUST WORKS -->
+  <section class="landing-section" id="trust" style="background:var(--surface)">
+    <div class="container">
+      <div class="text-center mb-20">
+        <h2>How trust works</h2>
+        <p>We built reliability into every number.</p>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-item">
+          <svg class="trust-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"/>
+          </svg>
+          <div>
+            <h4>Min. 3 reports</h4>
+            <p style="font-size:0.85rem">We only show a median when we have at least 3 data points. Fewer than that shows "Not enough data yet."</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <svg class="trust-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"/>
+          </svg>
+          <div>
+            <h4>Outlier filtering</h4>
+            <p style="font-size:0.85rem">Reports more than 50% from the median are flagged as "unusual" and excluded from the range calculation.</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <svg class="trust-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/>
+          </svg>
+          <div>
+            <h4>Verified receipts</h4>
+            <p style="font-size:0.85rem">Reports with a photo receipt upload earn a "Verified" badge, adding extra confidence.</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <svg class="trust-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12 11.204 3.045c.209-.223.242-.543.08-.797a1.5 1.5 0 0 0-1.17-.748H3.75A1.5 1.5 0 0 0 2.25 3v9ZM2.25 12h19.5M14.25 3.045 21.75 10.5M12 21v-7.5M15 21v-5.25M9 21v-5.25"/>
+          </svg>
+          <div>
+            <h4>Circle-only visibility</h4>
+            <p style="font-size:0.85rem">All prices are from RAMAIAH-BLK-A residents only. Data stays local to your community, not cross-city averages.</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <svg class="trust-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+          <div>
+            <h4>Fair-price floor</h4>
+            <p style="font-size:0.85rem">Offers below 70% of the median are blocked — protecting good providers while keeping prices fair for customers.</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <svg class="trust-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z"/>
+          </svg>
+          <div>
+            <h4>Transparent counters</h4>
+            <p style="font-size:0.85rem">Every counter-offer on the Job Board shows the neighbourhood median beside the customer's offer, so providers negotiate honestly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEIGHBOUR REVIEWS -->
+  <section class="landing-section" id="reviews" style="background:var(--surface)">
+    <div class="container">
+      <div class="text-center mb-20">
+        <div class="hero-eyebrow" style="margin-bottom:10px">Verified Neighbours · RAMAIAH-BLK-A</div>
+        <h2>What neighbours say</h2>
+        <p>Real stories from residents who checked FairFix before paying.</p>
+      </div>
+      <div class="reviews-grid">
+        <article class="review-card">
+          <div class="review-top">
+            <div class="provider-avatar" aria-hidden="true">AM</div>
+            <div>
+              <div class="review-author">Ananya Menon</div>
+              <div class="review-meta">Flat 304, Block A · AC General Service</div>
+            </div>
+            <span class="badge badge-success" style="margin-left:auto">Saved ₹600</span>
+          </div>
+          <p class="review-quote">“I was quoted ₹1,250 for a basic split AC service. Checked FairFix, saw neighbours paid ₹600–₹650, and used the counter script. Settled at ₹650 in two minutes.”</p>
+          <div class="review-foot">
+            <span>★★★★★</span>
+            <span class="verified-tag">✓ Verified Receipt</span>
+          </div>
+        </article>
+
+        <article class="review-card">
+          <div class="review-top">
+            <div class="provider-avatar" aria-hidden="true">RK</div>
+            <div>
+              <div class="review-author">Rohan Kulkarni</div>
+              <div class="review-meta">Flat 112, Block A · Flush Tank Repair</div>
+            </div>
+            <span class="badge badge-success" style="margin-left:auto">Saved ₹350</span>
+          </div>
+          <p class="review-quote">“Posted a request at ₹450 with the median right next to it. Ravi Plumbing accepted the same afternoon — clean work, zero awkward haggling.”</p>
+          <div class="review-foot">
+            <span>★★★★★</span>
+            <span class="verified-tag">✓ Held 30+ days</span>
+          </div>
+        </article>
+
+        <article class="review-card">
+          <div class="review-top">
+            <div class="provider-avatar" aria-hidden="true">SP</div>
+            <div>
+              <div class="review-author">Sneha Patel</div>
+              <div class="review-meta">Hostel Wing 2 · MCB Swap</div>
+            </div>
+            <span class="badge badge-accent" style="margin-left:auto">Fair Deal</span>
+          </div>
+          <p class="review-quote">“Knowing the labour vs material split made all the difference. I also love tracking our flat's yearly repair spend in one ledger.”</p>
+          <div class="review-foot">
+            <span>★★★★★</span>
+            <span class="verified-tag">✓ Verified Receipt</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US -->
+  <section class="landing-section" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-copy">
+          <div class="hero-eyebrow" style="margin-bottom:12px">About FairFix</div>
+          <h2>Built to make local home services honest and predictable.</h2>
+          <p style="margin:14px 0">Home repairs shouldn't feel like a guessing game. In most apartments and hostels, two neighbours on the same floor pay wildly different amounts for the exact same tap leak or AC service simply because nobody shares bills.</p>
+          <p style="margin-bottom:22px">FairFix turns your community's past invoices into a living, outlier-filtered price book — helping residents pay fair rates and helping honest local technicians build lasting trust.</p>
+          <div class="about-stats">
+            <div class="about-stat">
+              <strong>₹420</strong>
+              <span>Avg. saved per job</span>
+            </div>
+            <div class="about-stat">
+              <strong>16</strong>
+              <span>Standard jobs tracked</span>
+            </div>
+            <div class="about-stat">
+              <strong>30-day</strong>
+              <span>Quality follow-up</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-illustration card-raised" aria-hidden="true">
+          <svg viewBox="0 0 360 250" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+            <!-- Soft background circle -->
+            <circle cx="180" cy="125" r="102" fill="var(--accent-bg)"/>
+            <!-- Apartment / Neighbour Homes -->
+            <rect x="48" y="95" width="76" height="96" rx="10" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="2"/>
+            <path d="M40 98L86 62l46 36" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="66" y="114" width="16" height="16" rx="3" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+            <rect x="90" y="114" width="16" height="16" rx="3" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+            <rect x="74" y="152" width="24" height="39" rx="4" fill="var(--accent)" opacity="0.18"/>
+
+            <rect x="236" y="95" width="76" height="96" rx="10" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="2"/>
+            <path d="M228 98l46-36 46 36" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="254" y="114" width="16" height="16" rx="3" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+            <rect x="278" y="114" width="16" height="16" rx="3" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+            <rect x="262" y="152" width="24" height="39" rx="4" fill="var(--accent)" opacity="0.18"/>
+
+            <!-- Central Price Book Card -->
+            <rect x="132" y="72" width="96" height="118" rx="12" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+            <rect x="148" y="90" width="64" height="10" rx="5" fill="var(--accent)"/>
+            <rect x="148" y="110" width="44" height="7" rx="3.5" fill="var(--border-strong)"/>
+            <rect x="148" y="124" width="56" height="7" rx="3.5" fill="var(--border)"/>
+            <rect x="148" y="144" width="64" height="24" rx="6" fill="var(--success-bg)"/>
+            <path d="M168 156l6 6 12-12" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Connection arcs -->
+            <path d="M124 132h8M228 132h8" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="3 3"/>
+          </svg>
+          <div style="text-align:center;margin-top:12px;font-size:0.82rem;color:var(--text-secondary)">
+            Shared community ledger for <strong>RAMAIAH-BLK-A</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REAL vs SIMULATED -->
+  <section class="landing-section">
+    <div class="container">
+      <div class="card-raised" style="border:2px solid var(--accent)">
+        <h3 style="color:var(--accent);margin-bottom:4px">🔍 What's real vs simulated</h3>
+        <p style="margin-bottom:16px;font-size:0.875rem">FairFix is a hackathon demo. Here's exactly what the engine does vs what's seeded.</p>
+        <div class="real-sim-grid">
+          <div>
+            <h4 style="margin-bottom:10px;color:var(--success)">✅ Real</h4>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="real-item">📊 Statistics engine (median, percentiles, outliers)</div>
+              <div class="real-item">💰 Overcharge checker with live ratios</div>
+              <div class="real-item">🤝 Bargain logic, floor, and fair-offer marker</div>
+              <div class="real-item">🔐 Role gating (customer vs provider)</div>
+              <div class="real-item">⚡ Cross-tab sync via BroadcastChannel</div>
+              <div class="real-item">📒 Yearly spend ledger with charts</div>
+              <div class="real-item">💾 localStorage persistence with try/catch</div>
+            </div>
+          </div>
+          <div>
+            <h4 style="margin-bottom:10px;color:var(--warning)">🧪 Simulated</h4>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="sim-item">🏘 Neighbour circle & verification</div>
+              <div class="sim-item">🌱 ~55 seeded sample reports</div>
+              <div class="sim-item">🤖 "Simulate provider reply" in Demo Controls</div>
+              <div class="sim-item">🔑 Demo logins (no real auth)</div>
+              <div class="sim-item">📸 Receipt preview (no cloud upload)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROLE PICKER -->
+  <section class="landing-section" style="background:var(--surface)">
+    <div class="container text-center">
+      <h2>Get started — pick your role</h2>
+      <p>Demo mode — no login required. Data is local to your browser.</p>
+      <div class="role-cards">
+        <div class="role-card" onclick="App.setRole('customer')" tabindex="0" role="button" aria-label="Continue as Customer" onkeydown="if(event.key==='Enter')App.setRole('customer')">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+          </svg>
+          <h3>Customer</h3>
+          <p>Check fair prices, post bargain requests, log reports, and track yearly spend.</p>
+          <span class="btn btn-primary btn-sm">Continue as Customer →</span>
+        </div>
+        <div class="role-card" onclick="App.setRole('provider')" tabindex="0" role="button" aria-label="Continue as Provider" onkeydown="if(event.key==='Enter')App.setRole('provider')">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l5.654-4.654m5.655-4.656 2.496-3.03c.317-.384.74-.626 1.208-.766m0 0a3 3 0 1 1 1.666 2.646"/>
+          </svg>
+          <h3>Service Provider</h3>
+          <p>See open requests in your area, view the neighbourhood median, and accept or counter offers.</p>
+          <span class="btn btn-secondary btn-sm">Continue as Provider →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EARLY ACCESS CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Bring FairFix to your apartment or hostel</h2>
+      <p>We're onboarding pilot communities. Drop your email and we'll set up your circle.</p>
+      <form class="cta-form" id="cta-form" novalidate>
+        <input type="email" placeholder="your@email.com" required aria-label="Your email address">
+        <button type="submit" class="btn btn-secondary" style="background:white;color:var(--accent)">Get early access</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <strong>FairFix</strong> · Neighbourhood Price Book for Home Services
+      </div>
+      <div class="footer-links">
+        <a href="#checker">Price Check</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#trust">Trust</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#about">About Us</a>
+      </div>
+      <div class="footer-note">
+        Built for Startup Showcase Hackathon (Finance &amp; E-commerce) ·
+        <span style="color:var(--warning)">All prices shown are seeded sample data for demonstration only.</span>
+      </div>
+    </div>
+  </footer>
+</div><!-- /page-landing -->
+
+
+<!-- ████████████████████████████████████████
+     PAGE: APP (Customer + Provider screens)
+     ████████████████████████████████████████ -->
+<div id="page-app" class="page">
+
+  <!-- ══════════════════════════════════════
+       CUSTOMER SCREENS
+       ══════════════════════════════════════ -->
+
+  <!-- ── Screen: Price Check ── -->
+  <div id="screen-price-check" class="role-screen screen-content">
+    <div class="screen-inner">
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Price Check</h2>
+          <p>See what your neighbours actually paid for any job.</p>
+        </div>
+      </div>
+
+      <!-- Job picker -->
+      <div class="card">
+        <div class="picker-row">
+          <div class="form-group">
+            <label class="form-label" for="pc-service">Service <span class="required">*</span></label>
+            <select id="pc-service" class="form-control" aria-required="true"><option value="">— Select service —</option></select>
+            <input type="text" id="pc-service-custom" class="form-control" placeholder="Or type custom service..." aria-label="Custom service">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pc-job">Job Type <span class="required">*</span></label>
+            <select id="pc-job" class="form-control" aria-required="true"><option value="">— Select job —</option></select>
+            <input type="text" id="pc-job-custom" class="form-control" placeholder="Or type custom job..." aria-label="Custom job">
+          </div>
+        </div>
+      </div>
+
+      <!-- Rate card (populated by JS) -->
+      <div id="pc-rate-card">
+        <div class="card">
+          <div class="empty-state">
+            <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 7.5l3 4.5m0 0l3-4.5M12 12v5.25M15 12H9m6 3H9m12-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+            <h3>Select a service and job to see the rate card</h3>
+            <p>We'll show the neighbourhood median, range, and provider trust scores.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overcharge checker -->
+      <div id="pc-checker-wrap" style="display:none">
+        <div class="card-raised">
+          <h3 style="margin-bottom:4px">Was I overcharged?</h3>
+          <p style="margin-bottom:14px;font-size:0.875rem">Enter the quote you received to check it against the neighbourhood data.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+            <div class="form-group" style="flex:1;min-width:180px">
+              <label class="form-label" for="pc-quote">Quote Received (₹)</label>
+              <input type="number" id="pc-quote" class="form-control" placeholder="e.g. 850" min="1">
+            </div>
+            <button class="btn btn-primary" id="pc-check-btn">Check →</button>
+          </div>
+          <div id="pc-oc-result" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Screen: Request & Bargain ── -->
+  <div id="screen-bargain" class="role-screen screen-content">
+    <div class="screen-inner">
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Request &amp; Bargain</h2>
+          <p>Post a job with your offer. Providers will respond with the neighbourhood median in view.</p>
+        </div>
+      </div>
+
+      <!-- Request form -->
+      <div class="card-raised">
+        <h3 style="margin-bottom:16px">New Request</h3>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="rb-service">Service <span class="required">*</span></label>
+              <select id="rb-service" class="form-control" aria-required="true"><option value="">— Select service —</option></select>
+              <input type="text" id="rb-service-custom" class="form-control" placeholder="Or type custom service..." aria-label="Custom service">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rb-job">Job Type <span class="required">*</span></label>
+              <select id="rb-job" class="form-control" aria-required="true"><option value="">— Select job —</option></select>
+              <input type="text" id="rb-job-custom" class="form-control" placeholder="Or type custom job..." aria-label="Custom job">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rb-description">Describe the job <span class="required">*</span></label>
+            <textarea id="rb-description" class="form-control" rows="2" placeholder="e.g. Kitchen tap dripping constantly, rubber washer likely needs replacing." aria-required="true"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="rb-time">Preferred Time</label>
+              <input type="text" id="rb-time" class="form-control" placeholder="e.g. Weekday morning">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rb-offer">My Offer (₹) <span class="required">*</span></label>
+              <input type="number" id="rb-offer" class="form-control" placeholder="e.g. 350" min="1" aria-required="true">
+              <div id="rb-offer-bar" class="offer-marker-wrap"></div>
+              <div id="rb-offer-hint" class="offer-hint" role="alert"></div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-full" id="rb-submit">Post Request →</button>
+        </div>
+      </div>
+
+      <!-- My requests -->
+      <div>
+        <h3 style="margin-bottom:14px">My Requests</h3>
+        <div id="rb-my-requests" class="request-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Screen: Report & Review ── -->
+  <div id="screen-report" class="role-screen screen-content">
+    <div class="screen-inner">
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Report &amp; Review</h2>
+          <p>Log what you paid to help your neighbours negotiate better.</p>
+        </div>
+      </div>
+
+      <div class="card-raised">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <!-- Service / Job -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="rr-service">Service <span class="required">*</span></label>
+              <select id="rr-service" class="form-control" aria-required="true"><option value="">— Select service —</option></select>
+              <input type="text" id="rr-service-custom" class="form-control" placeholder="Or type custom service..." aria-label="Custom service">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rr-job">Job Type <span class="required">*</span></label>
+              <select id="rr-job" class="form-control" aria-required="true"><option value="">— Select job —</option></select>
+              <input type="text" id="rr-job-custom" class="form-control" placeholder="Or type custom job..." aria-label="Custom job">
+            </div>
+          </div>
+
+          <!-- Provider -->
+          <div class="form-group">
+            <label class="form-label" for="rr-provider">Provider <span class="required">*</span></label>
+            <select id="rr-provider" class="form-control">
+              <option value="">— Select or type below —</option>
+            </select>
+            <input type="text" id="rr-provider-custom" class="form-control" placeholder="Or type provider name..." aria-label="Custom provider name">
+          </div>
+
+          <!-- Pricing breakdown -->
+          <div>
+            <div class="form-label mb-8">Pricing Breakdown <span class="required">*</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;flex-wrap:wrap">
+              <div class="form-group">
+                <label class="form-label" for="rr-labour">Labour (₹)</label>
+                <input type="number" id="rr-labour" class="form-control" placeholder="0" min="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rr-material">Material (₹)</label>
+                <input type="number" id="rr-material" class="form-control" placeholder="0" min="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rr-visit">Visit charge (₹)</label>
+                <input type="number" id="rr-visit" class="form-control" placeholder="0" min="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rr-total">Total paid (₹) <span class="required">*</span></label>
+                <input type="number" id="rr-total" class="form-control" placeholder="auto" min="1" aria-required="true">
+              </div>
+            </div>
+            <p class="form-hint" style="margin-top:4px">Labour + Material + Visit must equal Total paid. Filling the three parts auto-calculates the total.</p>
+          </div>
+
+          <!-- Days taken -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="rr-days">Days taken to complete</label>
+              <input type="number" id="rr-days" class="form-control" placeholder="1" min="1" value="1">
+            </div>
+          </div>
+
+          <!-- Held after 30 days -->
+          <fieldset style="border:none;padding:0">
+            <legend class="form-label">Did the fix hold after 30 days?</legend>
+            <div class="toggle-group" style="margin-top:8px">
+              <label class="toggle-btn">
+                <input type="radio" name="rr-held" value="yes" class="sr-only"> Yes ✓
+              </label>
+              <label class="toggle-btn">
+                <input type="radio" name="rr-held" value="no" class="sr-only"> No ✗
+              </label>
+              <label class="toggle-btn">
+                <input type="radio" name="rr-held" value="early" class="sr-only"> Too early to say
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Would call again -->
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:0.9rem">
+              <input type="checkbox" id="rr-again" style="width:18px;height:18px;accent-color:var(--accent)">
+              Would call this provider again
+            </label>
+          </div>
+
+          <!-- Receipt (optional) -->
+          <div class="form-group">
+            <label class="form-label" for="rr-receipt">Receipt photo (optional)</label>
+            <input type="file" id="rr-receipt" class="form-control" accept="image/*" style="padding:6px">
+            <p class="form-hint">Attaching a photo marks your report as Verified.</p>
+            <div id="rr-receipt-preview" class="receipt-preview"></div>
+          </div>
+
+          <button class="btn btn-primary btn-full" id="rr-submit">Submit Report →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Screen: Yearly Ledger ── -->
+  <div id="screen-ledger" class="role-screen screen-content">
+    <div class="screen-inner">
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Yearly Ledger</h2>
+          <p>Your home repair spend in <span id="ledger-year"></span>.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-secondary btn-sm" id="ledger-load-sample">Load sample year</button>
+          <button class="btn btn-secondary btn-sm" id="ledger-print">🖨 Print</button>
+        </div>
+      </div>
+
+      <div id="ledger-empty" style="display:none" class="card">
+        <div class="empty-state">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
+          </svg>
+          <h3>No repairs logged yet this year</h3>
+          <p>Add reports in the Report &amp; Review screen, or click "Load sample year" to see a demo.</p>
+        </div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="ledger-top">
+        <div class="ledger-stat">
+          <span class="card-title">Total Spend</span>
+          <span class="amount" id="ledger-total" style="color:var(--accent)">₹0</span>
+          <span class="label">This year</span>
+        </div>
+        <div class="ledger-stat">
+          <span class="card-title">Savings vs Median</span>
+          <span class="amount" id="ledger-savings">₹0</span>
+          <span class="label" id="ledger-savings-label">vs neighbourhood median</span>
+        </div>
+        <div class="ledger-stat">
+          <span class="card-title">Jobs Done</span>
+          <span class="amount" id="ledger-jobs" style="color:var(--text)">0</span>
+          <span class="label">repair jobs</span>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="form-row" style="align-items:start">
+        <div class="card">
+          <h4 style="margin-bottom:14px">Monthly Spend</h4>
+          <div class="chart-wrap" style="height:220px">
+            <canvas id="ledger-monthly-chart" aria-label="Monthly spend bar chart"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <h4 style="margin-bottom:14px">Spend by Service</h4>
+          <div class="chart-wrap" style="height:220px">
+            <canvas id="ledger-service-chart" aria-label="Spend by service doughnut chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Provider breakdown -->
+      <div class="card">
+        <h4 style="margin-bottom:14px">Spend by Provider</h4>
+        <div id="ledger-providers"><p class="text-muted">No data</p></div>
+      </div>
+
+      <!-- Flags & Insight -->
+      <div class="card">
+        <h4 style="margin-bottom:12px">Repeat Repair Flags</h4>
+        <div id="ledger-flags"></div>
+      </div>
+      <div class="card">
+        <h4 style="margin-bottom:8px">Biggest Category Insight</h4>
+        <div id="ledger-insight" class="text-secondary" style="font-size:0.9rem"></div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent)">
+        <h4 style="margin-bottom:10px">💡 Suggestions &amp; Savings Tips</h4>
+        <div id="ledger-suggestions" style="display:flex;flex-direction:column;gap:8px;font-size:0.9rem"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PROVIDER SCREENS
+       ══════════════════════════════════════ -->
+
+  <!-- ── Provider: Job Board ── -->
+  <div id="screen-job-board" class="role-screen screen-content">
+    <div class="screen-inner">
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Job Board</h2>
+          <p>Open requests in RAMAIAH-BLK-A — neighbour median shown beside every offer.</p>
+        </div>
+      </div>
+
+      <!-- Provider identity selector -->
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label" for="pb-provider-select">Your Provider Name</label>
+          <select id="pb-provider-select" class="form-control" aria-label="Select your provider name"></select>
+          <input type="text" id="pb-provider-custom" class="form-control" placeholder="Or type your provider name..." aria-label="Custom provider name">
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card filter-bar">
+        <div class="form-group">
+          <label class="form-label" for="pb-filter-service">Filter by Service</label>
+          <select id="pb-filter-service" class="form-control"><option value="">All Services</option></select>
+          <input type="text" id="pb-filter-service-custom" class="form-control" placeholder="Or type service filter..." aria-label="Custom service filter">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pb-filter-fair">Filter by Offer</label>
+          <select id="pb-filter-fair" class="form-control">
+            <option value="">All offers</option>
+            <option value="above">At or above fair (≥ median)</option>
+            <option value="below">Below fair (&lt; median)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Job list -->
+      <div id="pb-job-list" style="display:flex;flex-direction:column;gap:14px"></div>
+
+      <!-- History -->
+      <div class="card">
+        <h4 style="margin-bottom:12px">Status History</h4>
+        <div id="pb-history" class="history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Provider: My Price Profile ── -->
+  <div id="screen-profile" class="role-screen screen-content">
+    <div class="screen-inner">
+      <div class="section-header">
+        <div class="section-title">
+          <h2>My Price Profile</h2>
+          <p>Your neighbourhood reputation at a glance.</p>
+        </div>
+      </div>
+
+      <!-- Profile content (populated by JS) -->
+      <div id="profile-content"></div>
+    </div>
+  </div>
+
+</div><!-- /page-app -->
+
+
+<!-- ████ DEMO CONTROLS PANEL ████ -->
+<div id="demo-panel">
+  <div id="demo-body" class="demo-body hidden">
+    <h4>⚙ Demo Controls</h4>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <button class="btn btn-secondary btn-sm btn-full" id="demo-reset">🔄 Reset demo data</button>
+      <button class="btn btn-secondary btn-sm btn-full" id="demo-load-sample">📊 Load sample year</button>
+      <button class="btn btn-primary btn-sm btn-full" id="demo-simulate">🤖 Simulate provider reply</button>
+    </div>
+    <p style="font-size:0.72rem;color:var(--text-muted);margin-top:4px">Simulate: provider responds to the latest open customer request in 2–3 s.</p>
+  </div>
+  <button class="demo-toggle" id="demo-toggle" aria-expanded="false" aria-controls="demo-body">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+    Demo Controls
+  </button>
+</div>
+
+<script src="app.js"></script>
+
+<script>
+  // Page init extras
+  document.addEventListener('DOMContentLoaded', () => {
+    // Show app nav when in app page
+    const appNav = document.getElementById('app-nav');
+    const observer = new MutationObserver(() => {
+      appNav.style.display = document.getElementById('page-app').classList.contains('active') ? '' : 'none';
+    });
+    observer.observe(document.getElementById('page-app'), { attributes: true, attributeFilter: ['class'] });
+
+    // Set ledger year
+    const lyEl = document.getElementById('ledger-year');
+    if (lyEl) lyEl.textContent = new Date().getFullYear();
+
+    // Toggle radio visual state for held question
+    document.querySelectorAll('[name="rr-held"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+          const r = btn.querySelector('input[name="rr-held"]');
+          if (r) btn.classList.toggle('active', r.checked);
+        });
+      });
+    });
+
+    // Hamburger aria
+    const hamburger = document.getElementById('nav-hamburger');
+    const navLinks = document.getElementById('nav-links');
+    if (hamburger && navLinks) {
+      hamburger.addEventListener('click', () => {
+        hamburger.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+      });
+    }
+
+    // Demo toggle aria
+    const demoToggle = document.getElementById('demo-toggle');
+    const demoBody = document.getElementById('demo-body');
+    if (demoToggle && demoBody) {
+      demoToggle.addEventListener('click', () => {
+        demoToggle.setAttribute('aria-expanded', !demoBody.classList.contains('hidden') ? 'true' : 'false');
+      });
+    }
+
+    // Provider profile select & custom input should also update job board provider
+    const pbSel = document.getElementById('pb-provider-select');
+    const pbCus = document.getElementById('pb-provider-custom');
+    if (pbSel) {
+      pbSel.addEventListener('change', () => {
+        Provider.Profile.render();
+        Provider.JobBoard.refresh();
+      });
+    }
+    if (pbCus) {
+      pbCus.addEventListener('input', () => {
+        Provider.Profile.render();
+        Provider.JobBoard.refresh();
+      });
+    }
+
+    // ── Scroll progress bar ──
+    const progressEl = document.getElementById('scroll-progress');
+    if (progressEl) {
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const docH = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docH > 0 ? Math.min(100, (window.scrollY / docH) * 100) : 0;
+            progressEl.style.width = pct.toFixed(1) + '%';
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+
+    // ── Scroll reveal animations (IntersectionObserver) ──
+    const revealTargets = document.querySelectorAll(
+      '#page-landing .how-step, #page-landing .trust-item, #page-landing .review-card, #page-landing .role-card, #page-landing .about-copy, #page-landing .about-illustration, #page-landing .real-sim-grid, #page-landing .cta-section .container'
+    );
+    if ('IntersectionObserver' in window && revealTargets.length) {
+      revealTargets.forEach((el, idx) => {
+        el.classList.add('reveal');
+        el.style.setProperty('--reveal-delay', ((idx % 4) * 75) + 'ms');
+      });
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+      revealTargets.forEach(el => io.observe(el));
+    }
+
+    // ── Subtle 3D tilt on Hero Checker, About Illustration & Central 3D Stage ──
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reducedMotion) {
+      const heroViewport = document.getElementById('hero-3d-viewport');
+      const heroStage = document.getElementById('hero-3d-stage');
+      if (heroViewport && heroStage) {
+        heroViewport.addEventListener('mousemove', e => {
+          const rect = heroViewport.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          heroStage.style.animation = 'none';
+          const rotY = (x * 20).toFixed(2);
+          const rotX = (-y * 16).toFixed(2);
+          heroStage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        });
+        heroViewport.addEventListener('mouseleave', () => {
+          heroStage.style.transform = '';
+          heroStage.style.animation = '';
+        });
+      }
+
+      document.querySelectorAll('.hero-checker-card, .about-illustration').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          const rotY = (x * 7).toFixed(2);
+          const rotX = (-y * 7).toFixed(2);
+          card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-3px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+  });
+</script>
+</body>
+</html>
