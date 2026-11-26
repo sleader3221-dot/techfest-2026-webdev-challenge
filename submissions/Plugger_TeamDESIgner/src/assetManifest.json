@@ -1,0 +1,49 @@
+{
+  "posters": {
+    "e1": "/assets/posters/e1.png",
+    "e2": "/assets/posters/e2.png",
+    "e3": "/assets/posters/e3.png",
+    "e4": "/assets/posters/e4.png",
+    "e5": "/assets/posters/e5.png",
+    "e6": "/assets/posters/e6.png",
+    "e7": "/assets/posters/e7.png",
+    "e8": "/assets/posters/e8.png",
+    "e9": "/assets/posters/e9.png",
+    "e10": "/assets/posters/e10.png",
+    "e11": "/assets/posters/e11.png",
+    "e12": "/assets/posters/e12.png"
+  },
+  "clubs": {
+    "codrit": "/assets/clubs/codrit.png",
+    "ieee-rit-b": "/assets/clubs/ieee-rit-b.png",
+    "udbhav": "/assets/clubs/udbhav.png",
+    "lenscraft": "/assets/clubs/lenscraft.png",
+    "robotics-aero": "/assets/clubs/robotics-aero.png",
+    "sports-collective": "/assets/clubs/sports-collective.png"
+  },
+  "avatars": {
+    "u1": "/assets/avatars/u1.png",
+    "u2": "/assets/avatars/u2.png",
+    "u3": "/assets/avatars/u3.png",
+    "u4": "/assets/avatars/u4.png",
+    "u5": "/assets/avatars/u5.png",
+    "u6": "/assets/avatars/u6.png",
+    "u7": "/assets/avatars/u7.png",
+    "u8": "/assets/avatars/u8.png"
+  },
+  "stickers": {
+    "boop": "/assets/stickers/boop.png",
+    "lets-go": "/assets/stickers/lets-go.png",
+    "fire": "/assets/stickers/fire.png",
+    "gg": "/assets/stickers/gg.png",
+    "vibes": "/assets/stickers/vibes.png",
+    "late-night": "/assets/stickers/late-night.png"
+  },
+  "album": {
+    "e11": [
+      "/assets/album/e11-1.jpg",
+      "/assets/album/e11-2.jpg",
+      "/assets/album/e11-3.jpg"
+    ]
+  }
+}
