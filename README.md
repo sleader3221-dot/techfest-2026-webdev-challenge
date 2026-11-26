@@ -20,9 +20,12 @@ This is the submission repository for the challenge. Every team uploads its work
 
 All you need is a GitHub account. Everything is done in the browser.
 
+> ⚠️ **You can't upload straight into this repository** ("Uploads are disabled"). **Fork it first** and upload to your fork.
+
 1. On your computer, put your files in a folder named after your team (e.g. `code-crafters`).
-2. Go to the [`submissions`](submissions/) folder → **Add file → Upload files** → **drag the whole folder in**.
-3. Click **Propose changes**, then **Create pull request**. That's your submission. ✅
+2. Click **Fork** (top right of this page) → **Create fork**.
+3. In **your fork**, open the `submissions` folder → **Add file → Upload files** → **drag the whole folder in** → **Commit changes**.
+4. On your fork's main page click **Contribute → Open pull request → Create pull request**. That's your submission. ✅
 
 ### What to upload
 

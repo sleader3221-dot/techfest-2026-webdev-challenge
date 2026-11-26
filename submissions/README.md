@@ -9,4 +9,4 @@ code-crafters/
 └── code-crafters.zip    (by 1:30 PM: website + WORKFLOW.md)
 ```
 
-Click **Add file → Upload files** above and drag your whole team folder in. Step-by-step help: [../docs/SUBMISSION_GUIDE.md](../docs/SUBMISSION_GUIDE.md)
+**Fork this repository first** (Fork button, top right). Then in **your fork**: `submissions` → **Add file → Upload files** → drag your whole team folder in → **Commit changes** → **Contribute → Open pull request**. Step-by-step help: [../docs/SUBMISSION_GUIDE.md](../docs/SUBMISSION_GUIDE.md)
