@@ -1,0 +1,25 @@
+{
+  "name": "plugged-rit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node scripts/offline.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.1",
+    "@fontsource/inter": "^5.2.5",
+    "@fontsource/inter-tight": "^5.2.5"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0",
+    "typescript": "~5.8.3",
+    "@vitejs/plugin-react": "^5.0.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0"
+  }
+}
