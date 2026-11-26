@@ -20,12 +20,21 @@ This is the submission repository for the challenge. Every team uploads its work
 
 All you need is a GitHub account. Everything is done in the browser.
 
-> ⚠️ **You can't upload straight into this repository** ("Uploads are disabled"). **Fork it first** and upload to your fork.
+### Option A: your team leader got an invite (recommended)
 
-1. On your computer, put your files in a folder named after your team (e.g. `code-crafters`).
-2. Click **Fork** (top right of this page) → **Create fork**.
-3. In **your fork**, open the `submissions` folder → **Add file → Upload files** → **drag the whole folder in** → **Commit changes**.
-4. On your fork's main page click **Contribute → Open pull request → Create pull request**. That's your submission. ✅
+1. **Accept the invite first:** open https://github.com/sleader3221-dot/techfest-2026-webdev-challenge/invitations
+   (or the invite email) → **Accept invitation**. Without this you will see "Uploads are disabled".
+2. On your computer, put your files in a folder named after your team (e.g. `code-crafters`).
+3. Open the [`submissions`](submissions/) folder → **Add file → Upload files** → **drag the whole folder in**.
+4. At the bottom choose **"Create a new branch for this commit and start a pull request"**, name the branch after your team,
+   click **Propose changes** → **Create pull request**. That's your submission. ✅
+   Only touch **your own team folder**. Never delete or edit other teams' files.
+
+### Option B: no invite (fork)
+
+1. Click **Fork** (top right of this page) → **Create fork**.
+2. In **your fork**, open `submissions` → **Add file → Upload files** → **drag the whole folder in** → **Commit changes**.
+3. On your fork's main page click **Contribute → Open pull request → Create pull request**. ✅
 
 ### What to upload
 

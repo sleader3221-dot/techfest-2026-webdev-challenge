@@ -11,15 +11,17 @@ You only need a free GitHub account (https://github.com/signup) and a browser. Y
    A PDF or PPT with the same content is also fine.
 2. On your computer, make a folder named after your team, e.g. **`code-crafters`**, and put `IDEATION.md`
    and any images in it.
-3. **Fork the repository (one time only).** Open
-   https://github.com/sleader3221-dot/techfest-2026-webdev-challenge and click **Fork** (top right) →
-   **Create fork**. You now have your own copy at `github.com/<your-username>/techfest-2026-webdev-challenge`.
-   > You **cannot** upload to the main repository directly ("Uploads are disabled"). Always upload to **your fork**.
-4. In **your fork**, open the **`submissions`** folder → **Add file → Upload files**.
-5. **Drag the whole `code-crafters` folder** (the folder itself, not just the files inside it) onto the upload area.
-   GitHub keeps the folder name. Use Chrome or Edge.
-6. Click **Commit changes**.
-7. Go to the main page of your fork → click **Contribute** → **Open pull request** → **Create pull request**.
+3. **If your team leader received an invite** (check email, or open
+   https://github.com/sleader3221-dot/techfest-2026-webdev-challenge/invitations): click **Accept invitation**, then:
+   - open the **`submissions`** folder of the main repository → **Add file → Upload files**
+   - **drag the whole `code-crafters` folder** onto the upload area (Chrome or Edge)
+   - choose **"Create a new branch for this commit and start a pull request"**, name the branch after your team
+   - **Propose changes** → **Create pull request**
+   - Only upload into **your own team folder**. Deleting or editing other teams' files leads to disqualification.
+4. **No invite?** Use a fork instead:
+   - Open https://github.com/sleader3221-dot/techfest-2026-webdev-challenge → **Fork** (top right) → **Create fork**
+   - In **your fork**: **`submissions`** → **Add file → Upload files** → drag the whole team folder → **Commit changes**
+   - Your fork's main page → **Contribute** → **Open pull request** → **Create pull request**
 
 ✅ Done. Your pull request is your ideation submission, and its time is recorded.
 
@@ -35,11 +37,8 @@ You only need a free GitHub account (https://github.com/signup) and a browser. Y
    - Keep it **under 25 MB**, the browser upload limit.
 
 ### Upload
-Put `TEAM_INFO.txt` and `code-crafters.zip` in your `code-crafters` folder (same name as before), then in **your fork**:
-`submissions` → **Add file → Upload files** → **drag the whole folder** → **Commit changes** →
-fork main page → **Contribute → Open pull request → Create pull request**.
-
-If your ideation pull request is still open, your new upload is added to it automatically. That counts too.
+Put `TEAM_INFO.txt` and `code-crafters.zip` in your `code-crafters` folder (same name as before), then upload the same way as
+for ideation (step 3 if you accepted the invite, step 4 if you use a fork) and create a pull request.
 
 > It's fine if your team ends up with more than one pull request (one for ideation, one for the final).
 > Judges look at all of them.
@@ -57,7 +56,7 @@ If your ideation pull request is still open, your new upload is added to it auto
 
 | Problem | Fix |
 |---|---|
-| "Uploads are disabled. File uploads require push access" | You are in the main repository. Click **Fork** → **Create fork** and upload in **your fork** (step 3). |
+| "Uploads are disabled. File uploads require push access" | Accept your invite first (…/invitations link in step 3), then reload. No invite? Use a fork (step 4). |
 | "Sign in to upload" | Log in to your GitHub account first. |
 | ZIP too large | Remove `node_modules`, videos and build folders, and compress images. |
 | Uploaded the wrong file | Upload again (same folder name) and create a new pull request. |
