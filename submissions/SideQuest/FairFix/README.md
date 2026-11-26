@@ -8,6 +8,8 @@ A neighbourhood price book for home services — plumber, electrician, carpenter
 
 ## 🚀 How to run
 
+Open directly - https://fairfix-eight.vercel.app
+
 1. **Clone / download** the folder containing:
    - `index.html`
    - `style.css`
