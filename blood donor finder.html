@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LifeLink – Sign in to find blood or donate</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3efec;--card:rgba(255,255,255,.74);--solid:#fff;--ink:#17141a;--mu:#6a6370;--ln:rgba(40,20,30,.11);--red:#d90b34;--deep:#8a0720;--ok:#12803f;--wn:#c2620a;--bl:#2457e6;--gl:rgba(217,11,52,.28);--mesh1:#ffd3d9;--mesh2:#ffe8c9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0a0f;--card:rgba(32,22,30,.66);--solid:#1d151c;--ink:#f6eff3;--mu:#a99ca7;--ln:rgba(255,255,255,.1);--red:#ff3359;--deep:#ffb3c0;--ok:#4ade80;--wn:#fbbf24;--bl:#7aa2ff;--gl:rgba(255,51,89,.35);--mesh1:#4a0b1c;--mesh2:#2a1030}}
+:root[data-theme=dark]{--bg:#0d0a0f;--card:rgba(32,22,30,.66);--solid:#1d151c;--ink:#f6eff3;--mu:#a99ca7;--ln:rgba(255,255,255,.1);--red:#ff3359;--deep:#ffb3c0;--ok:#4ade80;--wn:#fbbf24;--bl:#7aa2ff;--gl:rgba(255,51,89,.35);--mesh1:#4a0b1c;--mesh2:#2a1030}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;font:16px/1.55 "DM Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,.logo,.num{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.7;z-index:0;pointer-events:none;animation:drift 18s ease-in-out infinite alternate}
+.o1{width:46vw;height:46vw;background:var(--mesh1);top:-12vw;left:-10vw}.o2{width:40vw;height:40vw;background:var(--mesh2);bottom:-10vw;right:-8vw;animation-delay:-9s}
+@keyframes drift{to{transform:translate(8vw,6vw) scale(1.2)}}
+header,main,.strip{position:relative;z-index:2}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 24px;position:sticky;top:0;z-index:30;background:var(--card);backdrop-filter:blur(18px) saturate(1.6);-webkit-backdrop-filter:blur(18px) saturate(1.6);border-bottom:1px solid var(--ln)}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:25px;letter-spacing:-.5px}.logo b{color:var(--red)}
+.drop{width:26px;height:32px;animation:beat 1.3s infinite;filter:drop-shadow(0 4px 10px var(--gl))}@keyframes beat{0%,40%,100%{transform:scale(1)}15%{transform:scale(1.18)}28%{transform:scale(1.04)}}
+nav{display:flex;gap:4px;flex-wrap:wrap;position:relative}nav button{background:none;border:0;font:500 15px inherit;font-family:inherit;color:var(--mu);padding:8px 14px;cursor:pointer;border-radius:99px;position:relative;z-index:1;transition:color .25s}
+nav button.on{color:#fff}#pill{position:absolute;top:0;left:0;height:100%;border-radius:99px;background:linear-gradient(135deg,var(--red),#ff6a3d);box-shadow:0 6px 18px var(--gl);transition:all .45s cubic-bezier(.3,1.3,.5,1)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--bl);outline-offset:2px}
+.tools{display:flex;gap:6px;align-items:center}.ib{background:var(--solid);border:1px solid var(--ln);border-radius:50%;width:40px;height:40px;cursor:pointer;color:var(--ink);display:grid;place-items:center;position:relative;transition:transform .2s}.ib:hover{transform:rotate(-12deg) scale(1.08)}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font:700 11px sans-serif;border-radius:99px;padding:1px 6px}
+.bellw{position:relative}.np{position:absolute;right:0;top:50px;width:min(350px,88vw);max-height:420px;overflow:auto;background:var(--solid);border:1px solid var(--ln);border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.28);padding:14px;z-index:40;animation:pop .25s}
+@keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.96)}}
+.nt{border-left:4px solid var(--ln);padding:6px 10px;margin:8px 0;font-size:14px}.nt span{display:block;color:var(--mu);font-size:12px}.nt.alert{border-color:var(--red)}.nt.ok{border-color:var(--ok)}.nt.warn{border-color:var(--wn)}
+.strip{background:linear-gradient(90deg,var(--deep),var(--red));color:#fff;padding:11px 24px;font-weight:500;display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.strip i{width:11px;height:11px;border-radius:50%;background:#fff;animation:pl 1.2s infinite;display:inline-block;margin-right:8px}@keyframes pl{0%{box-shadow:0 0 0 0 #fff8}100%{box-shadow:0 0 0 12px #fff0}}
+main{max-width:1180px;margin:auto;padding:22px}
+.hero{position:relative;overflow:hidden;padding:48px 38px 30px;margin-bottom:24px;border-radius:26px;background:linear-gradient(135deg,#a50a28 0%,#e0173f 55%,#ff6a3d 100%);color:#fff;box-shadow:0 30px 70px var(--gl)}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,#fff3 0,#fff0 40%);animation:drift 9s ease-in-out infinite alternate}
+.hero h1{position:relative;font-size:clamp(34px,6.4vw,70px);line-height:1;margin:0 0 14px;font-weight:800;letter-spacing:-2px}
+.hero h1 span{display:inline-block;opacity:0;transform:translateY(28px) rotateX(-60deg);animation:rise .8s cubic-bezier(.2,.9,.3,1) forwards}@keyframes rise{to{opacity:1;transform:none}}
+.hero p{position:relative;margin:0 0 20px;max-width:540px;font-size:18px;opacity:.92}
+.ecg{position:absolute;left:0;right:0;bottom:78px;height:90px;width:100%;opacity:.55}.ecg path{fill:none;stroke:#fff;stroke-width:2.5;stroke-dasharray:1400;stroke-dashoffset:1400;animation:ecg 3.2s linear infinite;filter:drop-shadow(0 0 6px #fff)}@keyframes ecg{to{stroke-dashoffset:-1400}}
+.stats{position:relative;display:flex;gap:16px;flex-wrap:wrap;margin-top:34px}.stats div{background:#fff2;border:1px solid #fff4;backdrop-filter:blur(10px);border-radius:16px;padding:12px 22px;font-size:14px}.stats b{display:block;font:800 38px "Bricolage Grotesque";line-height:1.1}
+.grid{display:grid;grid-template-columns:1.05fr 1fr;gap:20px;align-items:start}@media(max-width:850px){.grid{grid-template-columns:1fr}.sticky{position:static!important}}.sticky{position:sticky;top:88px}
+.card{background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--ln);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 10px 30px rgba(30,10,20,.07);animation:up .55s cubic-bezier(.2,.9,.3,1) both;transition:transform .2s ease-out,box-shadow .3s}
+@keyframes up{from{opacity:0;transform:translateY(22px)}}.tilt:hover{box-shadow:0 24px 50px var(--gl)}
+h2{margin:0 0 12px;font-size:21px;font-weight:700;letter-spacing:-.3px}label{display:block;font-size:13px;font-weight:500;color:var(--mu);margin:10px 0 4px}
+select,input{width:100%;padding:11px 12px;border:1.5px solid var(--ln);border-radius:12px;font:inherit;background:var(--solid);color:var(--ink);transition:border-color .2s,box-shadow .2s}select:focus,input:focus{border-color:var(--red);box-shadow:0 0 0 4px var(--gl)}
+input[type=range]{padding:0;accent-color:var(--red);box-shadow:none}
+.f3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}@media(max-width:600px){.f3{grid-template-columns:1fr}}
+.btn{background:linear-gradient(135deg,var(--red),#ff5a3d);color:#fff;border:0;padding:12px 20px;border-radius:99px;font:700 15px inherit;font-family:inherit;cursor:pointer;margin:14px 8px 0 0;box-shadow:0 8px 22px var(--gl);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px var(--gl)}.btn:active{transform:scale(.96)}
+.btn.ghost{background:var(--solid);color:var(--red);border:1.5px solid var(--red);box-shadow:none}.btn.ok{background:linear-gradient(135deg,#0f9d4a,#34c06a);box-shadow:0 8px 22px #0f9d4a44}.btn.sm{padding:7px 14px;font-size:13px;margin:0}
+.rip{position:absolute;border-radius:50%;background:#fff6;transform:scale(0);animation:rp .6s linear;pointer-events:none}@keyframes rp{to{transform:scale(4);opacity:0}}
+.stock{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:12px}
+.s{position:relative;overflow:hidden;text-align:center;border:1.5px solid var(--ln);border-radius:10px;padding:5px 0 4px;font-size:12px;height:78px;background:var(--solid)}
+.s .v{position:absolute;left:0;right:0;bottom:0;height:var(--h);background:linear-gradient(180deg,var(--c),transparent 190%);opacity:.3;animation:fillup 1.2s cubic-bezier(.2,.9,.3,1) both}@keyframes fillup{from{height:0}}
+.s .v:before{content:"";position:absolute;left:-50%;top:-7px;width:200%;height:14px;border-radius:40%;background:var(--c);opacity:.7;animation:wave 3s linear infinite}@keyframes wave{to{transform:translateX(25%)}}
+.s b{position:relative;display:block;font:800 21px "Bricolage Grotesque"}.s span{position:relative}
+.s.g{--c:var(--ok)}.s.g b{color:var(--ok)}.s.a{--c:var(--wn)}.s.a b{color:var(--wn)}.s.r{--c:var(--red)}.s.r b{color:var(--red)}.s.hl{border-color:var(--ink);border-width:2.5px}
+.hc{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}.meta{color:var(--mu);font-size:14px}
+.pill{display:inline-block;padding:3px 12px;border-radius:99px;font-size:13px;font-weight:700;background:var(--ln)}.pill.ok{background:#16a34a2e;color:var(--ok)}.pill.rd{background:#e11d4830;color:var(--red)}
+svg{max-width:100%}#map1 svg,#map2 svg,.fl svg{width:100%;height:auto;display:block}#map1 svg,#map2 svg{background:linear-gradient(#0000,#0000),var(--solid);border:1px solid var(--ln);border-radius:16px}
+.gl{stroke:var(--ln)}.rd{stroke:var(--mu);opacity:.22}.lb{fill:var(--mu);font-size:11px}.lbh{fill:var(--ink);font-size:12px;font-weight:700}
+.pulse{animation:p 1.6s infinite;transform-box:fill-box;transform-origin:center}@keyframes p{0%{transform:scale(1);opacity:.8}100%{transform:scale(3.4);opacity:0}}
+.sweep{transform-origin:40px 365px;animation:rot 6s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
+.flow{animation:dash 1s linear infinite}@keyframes dash{to{stroke-dashoffset:-26}}
+.ring{transform-box:fill-box;transform-origin:center;animation:ringg 2.4s ease-out infinite}@keyframes ringg{from{transform:scale(.4);opacity:1}to{transform:scale(1);opacity:.2}}
+.tl{list-style:none;padding:0;margin:14px 0}.tl li{padding:7px 0 7px 32px;position:relative;color:var(--mu);transition:color .4s}.tl li:before{content:"";position:absolute;left:5px;top:12px;width:15px;height:15px;border-radius:50%;border:2px solid var(--ln);background:var(--solid);transition:all .4s}
+.tl li:after{content:"";position:absolute;left:11px;top:28px;bottom:-12px;width:2px;background:var(--ln)}.tl li:last-child:after{display:none}
+.tl li.d{color:var(--ink);font-weight:700}.tl li.d:before{background:var(--ok);border-color:var(--ok);box-shadow:0 0 0 5px #16a34a33}.tl li.d:after{background:var(--ok)}
+.idc{border:1.5px solid var(--ln);background:var(--solid);border-radius:16px;padding:14px;margin-top:12px;animation:pop .4s}.idc b.id{font:800 22px "Bricolage Grotesque";color:var(--red)}
+.alert{border:2px solid var(--red);background:var(--solid);padding:16px;border-radius:16px;animation:shake .6s,glow 1.6s infinite}@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}@keyframes glow{50%{box-shadow:0 0 0 8px var(--gl)}}
+.hgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}@media(max-width:600px){.hgrid{grid-template-columns:repeat(2,1fr)}}
+.hgrid div{border:1.5px solid var(--ln);background:var(--solid);border-radius:14px;padding:12px;text-align:center}.hgrid b{display:block;font:800 30px "Bricolage Grotesque"}.hgrid button{width:36px;height:36px;font-size:20px;margin:0 4px;border:1.5px solid var(--ink);background:none;color:var(--ink);border-radius:50%;cursor:pointer;transition:transform .15s,background .2s}.hgrid button:hover{background:var(--red);color:#fff;border-color:var(--red);transform:scale(1.12)}
+.toast{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:14px 18px;border-radius:14px;font-weight:500;z-index:50;max-width:320px;transform:translateX(130%);transition:transform .5s cubic-bezier(.2,1.2,.4,1)}.toast.on{transform:none}
+.hide{display:none!important}.score{font:800 44px "Bricolage Grotesque";color:var(--red)}.hz{border-top:1px solid var(--ln);padding:8px 0;font-size:15px}
+.lay{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 6px}.lay h3{width:130px;margin:0;font-size:15px;color:var(--red)}
+.chip{background:var(--solid);border:1.5px solid var(--ln);border-radius:12px;padding:8px 14px;font-size:14px;font-weight:500;transition:transform .2s,border-color .2s}.chip:hover{transform:translateY(-3px);border-color:var(--red)}.chip.hot{background:var(--red);color:#fff;border-color:var(--red)}
+.link{height:26px;margin-left:60px;width:3px;background:repeating-linear-gradient(var(--red) 0 6px,transparent 6px 12px);animation:dv 1s linear infinite;background-size:3px 12px}@keyframes dv{to{background-position:0 12px}}
+.fl{display:flex;flex-direction:column;align-items:center;gap:0}.nd{background:var(--solid);border:1.5px solid var(--ink);border-radius:12px;padding:9px 18px;font-size:14px;text-align:center;max-width:340px}.nd.t{background:var(--ink);color:var(--bg);border-radius:99px}.nd.q{border-color:var(--red);color:var(--red);font-weight:700;border-radius:99px;background:var(--gl)}
+.ar{height:28px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--red)}.ar:before{content:"";width:3px;height:100%;background:repeating-linear-gradient(var(--red) 0 6px,transparent 6px 12px);background-size:3px 12px;animation:dv 1s linear infinite}
+.jr{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.jr .chip{flex:1 1 110px;text-align:center}
+@media(prefers-reduced-motion:reduce){*,*:before{animation:none!important;transition:none!important}.hero h1 span{opacity:1;transform:none}.ecg path{stroke-dashoffset:0}}
+#map1,#map2{border-radius:16px;overflow:hidden}.gm-style-iw{font-family:inherit}.lg{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;align-items:stretch}@media(max-width:900px){.lg{grid-template-columns:1fr}}.lg .hero{margin:0;display:flex;flex-direction:column;justify-content:center;min-height:520px}.lc{margin:0;align-self:center}
+.steps{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:13px;font-weight:700}.steps span{display:flex;align-items:center;gap:7px;color:var(--mu)}.steps b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--ln);font-size:12px}.steps .on{color:var(--ink)}.steps .on b{background:var(--red);color:#fff;box-shadow:0 0 0 5px var(--gl)}.steps i{flex:1;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--red) 50%,var(--ln) 50%)}
+.rts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--ln);padding:5px;border-radius:99px;margin-bottom:6px}.rt{border:0;background:none;color:var(--mu);font:600 14px inherit;font-family:inherit;padding:9px 4px;border-radius:99px;cursor:pointer;transition:all .3s}.rt.on{background:var(--solid);color:var(--red);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+button.chip{font:inherit;cursor:pointer;color:var(--ink);padding:3px 10px;font-size:13px}details.rg{margin-top:14px;border-top:1px solid var(--ln);padding-top:12px}details.rg summary{cursor:pointer;font-weight:600;color:var(--red)}.err{color:var(--red);font-weight:500;min-height:22px;margin:8px 0 0}
+body[data-role=donor] #tk .btn{display:none}</style></head>
+<body>
+<canvas id="bg"></canvas><div class="orb o1"></div><div class="orb o2"></div>
+<header><div class="logo"><svg class="drop" viewBox="0 0 26 32"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6a3d"/><stop offset="1" stop-color="#c0082b"/></linearGradient></defs><path d="M13 1C13 1 2 14 2 21a11 11 0 0 0 22 0C24 14 13 1 13 1Z" fill="url(#dg)"/><path d="M7 21a6 6 0 0 0 4 5" stroke="#fff8" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span>Life<b>Link</b></span></div>
+<nav id="nav" class="hide"><i id="pill"></i><button data-t="find" class="on">Find blood</button><button data-t="emer">Emergency</button><button data-t="donor">Donor portal</button><button data-t="hosp">Hospital desk</button><button data-t="design">System design</button></nav>
+<div class="tools"><span id="who" class="pill ok hide"></span><button class="btn ghost sm hide" id="lo" onclick="logout()">Log out</button><button class="ib" id="th" aria-label="Switch theme"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+<div class="bellw"><button class="ib" onclick="togglePanel()" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/></svg><span id="badge" class="badge hide">0</span></button><div id="np" class="np hide"></div></div></div></header>
+<div id="strip" class="strip hide"></div>
+<main>
+<div id="login" class="lg"><section class="hero"><h1 id="h1"></h1>
+<svg class="ecg" viewBox="0 0 1000 90" preserveAspectRatio="none"><path d="M0 45H260l14-4 14 4h40l10 10 12-52 14 70 12-28h40H560l14-4 14 4h40l10 10 12-52 14 70 12-28H1000"/></svg>
+<p>Live blood stock from nearby hospitals, and instant alerts to verified donors around the patient.</p>
+<div class="stats"><div><b id="s1">0</b>hospitals</div><div><b id="s2">0</b>ready donors</div><div><b id="s3">0</b>blood groups</div></div></section>
+<div class="card lc"><div class="steps"><span class="on"><b>1</b>Sign in</span><i></i><span><b>2</b>Your dashboard</span></div>
+<h2>Welcome to LifeLink</h2><p class="meta">Choose who you are. Your ID decides which page opens next.</p>
+<div class="rts"><button class="rt on" data-r="donor" onclick="setRole('donor')">Donor</button><button class="rt" data-r="recv" onclick="setRole('recv')">Receiver</button><button class="rt" data-r="hosp" onclick="setRole('hosp')">Hospital</button></div>
+<div id="f-donor"><label>Donor ID</label><input id="ld" placeholder="LL-BD-001" autocomplete="off"><p class="meta">Demo IDs: <button class="chip" type="button" onclick="$('ld').value=this.textContent">LL-BD-001</button> <button class="chip" type="button" onclick="$('ld').value=this.textContent">LL-BD-002</button></p><button class="btn" onclick="loginDonor()">Log in as donor</button></div>
+<div id="f-recv" class="hide"><label>Receiver ID</label><input id="lr" placeholder="RC-1001" autocomplete="off" oninput="rfill()"><p class="meta">Demo IDs: <button class="chip" type="button" onclick="$('lr').value=this.textContent;rfill()">RC-1001</button> <button class="chip" type="button" onclick="$('lr').value=this.textContent;rfill()">RC-1002</button></p>
+<div class="f3"><div><label>Blood needed</label><select id="lrg"></select></div><div><label>Units</label><input id="lru" type="number" value="2" min="1" max="10"></div><div><label>Urgency</label><select id="lrx"><option>Critical</option><option>High</option><option>Normal</option></select></div></div>
+<label>Hospital where blood is needed</label><select id="lrh"></select><button class="btn" onclick="loginRecv()">Log in and request blood</button></div>
+<div id="f-hosp" class="hide"><label>Hospital ID</label><input id="lh" placeholder="HS-1" autocomplete="off"><p class="meta">Demo IDs: HS-1 to HS-4 (in the order of the hospital list).</p><button class="btn" onclick="loginHosp()">Open stock desk</button></div>
+<p id="lm" class="err" role="alert"></p><details class="rg" id="regbox"><summary id="rsum">New here? Register as a donor</summary>
+<div class="f3"><div><label>Full name</label><input id="rn"></div><div><label>Blood group</label><select id="rg"></select></div><div><label>Phone number</label><input id="rph" inputmode="numeric" maxlength="10"></div></div>
+<button class="btn ghost" onclick="sendOtp()">Send OTP</button>
+<div id="otpbox" class="hide"><label>Enter the 4-digit OTP</label><input id="rotp" maxlength="4" inputmode="numeric"><button class="btn" onclick="register()">Verify and get Donor ID</button></div><p id="rm" class="meta"></p></details></div></div><div id="app" class="hide">
+
+<section id="find"><div class="grid"><div>
+<div class="card"><h2>Search hospitals</h2>
+<div class="f3"><div><label>Blood group</label><select id="fg"></select></div><div><label>Sort by</label><select id="fs"><option value="n">Nearest first</option><option value="s">Most stock first</option></select></div>
+<div><label>Within <span id="fdv">25</span> km</label><input id="fd" type="range" min="2" max="25" value="25"></div></div></div>
+<div id="hl"></div></div>
+<div class="card sticky"><div class="hc"><h2>Live hospital map</h2><button class="btn ghost sm" id="ht1" onclick="toggleHeat()">Hide hotspots</button></div><div id="map1"></div>
+<p class="meta">With a Google API key this is a live Google map with traffic; without one it shows the demo radar map. The ringed hospital holds the most stock of your group. Red glow marks past emergencies; amber rings mark donor gaps.</p><div id="hot"></div></div></div></section>
+
+<section id="emer" class="hide"><div class="grid"><div>
+<div class="card" id="eform"><h2>Raise an emergency request</h2>
+<div class="f3"><div><label>Blood group</label><select id="eg"></select></div><div><label>Units</label><input id="eu" type="number" value="2" min="1" max="10"></div><div><label>Urgency</label><select id="eurg"><option>Critical</option><option>High</option><option>Normal</option></select></div></div>
+<label>Hospital where blood is needed</label><select id="eh"></select><button class="btn" onclick="sendReq()">Alert nearby donors</button></div>
+<div class="card" id="tk"></div></div>
+<div class="card sticky"><div class="hc"><h2>Live map</h2><button class="btn ghost sm" id="ht2" onclick="toggleHeat()">Hide hotspots</button></div><div id="map2"></div>
+<p class="meta">Pulsing red: hospital. Blue: alerted donor. Green: accepted donor travelling in. Dashed ring: search radius.</p></div></div></section>
+
+<section id="donor" class="hide"><div class="grid"><div>
+<div class="card"><h2>My donor profile</h2><select id="did" class="hide"></select><div id="dp"></div></div>
+</div>
+<div class="card"><h2>My alerts</h2><div id="al"></div></div></div></section>
+
+<section id="hosp" class="hide"><div class="card"><h2>Hospital stock desk</h2><p class="meta">Blood bank staff update units here. Changes show instantly on the Find blood page.</p>
+<select id="hs" class="hide" onchange="renderHosp()"></select><div id="hg" class="hgrid"></div></div></section>
+
+<section id="design" class="hide">
+<div class="card"><h2>Block diagram: how LifeLink is built</h2><div id="fc1"></div></div>
+<div class="card"><h2>Flowchart: emergency request</h2><div id="fc2" class="fl"></div></div>
+<div class="card"><h2>Flowchart: donor journey</h2><div id="fc3" class="jr"></div></div></section>
+</div></main>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const G=["A+","A-","B+","B-","AB+","AB-","O+","O-"];
+const CAN={"O-":["O-"],"O+":["O+","O-"],"A-":["A-","O-"],"A+":["A+","A-","O+","O-"],"B-":["B-","O-"],"B+":["B+","B-","O+","O-"],"AB-":["AB-","A-","B-","O-"],"AB+":G};
+const KEY="lifelink_pro_v3",DAY=864e5,ME={x:40,y:365};
+const ago=d=>new Date(Date.now()-d*DAY).toISOString().slice(0,10);
+const seed=()=>({hospitals:[
+ {id:0,name:"City General Hospital",ph:"080-1111111",x:300,y:200,upd:Date.now(),st:[12,2,8,1,4,0,15,1]},
+ {id:1,name:"Lifeline Blood Bank",ph:"080-2222222",x:120,y:110,upd:Date.now(),st:[20,5,14,3,6,1,25,3]},
+ {id:2,name:"Sunrise Medical Centre",ph:"080-3333333",x:470,y:120,upd:Date.now(),st:[3,0,0,0,2,0,6,0]},
+ {id:3,name:"Metro Care Hospital",ph:"080-4444444",x:430,y:310,upd:Date.now(),st:[7,1,9,2,3,1,4,0]}],
+ donors:[{id:"LL-BD-001",name:"Ravi",g:"O+",x:260,y:170,avail:true,last:null},{id:"LL-BD-002",name:"Anita",g:"O-",x:340,y:240,avail:true,last:ago(120)},{id:"LL-BD-003",name:"Kiran",g:"A+",x:200,y:230,avail:true,last:null},{id:"LL-BD-004",name:"Meena",g:"B+",x:420,y:180,avail:true,last:null},{id:"LL-BD-005",name:"Arjun",g:"O+",x:150,y:150,avail:true,last:null},{id:"LL-BD-006",name:"Sara",g:"AB+",x:480,y:260,avail:true,last:null},{id:"LL-BD-007",name:"Dev",g:"O-",x:90,y:300,avail:true,last:ago(30)},{id:"LL-BD-008",name:"Priya",g:"A-",x:380,y:140,avail:true,last:null},{id:"LL-BD-009",name:"Neha",g:"B+",x:110,y:130,avail:true,last:null}],req:null,recv:[{id:"RC-1001",name:"Rahul Verma",g:"O+"},{id:"RC-1002",name:"Asha Nair",g:"B-"}]});
+let S={hospitals:[],donors:[],recv:[],req:null,hist:[]};
+const HIST=[[88,320],[75,335],[92,345],[80,355],[95,330],[435,320],[450,335],[420,345],[445,360],[305,170],[320,185],[340,160],[310,195],[360,175],[470,125],[480,110],[460,135],[120,100],[135,120],[150,140]];
+let HEAT=true,NT=[],unread=0,lastAcc=0,lastId=0;
+const save=()=>{};
+const $=id=>document.getElementById(id),km=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y)/25,f1=n=>n.toFixed(1),cls=n=>n==0?"r":n<=3?"a":"g";
+const fill=(el,arr,f=x=>x)=>el.innerHTML=arr.map((x,i)=>`<option value="${i}">${f(x)}</option>`).join("");
+const days=d=>d?Math.floor((Date.now()-new Date(d))/DAY):null,eligible=d=>d.avail&&(d.last==null||days(d.last)>=90),hosp=id=>S.hospitals[id];
+const RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+/* count-up numbers */
+function cnt(el,to){const from=+el.textContent||0;if(from==to||RM){el.textContent=to;return}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/900);el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0)}
+
+/* notifications */
+function beep(){try{const a=new(window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=880;g.gain.value=.08;o.start();setTimeout(()=>{o.stop();a.close()},220)}catch(e){}}
+function notify(t,type="info"){NT.unshift({t,type,time:Date.now()});NT=NT.slice(0,40);unread++;renderBell();const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),4500);
+ if(type=="alert")beep();try{if("Notification" in window&&Notification.permission==="granted")new Notification("LifeLink",{body:t})}catch(x){}}
+const seen=new Set();
+
+/* SVG map */
+function svgMap(el,o={}){let s='<svg viewBox="0 0 600 400">';
+ for(let i=0;i<=600;i+=50)s+=`<line class="gl" x1="${i}" y1="0" x2="${i}" y2="400"/>`;
+ for(let i=0;i<=400;i+=50)s+=`<line class="gl" x1="0" y1="${i}" x2="600" y2="${i}"/>`;
+ s+=`<path class="rd" fill="none" stroke-width="7" d="M0 250C120 230 200 280 330 200S520 190 600 150M130 0C150 120 110 250 170 400M420 0C400 140 460 260 430 400"/>`;
+ const r=S.req,H=r?hosp(r.hosp):null,live=r&&!r.done;
+ if(HEAT){const gid="hg"+(o.donors?2:1);s+=`<defs><radialGradient id="${gid}"><stop offset="0" stop-color="#e11d48" stop-opacity=".5"/><stop offset="1" stop-color="#e11d48" stop-opacity="0"/></radialGradient></defs>`;
+  S.hist.forEach(p=>s+=`<circle cx="${p.x}" cy="${p.y}" r="48" fill="url(#${gid})"/>`);
+  hotspots().filter(z=>z.gap).forEach(z=>s+=`<circle cx="${z.cx}" cy="${z.cy}" r="46" fill="none" stroke="#d97706" stroke-width="2.5" stroke-dasharray="5 4"/><text x="${z.cx}" y="${z.cy+64}" text-anchor="middle" class="lbh" fill="#d97706" style="fill:#d97706">Donor gap</text>`)}
+ if(!o.donors)s+=`<defs><linearGradient id="sw" x1="0" x2="1"><stop offset="0" stop-color="#2457e6" stop-opacity=".35"/><stop offset="1" stop-color="#2457e6" stop-opacity="0"/></linearGradient></defs><g class="sweep"><path d="M40 365L340 300A310 310 0 0 1 340 430Z" fill="url(#sw)"/></g>`;
+ if(live&&!r.acc.length&&o.donors)s+=`<circle class="ring" cx="${H.x}" cy="${H.y}" r="${r.radius*25}" fill="rgba(217,11,52,.07)" stroke="#e11d48" stroke-dasharray="6"/>`;
+ if(r&&o.donors)r.acc.forEach(id=>{const d=S.donors.find(x=>x.id==id);s+=`<line class="flow" x1="${d.x}" y1="${d.y}" x2="${H.x}" y2="${H.y}" stroke="#16a34a" stroke-width="3" stroke-dasharray="8 5"/>`;
+  if(!r.done)s+=`<circle r="6" fill="#16a34a"><animateMotion dur="${Math.max(3,km(d,H)*1.6)}s" repeatCount="indefinite" path="M${d.x},${d.y} L${H.x},${H.y}"/></circle>`});
+ S.hospitals.forEach(h=>{const hot=r&&o.donors&&r.hosp==h.id,hl=o.hl==h.id;
+  if(hot&&live||hl)s+=`<circle class="pulse" cx="${h.x}" cy="${h.y}" r="10" fill="#e11d48"/>`;
+  s+=`<rect x="${h.x-8}" y="${h.y-8}" width="16" height="16" rx="4" fill="#e11d48" stroke="${hl?"#111":"#fff"}" stroke-width="2.5"/><path d="M${h.x} ${h.y-4}v8M${h.x-4} ${h.y}h8" stroke="#fff" stroke-width="2"/><text class="lbh" x="${h.x}" y="${h.y-15}" text-anchor="middle">${h.name.split(" ")[0]}</text>`});
+ if(o.donors&&r)S.donors.forEach(d=>{const ac=r.acc.includes(d.id);if(r.alerted.includes(d.id)||ac)
+  s+=`<circle cx="${d.x}" cy="${d.y}" r="7" fill="${ac?"#16a34a":"#2457e6"}" stroke="#fff" stroke-width="2"/>${ac?"":`<circle class="pulse" cx="${d.x}" cy="${d.y}" r="6" fill="#2457e6"/>`}<text class="lb" x="${d.x}" y="${d.y+19}" text-anchor="middle">${d.name} ${d.g}</text>`});
+ s+=`<circle cx="${ME.x}" cy="${ME.y}" r="6" fill="#2457e6" stroke="#fff" stroke-width="2"/><text class="lbh" x="${ME.x+10}" y="${ME.y+4}">You</text></svg>`;el.innerHTML=s}
+
+/* ---------- Google Maps (live) ---------- */
+const GMAPS_KEY="PASTE_YOUR_GOOGLE_MAPS_API_KEY_HERE";let GM_OK=false;
+const LL=p=>({lat:12.89+(400-p.y)/400*.144,lng:77.5+p.x/600*.22});
+const DARKMAP=[{elementType:"geometry",stylers:[{color:"#1d151c"}]},{elementType:"labels.text.fill",stylers:[{color:"#a99ca7"}]},{elementType:"labels.text.stroke",stylers:[{color:"#1d151c"}]},{featureType:"road",elementType:"geometry",stylers:[{color:"#3a2a36"}]},{featureType:"water",stylers:[{color:"#0d0a0f"}]}];
+function initGM(){GM_OK=true;document.querySelectorAll("#map1,#map2").forEach(e=>e.innerHTML="");renderAll()}
+window.gm_authFailure=()=>{GM_OK=false;document.querySelectorAll("#map1,#map2").forEach(e=>{e._m=null;e.innerHTML=""});notify("Google rejected the API key. Showing the demo map instead.","warn");renderAll()};
+function map(el,o={}){GM_OK?gmap(el,o):svgMap(el,o)}
+function gmap(el,o){const G_=google.maps;
+ if(!el._m){const d=document.documentElement.dataset.theme?document.documentElement.dataset.theme=="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+  el.style.height="460px";el._m=new G_.Map(el,{center:LL({x:300,y:200}),zoom:12,mapTypeControl:false,streetViewControl:false,styles:d?DARKMAP:[]});
+  new G_.TrafficLayer().setMap(el._m);el._o=[];el._iw=new G_.InfoWindow()}
+ const m=el._m,r=S.req,H=r?hosp(r.hosp):null,live=r&&!r.done;el._o.forEach(x=>x.setMap(null));el._o=[];cancelAnimationFrame(el._a);
+ const add=x=>(el._o.push(x),x),dot=(p,c,t,sc=8)=>add(new G_.Marker({position:LL(p),map:m,title:t,icon:{path:G_.SymbolPath.CIRCLE,scale:sc,fillColor:c,fillOpacity:1,strokeColor:"#fff",strokeWeight:2}}));
+ if(HEAT){S.hist.forEach(p=>add(new G_.Circle({map:m,center:LL(p),radius:700,fillColor:"#e11d48",fillOpacity:.1,strokeWeight:0,clickable:false})));
+  hotspots().filter(z=>z.gap).forEach(z=>add(new G_.Circle({map:m,center:LL(z),radius:1500,fillOpacity:0,strokeColor:"#d97706",strokeWeight:2.5,clickable:false})))}
+ if(live&&!r.acc.length&&o.donors)add(new G_.Circle({map:m,center:LL(H),radius:r.radius*1000,fillColor:"#e11d48",fillOpacity:.08,strokeColor:"#e11d48",strokeWeight:2}));
+ S.hospitals.forEach(h=>{const hl=o.hl==h.id||(r&&o.donors&&r.hosp==h.id),mk=add(new G_.Marker({position:LL(h),map:m,title:h.name,label:{text:"+",color:"#fff",fontWeight:"800",fontSize:"16px"},zIndex:9,animation:hl?G_.Animation.BOUNCE:null,
+   icon:{path:G_.SymbolPath.CIRCLE,scale:hl?15:12,fillColor:"#e11d48",fillOpacity:1,strokeColor:"#fff",strokeWeight:3}}));
+  mk.addListener("click",()=>{el._iw.setContent(`<div style="color:#111;font:14px DM Sans,sans-serif"><b>${h.name}</b><br>${f1(km(ME,h))} km from you · ${h.ph}<br>${G.map((n,i)=>n+": "+h.st[i]).join(" · ")}</div>`);el._iw.open(m,mk)})});
+ if(o.donors&&r){S.donors.forEach(d=>{const ac=r.acc.includes(d.id);if(r.alerted.includes(d.id)||ac)dot(d,ac?"#16a34a":"#2457e6",d.name+" "+d.g)});
+  const mv=[];r.acc.forEach(id=>{const d=S.donors.find(x=>x.id==id);add(new G_.Polyline({map:m,path:[LL(d),LL(H)],strokeOpacity:0,icons:[{icon:{path:"M 0,-1 0,1",strokeOpacity:1,strokeColor:"#16a34a",scale:3},offset:"0",repeat:"14px"}]}));if(!live)return;mv.push({d,mk:dot(d,"#16a34a","On the way: "+d.name,6)})});
+  if(mv.length){const t0=performance.now();(function f(t){mv.forEach(v=>{const T=Math.max(4e3,km(v.d,H)*1600),k=((t-t0)%T)/T,a=LL(v.d),b=LL(H);v.mk.setPosition({lat:a.lat+(b.lat-a.lat)*k,lng:a.lng+(b.lng-a.lng)*k})});el._a=requestAnimationFrame(f)})(t0)}}
+ dot(ME,"#2457e6","You",7);
+ if(el.offsetWidth){G_.event.trigger(m,"resize");if(!el._fit){const b=new G_.LatLngBounds();S.hospitals.concat([ME]).forEach(p=>b.extend(LL(p)));m.fitBounds(b,40);el._fit=1}}}
+/* Find blood */
+function renderFind(){setTimeout(renderHot,0);const g=+$("fg").value,mx=+$("fd").value;$("fdv").textContent=mx;
+ let l=S.hospitals.filter(h=>km(ME,h)<=mx);
+ l.sort($("fs").value=="s"?(a,b)=>b.st[g]-a.st[g]:(a,b)=>km(ME,a)-km(ME,b));
+ $("hl").innerHTML=l.length?l.map((h,k)=>{const m=Math.max(0,Math.round((Date.now()-h.upd)/6e4));
+  return `<div class="card tilt" style="animation-delay:${k*.08}s"><div class="hc"><div><b>${h.name}</b><div class="meta">${f1(km(ME,h))} km away · call ${h.ph} · updated ${m} min ago</div></div>
+  <span class="pill ${h.st[g]?"ok":"rd"}">${G[g]}: ${h.st[g]} units</span></div>
+  <div class="stock">${G.map((n,i)=>`<div class="s ${cls(h.st[i])} ${i==g?"hl":""}"><i class="v" style="--h:${Math.min(100,h.st[i]/25*100)}%"></i><span>${n}</span><b>${h.st[i]}</b></div>`).join("")}</div></div>`}).join(""):'<div class="card">No hospital within this distance. Increase the distance slider.</div>';
+ const best=[...l].sort((a,b)=>b.st[g]-a.st[g])[0];map($("map1"),{hl:best&&best.st[g]?best.id:-1});
+ cnt($("s1"),S.hospitals.length);cnt($("s2"),S.donors.filter(eligible).length);cnt($("s3"),8)}
+
+/* Emergency */
+const act=(p,b)=>api(p,b||{}).catch(()=>{});
+function sendReq(){askPerm();act("/request",{group:G[$("eg").value],units:+$("eu").value||1,hosp:+$("eh").value,urg:$("eurg").value})}
+const expand=()=>act("/request/expand"),finish=()=>act("/request/finish"),clearReq=()=>act("/request/cancel");
+function renderEmer(){const r=S.req;map($("map2"),{donors:true});const st=$("strip"),t=$("tk");
+ if(!r){t.innerHTML='<h2>Request status</h2><p class="meta">No active request. Fill in the form to alert donors near the hospital.</p>';st.classList.add("hide");return}
+ const H=hosp(r.hosp),n=r.acc.length;if(r.id!=lastId){lastId=r.id;lastAcc=0}if(n>lastAcc){const d=S.donors.find(x=>x.id==r.acc[n-1]);notify(d.name+" ("+d.id+") accepted: "+n+"/"+r.units+" donors. ETA about "+Math.max(3,Math.round(km(d,H)*3))+" min.","ok")}lastAcc=n;
+ st.className=SES?"strip":"strip hide";st.innerHTML=r.done?`<span>Request completed</span>`:`<span><i></i>${r.urg} request: ${r.units} unit(s) of ${r.group} at ${H.name}</span><span>${n}/${r.units} donors accepted</span>`;
+ const steps=[["Request sent",1],["Donor accepted ("+n+"/"+r.units+")",n>0],["Donor on the way",r.en.length>0],["Completed",r.done]];
+ const near=[...S.hospitals].filter(h=>h.st[G.indexOf(r.group)]>0).sort((a,b)=>km(a,H)-km(b,H)).slice(0,2);
+ t.innerHTML=`<h2>Request status</h2><b>${r.units} unit(s) of ${r.group}</b> needed at ${H.name} <span class="pill rd">${r.urg}</span>
+ <ul class="tl">${steps.map(s=>`<li class="${s[1]?"d":""}">${s[0]}</li>`).join("")}</ul>`+
+ r.acc.map(id=>{const d=S.donors.find(x=>x.id==id);return `<div class="idc"><span class="pill ok">Accepted</span> <b>${d.name}</b> · ${d.id} · ${d.g}<br>${f1(km(d,H))} km from hospital · ETA about ${Math.max(3,Math.round(km(d,H)*3))} min${r.en.includes(id)?" · on the way":""}</div>`}).join("")+
+ (r.done?`<button class="btn" onclick="clearReq()">Start a new request</button>`:
+ `<p class="meta">${n?"":`Searching: ${r.alerted.length} donor(s) alerted within ${r.radius} km. The radius widens by itself every 15 seconds.`}</p>
+ ${n?"":`<button class="btn ghost" onclick="expand()">Widen radius now</button>`}${n?`<button class="btn ok" onclick="finish()">Mark completed</button>`:""}<button class="btn ghost" onclick="clearReq()">Cancel request</button>
+ ${!n&&r.radius>=10?`<p class="meta">Still no donor? Try these blood banks: ${near.map(h=>`${h.name} (${h.ph})`).join(", ")||"none have stock"}</p>`:""}`)}
+
+/* Donor portal */
+function myAlert(d){const r=S.req;return r&&!r.done&&r.alerted.includes(d.id)&&!r.acc.includes(d.id)&&r.acc.length<r.units?r:null}
+function renderDonor(){const el=$("did");if(el.options.length!=S.donors.length){const v=el.value;fill(el,S.donors,d=>`${d.id} – ${d.name} (${d.g})`);el.value=v||0}
+ const d=S.donors[+el.value||0],dd=days(d.last),ok=eligible(d);
+ $("dp").innerHTML=`<div class="idc"><b class="id">${d.id}</b><br><b>${d.name}</b> · Blood group <b>${d.g}</b><br>
+ <span class="pill ${ok?"ok":"rd"}">${!d.avail?"Not available":ok?"Ready to donate":"Resting: donated "+dd+" days ago (90-day gap)"}</span><br>
+ <span class="meta">Last donation: ${d.last||"never"}</span><br><button class="btn ghost" onclick="toggleAvail(${+el.value||0})">${d.avail?"Mark me not available":"Mark me available"}</button></div>`;
+ const r=myAlert(d),al=$("al");
+ if(r){const H=hosp(r.hosp);al.innerHTML=`<div class="alert"><b>Emergency: ${r.group} blood needed (${r.urg})</b><p>${H.name}, ${f1(km(d,H))} km from you. ${r.units} unit(s) needed.</p><button class="btn ok" onclick="respond('${d.id}',1)">Accept</button><button class="btn ghost" onclick="respond('${d.id}',0)">Decline</button></div>`;
+  if(!seen.has(r.id+d.id)){seen.add(r.id+d.id);notify("Emergency: "+r.group+" needed at "+H.name+" ("+f1(km(d,H))+" km from you)","alert")}}
+ else if(S.req&&S.req.acc.includes(d.id)&&!S.req.done)al.innerHTML=`<p><b>Thank you for accepting.</b> Please head to ${hosp(S.req.hosp).name}.</p>${S.req.en.includes(d.id)?"":`<button class="btn" onclick="enroute('${d.id}')">I am on the way</button>`}`;
+ else al.innerHTML='<p class="meta">No alerts right now. Keep your availability on to receive emergencies near you.</p>'}
+function toggleAvail(i){act("/donor/avail")}
+function respond(id,yes){act("/respond",{yes:!!yes})}
+function enroute(id){act("/enroute")}
+async function sendOtp(){if(!$("rn").value.trim()||!/^\d{10}$/.test($("rph").value)){$("rm").textContent="Enter your name and a 10-digit phone number first.";return}
+ try{const j=await api("/otp/send",{phone:$("rph").value});$("otpbox").classList.remove("hide");$("rm").textContent=j.demoOtp?"Demo mode: your OTP is "+j.demoOtp+" (no SMS gateway is set on the server).":"OTP sent by SMS."}catch(e){$("rm").textContent=e.message}}
+async function register(){try{const rc=role=="recv",j=await api("/register",{role,name:$("rn").value.trim(),g:G[$("rg").value],phone:$("rph").value,otp:$("rotp").value});
+ $("otpbox").classList.add("hide");$("rn").value=$("rph").value=$("rotp").value="";$(rc?"lr":"ld").value=j.id;if(rc)$("lrg").value=$("rg").value;$("rm").textContent="Verified. Your "+(rc?"Receiver":"Donor")+" ID is "+j.id+". It is filled in above, so press Log in."}catch(e){$("rm").textContent=e.message}}
+function askPerm(){try{if("Notification" in window&&Notification.permission=="default")Notification.requestPermission()}catch(e){}}
+
+/* Hospital desk */
+function renderHosp(){const h=S.hospitals[+$("hs").value||0],c={r:"var(--red)",a:"var(--wn)",g:"var(--ok)"};
+ $("hg").innerHTML=G.map((n,i)=>`<div><span class="meta">${n}</span><b style="color:${c[cls(h.st[i])]}">${h.st[i]}</b><button onclick="stk(${h.id},${i},-1)" aria-label="decrease ${n}">−</button><button onclick="stk(${h.id},${i},1)" aria-label="increase ${n}">+</button></div>`).join("")}
+function stk(h,i,v){act("/stock",{i,v})}
+
+/* System design (HTML diagrams) */
+function drawFlows(){
+ const L=[["Users",["Blood seeker","Donor","Hospital staff","Admin"]],["Pages (HTML + CSS)",["Find blood","Emergency","Donor portal","Hospital desk"]],["Logic (JavaScript)",["Stock search and filters","Blood-group matching","Distance and radius search","Alerts and accept flow","Hotspots and coverage"],1],["Data and services",["localStorage (demo data)","SVG live map","Notification centre","Database, SMS and push (Round 2)"]]];
+ $("fc1").innerHTML=L.map((l,i)=>`<div class="lay"><h3>${l[0]}</h3>${l[1].map(t=>`<span class="chip ${l[2]?"hot":""}">${t}</span>`).join("")}</div>${i<3?'<div class="link"></div>':""}`).join("");
+ const F=[["t","Start"],["n","Seeker raises request (group, units, urgency)"],["n","Find donors: right group, available, rested, in radius"],["q","Donors found?"],["n","No: widen radius by 3 km, search again"],["n","Yes: alert donors and show pins on the map"],["q","Donor accepts?"],["n","No: after 15 s widen radius and suggest blood banks"],["n","Yes: show Donor ID, ETA and route on the map"],["q","Units covered?"],["n","On the way, then completed. Save donation date"],["t","End"]];
+ $("fc2").innerHTML=F.map((f,i)=>`<div class="nd ${f[0]!="n"?f[0]:""}">${f[1]}</div>${i<F.length-1?'<div class="ar"></div>':""}`).join("");
+ $("fc3").innerHTML=["Sign up with name and group","Verify phone by OTP","Receive Donor ID","Set status to available","Get nearby alert","Accept or decline","Donate, then 90-day rest"].map((t,i)=>`<span class="chip ${i==4?"hot":""}">${t}</span>`).join("")}
+
+/* hotspots */
+function hotspots(){const c={};S.hist.forEach(p=>{const k=Math.floor(p.x/100)+","+Math.floor(p.y/100);const z=c[k]=c[k]||{n:0,sx:0,sy:0};z.n++;z.sx+=p.x;z.sy+=p.y});
+ return Object.values(c).map(z=>{const cx=z.sx/z.n,cy=z.sy/z.n,dn=S.donors.filter(d=>eligible(d)&&Math.hypot(d.x-cx,d.y-cy)<=75).length;
+  const h=[...S.hospitals].sort((a,b)=>Math.hypot(a.x-cx,a.y-cy)-Math.hypot(b.x-cx,b.y-cy))[0];return{cx,cy,n:z.n,dn,near:h.name,gap:z.n>=3&&dn<2}}).sort((a,b)=>b.n-a.n)}
+function toggleHeat(){HEAT=!HEAT;renderAll()}
+function renderHot(){const hs=hotspots(),tot=hs.reduce((a,z)=>a+z.n,0),cov=tot?Math.round(100*hs.filter(z=>z.dn>=2).reduce((a,z)=>a+z.n,0)/tot):100;
+ $("ht1").textContent=$("ht2").textContent=HEAT?"Hide hotspots":"Show hotspots";
+ $("hot").innerHTML=`<h2 style="margin-top:16px">Demand hotspots</h2><b class="score">${cov}%</b> <span class="meta">of past emergency demand has 2+ ready donors within 3 km</span>`+
+ hs.slice(0,4).map(z=>`<div class="hz"><b>Near ${z.near}</b>: ${z.n} past emergencies, ${z.dn} ready donor(s) nearby ${z.gap?'<span class="pill rd">Recruit donors here</span>':'<span class="pill ok">Covered</span>'}</div>`).join("")}
+function renderBell(){const b=$("badge");b.textContent=unread;b.classList.toggle("hide",!unread);
+ $("np").innerHTML=`<div class="hc"><b>Notifications</b><button class="btn ghost sm" onclick="askPerm();notify('Browser alerts requested. Allow them in the prompt.')">Turn on browser alerts</button></div>`+
+ (NT.length?NT.map(n=>`<div class="nt ${n.type}">${n.t}<span>${new Date(n.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</span></div>`).join(""):'<p class="meta">Nothing yet. Emergency alerts, acceptances and low-stock warnings appear here.</p>')}
+function togglePanel(){const p=$("np");p.classList.toggle("hide");if(!p.classList.contains("hide")){unread=0;renderBell()}}
+document.addEventListener("click",e=>{if(!e.target.closest(".bellw"))$("np").classList.add("hide")});
+
+/* 3D tilt + button ripple */
+document.addEventListener("mousemove",e=>{if(RM)return;const c=e.target.closest&&e.target.closest(".tilt");document.querySelectorAll(".tilt").forEach(x=>{if(x!=c)x.style.transform=""});
+ if(c){const b=c.getBoundingClientRect(),px=(e.clientX-b.left)/b.width-.5,py=(e.clientY-b.top)/b.height-.5;c.style.transform=`perspective(800px) rotateY(${px*7}deg) rotateX(${-py*7}deg) translateY(-3px)`}});
+document.addEventListener("click",e=>{const b=e.target.closest(".btn");if(!b||RM)return;const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height),i=document.createElement("i");i.className="rip";i.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;b.appendChild(i);setTimeout(()=>i.remove(),600)});
+
+/* hero headline: letter-by-letter reveal */
+$("h1").innerHTML=["Every minute counts.","Find blood in two."].map((l,j)=>l.split(" ").map((w,i)=>`<span style="animation-delay:${(j*4+i)*.09}s">${w}</span>`).join(" ")).join("<br>");
+
+/* floating blood-cell canvas */
+(function(){const c=$("bg"),x=c.getContext("2d");if(RM)return;let W,H,P=[];const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight};rs();addEventListener("resize",rs);
+ for(let i=0;i<34;i++)P.push({x:Math.random()*2e3,y:Math.random()*1e3,r:6+Math.random()*16,v:.15+Math.random()*.5,a:Math.random()*6,s:.3+Math.random()*.5});
+ (function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.y-=p.v;p.x+=Math.sin(p.a+=.008)*.4;if(p.y<-30){p.y=H+30;p.x=Math.random()*W}
+  x.save();x.translate(p.x%W,p.y);x.scale(1,.55+.35*Math.sin(p.a*1.3));const g=x.createRadialGradient(0,0,p.r*.2,0,0,p.r);g.addColorStop(0,"rgba(217,11,52,.04)");g.addColorStop(.7,"rgba(217,11,52,.22)");g.addColorStop(1,"rgba(160,8,38,.35)");x.fillStyle=g;x.beginPath();x.arc(0,0,p.r,0,7);x.fill();x.restore()});requestAnimationFrame(f)})()})();
+
+/* ---------- Step 1: sign in, Step 2: role dashboard ---------- */
+let SES=null,role="donor";try{SES=JSON.parse(sessionStorage.getItem("ll_ses"))}catch(e){}
+const RN={donor:[["donor","My dashboard"],["emer","Live map"],["design","System design"]],recv:[["emer","My request"],["find","Find blood"],["design","System design"]],hosp:[["hosp","Stock desk"],["find","Find blood"],["design","System design"]]};
+function setRole(r){role=r;document.querySelectorAll(".rt").forEach(b=>b.classList.toggle("on",b.dataset.r==r));["donor","recv","hosp"].forEach(x=>$("f-"+x).classList.toggle("hide",x!=r));$("regbox").classList.toggle("hide",r=="hosp");$("rsum").textContent="New here? Register as a "+(r=="recv"?"receiver":"donor");$("lm").textContent=""}
+const bad=t=>$("lm").textContent=t;
+function rfill(){const r=S.recv.find(x=>x.id==$("lr").value.trim().toUpperCase());if(r)$("lrg").value=G.indexOf(r.g)}
+async function doLogin(b,x){try{const j=await api("/login",b);enter({role:b.role,...x,id:j.id,token:j.token,i:j.i})}catch(e){bad(e.message)}}
+function loginDonor(){doLogin({role:"donor",id:$("ld").value})}
+function loginRecv(){doLogin({role:"recv",id:$("lr").value},{req:{group:G[$("lrg").value],units:Math.max(1,+$("lru").value||1),urg:$("lrx").value,hosp:+$("lrh").value}})}
+function loginHosp(){doLogin({role:"hosp",id:$("lh").value})}
+function enter(s){SES=s;try{sessionStorage.setItem("ll_ses",JSON.stringify(s))}catch(e){}showApp()}
+function showApp(){const s=SES,rc=s.role=="recv",sh=(id,on)=>$(id).classList.toggle("hide",!on);
+ document.body.dataset.role=s.role;sh("login",0);sh("app",1);sh("nav",1);sh("lo",1);sh("who",1);
+ $("who").textContent="Step 2 of 2 · "+{donor:"Donor",recv:"Receiver",hosp:"Hospital"}[s.role]+" "+s.id;
+ nb.forEach(b=>{const k=RN[s.role].find(x=>x[0]==b.dataset.t);b.classList.toggle("hide",!k);if(k)b.textContent=k[1]});
+ sh("eform",rc);if(s.role=="donor")$("did").value=s.i;
+ if(s.role=="hosp"){$("hs").value=s.i;document.querySelector("#hosp h2").textContent=S.hospitals[s.i].name+": stock desk"}
+ if(rc){const q=s.req;if(q){$("eg").value=$("fg").value=G.indexOf(q.group);$("eu").value=q.units;$("eurg").value=q.urg;$("eh").value=q.hosp;
+  if(!(S.req&&!S.req.done&&S.req.by==s.id))sendReq()}}
+ nb.find(b=>b.dataset.t==RN[s.role][0][0]).click();scrollTo(0,0)}
+function logout(){SES=null;try{sessionStorage.removeItem("ll_ses")}catch(e){}delete document.body.dataset.role;["login"].forEach(i=>$(i).classList.remove("hide"));["app","nav","lo","who","strip"].forEach(i=>$(i).classList.add("hide"));setRole("donor")}
+/* ---------- backend connection ---------- */
+async function api(path,body,method="POST"){let r,j;try{r=await fetch("/api"+path,{method,headers:{"Content-Type":"application/json",...(SES&&SES.token?{Authorization:"Bearer "+SES.token}:{})},body:body?JSON.stringify(body):undefined});j=await r.json()}catch(e){notify("Cannot reach the server.","warn");throw e}
+ if(!r.ok){if(r.status==401&&SES)logout();notify(j.error||"Request failed","warn");throw new Error(j.error||"Request failed")}return j}
+function connect(){const es=new EventSource("/api/events");es.onmessage=e=>{const m=JSON.parse(e.data);S=m.s;if(m.ev&&(!m.to||!SES||m.to.includes(SES.role)))notify(m.ev,m.type||"info");renderAll()}}
+async function boot(){fill($("lrg"),G);setRole("donor");drawFlows();renderBell();
+ try{S=await(await fetch("/api/state")).json()}catch(e){bad("Cannot reach the server. Start it with: node server.js");return}
+ [$("eh"),$("hs"),$("lrh")].forEach(e=>fill(e,S.hospitals,h=>h.name));renderAll();connect();if(SES)showApp();
+ try{const c=await(await fetch("/api/config")).json();if(c.mapsKey){const sc=document.createElement("script");sc.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(c.mapsKey)+"&callback=initGM";sc.async=true;document.head.appendChild(sc)}}catch(e){}}
+/* nav with sliding pill + theme */
+const nb=[...document.querySelectorAll("#nav button")];
+function pill(b){const p=$("pill");p.style.left=b.offsetLeft+"px";p.style.width=b.offsetWidth+"px"}
+nb.forEach(b=>b.onclick=()=>{nb.forEach(x=>x.classList.toggle("on",x==b));pill(b);
+ ["find","emer","donor","hosp","design"].forEach(id=>$(id).classList.toggle("hide",id!=b.dataset.t));renderAll()});
+addEventListener("resize",()=>pill(document.querySelector("#nav .on")));
+$("th").onclick=()=>{const d=document.documentElement,dark=d.dataset.theme?d.dataset.theme=="dark":matchMedia("(prefers-color-scheme:dark)").matches;d.dataset.theme=dark?"light":"dark"};
+
+function renderAll(){renderFind();renderEmer();renderDonor();renderHosp()}
+[$("fg"),$("eg"),$("rg")].forEach(e=>fill(e,G));fill($("eh"),S.hospitals,h=>h.name);fill($("hs"),S.hospitals,h=>h.name);
+$("fg").onchange=$("fs").onchange=$("fd").oninput=renderFind;
+boot();document.fonts&&document.fonts.ready.then(()=>pill(document.querySelector("#nav .on")));pill(document.querySelector("#nav .on"));
+
+</script></body></html>
