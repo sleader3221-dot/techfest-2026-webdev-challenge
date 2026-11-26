@@ -1,0 +1,2221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ReCircuit — Every old device has a next life</title>
+<meta name="description" content="ReCircuit tells you whether to repair, pass on, or recycle any electronic device, and shows you exactly where to take it in Bengaluru, safely.">
+<meta name="theme-color" content="#0d3a2b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": { "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm" } }
+</script>
+<style>
+:root{
+  --background:#ffffff; --foreground:#0b0f0d;
+  --brand:#1f8a5b;        /* primary green */
+  --brand-deep:#0d3a2b;   /* deep forest — hero/stats/footer base */
+  --brand-light:#62c792;  /* light green accent / focus ring */
+  --accent-teal:#0b6e6e;  /* teal caption tint */
+  --lime:#c2e029;
+  --surface:#f3f5f2; --surface-card:#ffffff;
+  --ink:#0b0f0d; --ink-soft:#6b756f; --ghost:#d6ddd8; --hairline:#e4e8e4;
+  --on-brand:#ffffff; --danger:#b42318; --danger-bg:#fdeceb;
+  --radius-card:1.5rem; --radius-card-lg:2rem; --radius-pill:62.5rem;
+  --e-expo:cubic-bezier(.16,1,.3,1); --e-quart:cubic-bezier(.25,1,.5,1); --e-cubic:cubic-bezier(.65,0,.35,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+@media (max-width:1920px){html{font-size:.833333vw}}
+@media (max-width:1440px){html{font-size:1.111111vw}}
+@media (max-width:1024px){html{font-size:1.5625vw}}
+@media (max-width:640px){html{font-size:4.444444vw}}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+img,svg{display:block;max-width:100%}
+body{min-height:100vh;background:var(--background);color:var(--foreground);font-family:"Onest",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none;padding:0}
+:focus-visible{outline:2px solid var(--brand-light);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.ico{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+main{width:100%;overflow-x:clip;padding:.5rem}
+.px{padding-left:1.5rem;padding-right:1.5rem}
+@media (min-width:640px){main{padding:.75rem}.px{padding-left:2.5rem;padding-right:2.5rem}}
+
+/* ---------- reveal primitives ---------- */
+.m{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.14em}
+.m>span{display:inline-block;transform:translateY(115%);opacity:0;transition:transform var(--d,950ms) var(--e-expo),opacity var(--d,950ms) var(--e-expo);transition-delay:var(--dl,0ms);will-change:transform}
+.is-in .m>span{transform:none;opacity:1}
+.sl .m{display:block}
+.wf .w{display:inline-block;opacity:0;transform:translateY(18px);transition:transform 700ms var(--e-quart),opacity 700ms var(--e-quart);transition-delay:var(--dl,0ms)}
+.wf.is-in .w{opacity:1;transform:none}
+[data-iv]{opacity:0}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+.fade{animation:rise .5s var(--e-expo) both}
+
+/* ---------- shared ui ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;color:var(--ink-soft)}
+.eyebrow::before{content:"";width:.375rem;height:.375rem;border-radius:var(--radius-pill);background:var(--brand);flex:none}
+.eyebrow.light{color:rgba(255,255,255,.7)}
+.eyebrow.light::before{background:var(--brand-light)}
+.h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:1rem}
+.pill{display:inline-flex;align-items:center;gap:.5rem;border-radius:var(--radius-pill);padding:.875rem 1.75rem;font-size:.875rem;font-weight:500;text-transform:uppercase;letter-spacing:.04em;border:1px solid transparent;transition:background .25s,color .25s,border-color .25s;white-space:nowrap}
+.pill .arr{display:inline-flex}
+.pill .arr .ico{width:1rem;height:1rem}
+.pill.light{background:#fff;color:var(--brand-deep)}
+.pill.light:hover{background:var(--brand-light);color:#fff}
+.pill.solid{background:var(--ink);color:#fff}
+.pill.solid:hover{background:var(--brand-deep)}
+.pill.outline{border-color:currentColor;color:var(--ink)}
+.pill.outline:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.abtn{width:3rem;height:3rem;display:grid;place-items:center;border-radius:var(--radius-pill);border:1px solid var(--hairline);color:var(--ink);transition:background .25s,border-color .25s}
+.abtn:hover{border-color:var(--ink)}
+.abtn.solid{background:var(--ink);border-color:var(--ink);color:#fff}
+.abtn.solid:hover{background:var(--brand-deep);border-color:var(--brand-deep)}
+.abtn .sp{display:inline-flex}
+.abtn .ico{width:1.25rem;height:1.25rem}
+.abtn.prev .ico{transform:scaleX(-1)}
+@media (min-width:640px){.abtn{width:3.5rem;height:3.5rem}}
+.dots{display:flex;align-items:center;gap:.5rem}
+.dot{padding:.375rem}
+.dot i{display:block;height:.375rem;width:.375rem;border-radius:var(--radius-pill);background:var(--ghost);transition:width .5s var(--e-expo),background .3s}
+.dot[aria-current="true"] i{width:1.25rem;background:var(--ink)}
+.dots.light .dot i{background:rgba(255,255,255,.4)}
+.dots.light .dot[aria-current="true"] i{background:#fff}
+.xbtn{width:2.5rem;height:2.5rem;flex:none;display:grid;place-items:center;border-radius:var(--radius-pill);background:rgba(255,255,255,.15);transition:background .25s}
+.xbtn:hover{background:rgba(255,255,255,.25)}
+.xbtn.dark{background:var(--surface)}
+.xbtn.dark:hover{background:var(--hairline)}
+.xbtn .sp{display:inline-flex}
+.xbtn .ico{width:1.1rem;height:1.1rem}
+.glass{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.1);border-radius:var(--radius-card);padding:.75rem;box-shadow:0 12px 32px rgba(13,58,43,.2);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.brand{display:inline-flex;align-items:center;gap:.5rem;font-size:1rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em}
+.brand .ico{width:1.25rem;height:1.25rem}
+
+/* ---------- loader ---------- */
+.loader{position:fixed;inset:0;z-index:200;background:var(--brand-deep);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;will-change:transform}
+.ld-mark{display:flex;align-items:center;gap:.75rem;font-size:1.5rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em;opacity:0}
+.ld-mark .ico{width:1.75rem;height:1.75rem}
+.ld-track{width:10rem;height:1px;border-radius:var(--radius-pill);background:rgba(255,255,255,.2);overflow:hidden}
+.ld-fill{height:100%;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform 1280ms var(--e-cubic) 120ms}
+.ld-fill.go{transform:scaleX(1)}
+
+/* ---------- header ---------- */
+.site-header{position:relative;z-index:5;display:flex;align-items:center;padding:1.5rem 1.5rem 0;font-size:.75rem;color:#fff}
+.hnav{display:none;flex:1;gap:2rem}
+.hnav a{opacity:.9;text-transform:uppercase;letter-spacing:.06em;transition:opacity .2s}
+.hnav a:hover{opacity:1}
+.hbrand{flex:1;display:flex}
+.hright{flex:1;display:flex;justify-content:flex-end;align-items:center;gap:1rem}
+.hbtn{display:none;text-transform:uppercase;letter-spacing:.06em;text-underline-offset:4px}
+.hbtn:hover{text-decoration:underline}
+.hlogin{display:inline-flex;align-items:center;gap:.5rem;height:2.5rem;padding:0 1.1rem 0 .375rem;border-radius:var(--radius-pill);background:#fff;color:var(--brand-deep);font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;transition:background .25s,color .25s;white-space:nowrap}
+.hlogin .av{width:1.75rem;height:1.75rem;border-radius:var(--radius-pill);display:grid;place-items:center;background:var(--lime);color:var(--brand-deep);transition:transform .45s cubic-bezier(.34,1.4,.64,1)}
+.hlogin .av .ico{width:.95rem;height:.95rem}
+.hlogin:hover{background:var(--brand-light);color:#fff}
+@media (hover:hover) and (min-width:769px){.hlogin:hover .av{transform:rotate(-12deg) scale(1.08)}}
+.burger{width:2.5rem;height:2.5rem;display:grid;place-content:center;gap:5px;border-radius:var(--radius-pill);background:rgba(255,255,255,.15);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:background .25s}
+.burger:hover{background:rgba(255,255,255,.25)}
+.burger span{display:block;width:1rem;height:1px;background:#fff}
+@media (min-width:640px){.site-header{padding:2rem 2.5rem 0}.hright{gap:1.25rem}.hbtn{display:inline}}
+@media (min-width:1024px){.hnav{display:flex}.hbrand{justify-content:center}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden;border-radius:var(--radius-card-lg);background:var(--brand-deep);color:#fff;min-height:max(36rem,calc(100svh - 1rem));display:flex;flex-direction:column}
+@media (min-width:640px){.hero{min-height:max(36rem,calc(100svh - 1.5rem))}}
+.hero-plate{position:absolute;inset:0;z-index:-10;overflow:hidden}
+.hero-plate-in{position:absolute;left:0;right:0;top:-16%;height:132%;width:100%;will-change:transform}
+.hero-plate-in svg{width:100%;height:100%}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(13,58,43,.6),rgba(13,58,43,.1),rgba(13,58,43,.8))}
+.hero-title-wrap{padding-top:1rem}
+.hero-title{font-size:12.5vw;font-weight:500;text-transform:uppercase;line-height:.85;letter-spacing:-.02em;white-space:nowrap}
+.hero-bottom{margin-top:auto;padding-top:2rem;padding-bottom:2rem;display:flex;flex-direction:column;gap:1.5rem}
+@media (min-width:640px){.hero-bottom{flex-direction:row;justify-content:space-between;align-items:flex-end;padding-bottom:2.5rem}}
+.tagline{font-size:2.4rem;font-weight:500;text-transform:uppercase;line-height:.95;letter-spacing:-.02em;color:rgba(255,255,255,.85)}
+.hero-sub{margin-top:1.25rem;max-width:27rem;font-size:.9375rem;line-height:1.55;color:rgba(255,255,255,.75)}
+.hero-ctas{margin-top:1.5rem;display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.5rem}
+.textlink{font-size:.8125rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.85);border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:2px;transition:color .2s,border-color .2s}
+.textlink:hover{color:#fff;border-color:#fff}
+.hero-right{display:flex;align-items:flex-end;gap:1rem;flex:none}
+.vslider{display:none;width:16rem;flex-direction:column;gap:.75rem}
+@media (min-width:768px){.vslider{display:flex}}
+.vstack{position:relative}
+.vcard{display:flex;gap:.75rem;align-items:stretch}
+.vcard.out{position:absolute;left:0;right:0;top:0}
+.vthumb{width:3.5rem;height:3.5rem;flex:none;border-radius:.75rem;display:grid;place-items:center}
+.vthumb .ico{width:1.6rem;height:1.6rem}
+.vt-repair{background:var(--brand-light);color:var(--brand-deep)}
+.vt-reuse{background:var(--lime);color:var(--brand-deep)}
+.vt-recycle{background:#fff;color:var(--accent-teal)}
+.vtext{display:flex;flex-direction:column;justify-content:center;gap:.125rem;min-width:0}
+.vlabel{font-size:.7rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em}
+.vtitle{font-size:.7rem;text-transform:uppercase;opacity:.8}
+.vcta{font-size:.65rem;text-decoration:underline;text-underline-offset:3px;margin-top:.25rem;align-self:flex-start}
+.mcard{width:100%;max-width:20rem;display:flex;gap:.75rem;align-items:stretch}
+@media (min-width:640px){.mcard{width:15rem}}
+.mcard-l{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:.5rem}
+.mv{font-size:1.875rem;font-weight:500;line-height:1}
+.avs{display:flex}
+.avs i{width:1.25rem;height:1.25rem;border-radius:var(--radius-pill);border:1px solid rgba(13,58,43,.4)}
+.avs i+i{margin-left:-.5rem}
+.mcap{font-size:.65rem;opacity:.8;line-height:1.35}
+.mthumb{width:4rem;aspect-ratio:3/4;flex:none;border-radius:.75rem;display:grid;place-items:center;background:linear-gradient(160deg,var(--brand-light),var(--brand));color:var(--brand-deep)}
+.mthumb .ico{width:1.75rem;height:1.75rem}
+
+/* ---------- stats (problem) ---------- */
+.band{background:var(--brand-deep);color:#fff;border-radius:var(--radius-card-lg);margin-top:.75rem}
+.stats{padding-top:5rem;padding-bottom:5rem}
+.stats-head{display:grid;gap:1.5rem}
+@media (min-width:1024px){.stats-head{grid-template-columns:1fr 1fr;align-items:end}}
+.intro{font-size:1rem;line-height:1.65;color:rgba(255,255,255,.7);max-width:34rem}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:2rem;row-gap:3rem;margin-top:4rem}
+@media (min-width:1024px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
+.stat{border-top:1px solid rgba(255,255,255,.2);padding-top:1.25rem}
+.stat dd{margin:0}
+.stat-v{display:block;font-size:2.5rem;font-weight:500;letter-spacing:-.03em;line-height:1;white-space:nowrap}
+.stat-v small{font-size:.36em;letter-spacing:0;margin-left:.2em;opacity:.7;font-weight:400}
+@media (min-width:640px){.stat-v{font-size:3.75rem}}
+@media (min-width:1024px){.stat-v{font-size:4.5rem}}
+.stat-l{display:block;font-size:.875rem;color:rgba(255,255,255,.65);margin-top:.75rem;max-width:15rem}
+.stats-foot{margin-top:4rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.15);display:grid;gap:1rem;font-size:.9375rem;line-height:1.6;color:rgba(255,255,255,.8)}
+.stats-foot cite{font-style:normal;font-size:.75rem;color:rgba(255,255,255,.5)}
+@media (min-width:768px){.stats-foot{grid-template-columns:1fr 1fr;column-gap:2rem}}
+.stats-foot strong{color:#fff;font-weight:500}
+
+/* ---------- gap (trust-style carousel) ---------- */
+.trust{position:relative;isolation:isolate;overflow:hidden;background:var(--background);padding-top:4rem;padding-bottom:4rem}
+.trust-top{position:relative;z-index:20;display:flex;flex-direction:column;gap:1.5rem}
+@media (min-width:640px){.trust{padding-top:5rem;padding-bottom:5rem}.trust-top{flex-direction:row;justify-content:space-between;align-items:flex-start}}
+.pbadge{width:7rem;height:7rem;border-radius:var(--radius-pill);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;text-align:center}
+@media (min-width:640px){.pbadge{width:8rem;height:8rem}}
+.pb-v{font-size:1.5rem;font-weight:500;line-height:1}
+.pb-c{font-size:.6rem;color:var(--ink-soft);max-width:7em;line-height:1.3}
+.bcard{max-width:28rem;display:flex;align-items:flex-start;gap:1rem;border-radius:var(--radius-card);background:var(--surface);padding:1.25rem}
+@media (min-width:640px){.bcard{gap:1.25rem;padding:1.5rem}}
+.bchip{flex:none;border-radius:.75rem;background:var(--background);padding:.5rem 1rem;font-size:1.25rem;font-weight:500}
+.bcard h2{font-size:1.125rem;font-weight:500;line-height:1.3}
+.bcard p{font-size:.75rem;color:var(--ink-soft);line-height:1.65;margin-top:.375rem}
+.ghost{position:relative;z-index:0;pointer-events:none;user-select:none;max-width:88rem;margin:3rem auto 0;font-size:8.2vw;font-weight:500;text-transform:uppercase;line-height:1.02;letter-spacing:-.02em}
+.grow{display:grid;grid-template-columns:minmax(0,1fr) var(--ggap,1rem) minmax(0,1fr);align-items:end}
+.grow>.gwp:first-child{grid-column:1;justify-self:start}
+.grow>.gwp:last-child{grid-column:3;justify-self:end}
+@media (min-width:640px){.ghost{--ggap:21rem}}
+.gwp{display:block;will-change:transform}
+.gw{display:block;color:#b8c3bc;white-space:nowrap}
+.gw.ink{color:var(--ink)}
+.gw .m{padding-bottom:.12em}
+.gw .m>span{--d:700ms}
+.coach-pos{position:relative;z-index:10;display:flex;justify-content:center;margin-top:2rem}
+@media (min-width:640px){.coach-pos{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0}}
+.coach{position:relative;width:13rem;aspect-ratio:3/4;border-radius:var(--radius-card);background:var(--brand);overflow:hidden;transform:rotate(6deg);color:#fff;box-shadow:0 24px 60px rgba(13,58,43,.25)}
+@media (min-width:640px){.coach{width:16rem}}
+.coach-pat{position:absolute;inset:0;opacity:.5}
+.coach-in{position:absolute;inset:0}
+.coach-num{position:absolute;top:1rem;left:1rem;font-size:.7rem;font-weight:500;letter-spacing:.18em;opacity:.85}
+.coach-ico{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);width:5rem;height:5rem;border-radius:var(--radius-pill);display:grid;place-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25)}
+.coach-ico .ico{width:2.25rem;height:2.25rem}
+@media (max-width:639px){.coach-ico{top:27%;width:4rem;height:4rem}.coach-ico .ico{width:1.8rem;height:1.8rem}}
+.coach-cap{position:absolute;left:.75rem;right:.75rem;bottom:.75rem;border-radius:.75rem;background:rgba(13,58,43,.45);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding:.625rem .75rem}
+.coach-cap strong{display:block;font-size:.875rem;font-weight:500;line-height:1.3}
+.coach-cap span{display:block;font-size:.65rem;opacity:.85;line-height:1.45;margin-top:.25rem}
+.ctrls{position:relative;z-index:20;margin-top:3rem;display:flex;align-items:center;justify-content:space-between}
+@media (min-width:640px){.ctrls{margin-top:6rem}}
+
+/* ---------- solution (programs-style) ---------- */
+.programs{background:var(--surface);padding-top:6rem;padding-bottom:6rem}
+.plist{margin-top:3.5rem}
+.plist li{border-top:1px solid var(--hairline)}
+.plist li:last-child{border-bottom:1px solid var(--hairline)}
+.prow{display:block;cursor:pointer}
+.prow:focus-visible{background:var(--background);outline-offset:-2px}
+.prow-in{display:flex;align-items:center;gap:1.5rem;padding:1.75rem 0}
+.pidx{width:2.5rem;flex:none;font-size:.875rem;font-weight:500;color:var(--ink-soft)}
+.pbody{flex:1;min-width:0}
+.pname{display:block;font-size:1.5rem;font-weight:500;letter-spacing:-.02em;line-height:1.15}
+.pdesc{display:block;font-size:.875rem;color:var(--ink-soft);margin-top:.375rem}
+@media (min-width:640px){.pname{font-size:1.875rem}}
+.pcirc{width:2.75rem;height:2.75rem;flex:none;border-radius:var(--radius-pill);border:1px solid var(--hairline);display:grid;place-items:center}
+.pcirc .sp{display:inline-flex}
+.pcirc .ico{width:1.1rem;height:1.1rem}
+.steps{margin-top:5rem}
+.steps-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.5rem 1rem}
+.h3{font-size:1.5rem;font-weight:500;letter-spacing:-.02em}
+.steps-head p{font-size:.875rem;color:var(--ink-soft)}
+.step-grid{margin-top:1.5rem;display:grid;gap:1.25rem}
+@media (min-width:768px){.step-grid{grid-template-columns:repeat(3,1fr)}}
+.step{height:100%;background:var(--background);border-radius:var(--radius-card);padding:1.75rem}
+.step-n{width:2.5rem;height:2.5rem;border-radius:var(--radius-pill);background:var(--brand);color:#fff;display:grid;place-items:center;font-size:.875rem;font-weight:500}
+.step h4{margin-top:1.5rem;font-size:1.125rem;font-weight:500}
+.step p{margin-top:.5rem;font-size:.875rem;color:var(--ink-soft);line-height:1.6}
+
+/* ---------- repair first (facilities-style) ---------- */
+.facil{position:relative;background:var(--background);border-radius:var(--radius-card-lg);margin-top:-2.5rem;padding-top:4rem;padding-bottom:5rem}
+.fgrid{display:grid;gap:2.5rem;align-items:end}
+@media (min-width:768px){.fgrid{grid-template-columns:1fr 1fr}}
+.fintro{max-width:24rem}
+.ficon{width:4rem;height:4rem;border-radius:var(--radius-card);background:var(--brand);color:#fff;display:grid;place-items:center}
+.ficon .ico{width:1.75rem;height:1.75rem}
+.fintro .h2{margin-top:1.5rem}
+.fbody{margin-top:1.5rem;font-size:.875rem;color:var(--ink-soft);max-width:20rem;line-height:1.65}
+.fcards{display:flex;align-items:flex-end;gap:1.25rem}
+.fcard{flex:1;min-width:0}
+.fcard:nth-child(2){margin-bottom:2rem}
+.ftile{position:relative;aspect-ratio:3/4;border-radius:var(--radius-card);overflow:hidden;background:var(--surface)}
+.ftile-art{position:absolute;inset:0;will-change:transform}
+.art-ladder{background:var(--brand-deep);padding:1.25rem;display:flex;flex-direction:column;gap:.5rem}
+.rung{border-radius:.625rem;padding:.6rem .75rem;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;display:flex;justify-content:space-between;align-items:center}
+.rung em{font-style:normal;font-size:.6rem;opacity:.7;letter-spacing:.06em}
+.art-foot{background:linear-gradient(165deg,var(--accent-teal),var(--brand));display:flex;justify-content:center;padding-top:1.5rem}
+.phone-art{position:relative;width:48%;aspect-ratio:1/1.9;border:2px solid rgba(255,255,255,.85);border-radius:1.1rem;overflow:hidden;color:#fff;font-size:.6rem;font-weight:500;text-transform:uppercase;letter-spacing:.12em}
+.phone-art .use{position:absolute;top:0;left:0;right:0;height:22%;display:grid;place-items:center;background:rgba(255,255,255,.08)}
+.phone-art .make{position:absolute;bottom:0;left:0;right:0;height:78%;background:var(--brand-light);color:var(--brand-deep);display:grid;place-items:center;text-align:center;line-height:1.4}
+.fcap{position:absolute;left:.75rem;right:.75rem;bottom:.75rem;border-radius:.75rem;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:#fff;padding:.75rem 1rem}
+.fcap.deep{background:rgba(13,58,43,.5)}
+.fcap.blue{background:rgba(11,110,110,.55)}
+.fcap strong{display:block;font-size:.875rem;font-weight:500}
+.fcap span{display:block;font-size:.65rem;opacity:.85;line-height:1.4;margin-top:.125rem}
+
+/* ---------- locator ---------- */
+.locator{background:var(--surface);border-radius:var(--radius-card-lg);margin-top:.75rem;padding-top:5rem;padding-bottom:5rem}
+.loc-head{display:grid;gap:2rem}
+@media (min-width:1024px){.loc-head{grid-template-columns:1fr auto;align-items:end}}
+.impact{background:var(--background);border-radius:var(--radius-card);padding:1.25rem 1.5rem;max-width:26rem;display:flex;gap:1rem;align-items:center}
+.impact-ico{width:2.75rem;height:2.75rem;flex:none;border-radius:var(--radius-pill);background:var(--brand);color:#fff;display:grid;place-items:center}
+.impact-ico .ico{width:1.2rem;height:1.2rem}
+.impact strong{display:block;font-size:1.0625rem;font-weight:500}
+.impact span{display:block;font-size:.8125rem;color:var(--ink-soft);line-height:1.45;margin-top:.125rem}
+.filters{margin-top:3rem;display:flex;flex-wrap:wrap;gap:1rem 1.5rem;align-items:center;justify-content:space-between}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{padding:.625rem 1.1rem;border-radius:var(--radius-pill);border:1px solid var(--hairline);background:var(--background);font-size:.8125rem;font-weight:500;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.sel{display:flex;align-items:center;gap:.75rem;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-soft)}
+.sel select{appearance:none;-webkit-appearance:none;font:inherit;font-size:.875rem;text-transform:none;letter-spacing:0;color:var(--ink);background:var(--background) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230b0f0d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 1rem center/.8rem;border:1px solid var(--hairline);border-radius:var(--radius-pill);padding:.625rem 2.5rem .625rem 1.1rem;cursor:pointer}
+.fcount{margin-top:1.5rem;font-size:.875rem;color:var(--ink-soft)}
+.fac-grid{margin-top:1rem;display:grid;gap:1rem}
+@media (min-width:768px){.fac-grid{grid-template-columns:1fr 1fr}}
+@media (min-width:1024px){.fac-grid{grid-template-columns:repeat(3,1fr)}}
+.fac{background:var(--background);border-radius:var(--radius-card);padding:1.5rem;display:flex;flex-direction:column;gap:1rem;animation:rise .6s var(--e-expo) both}
+.fac-top{display:flex;justify-content:space-between;align-items:center;gap:.75rem}
+.tag{display:inline-flex;align-items:center;gap:.375rem;font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.12em;padding:.35rem .65rem;border-radius:var(--radius-pill)}
+.tag.repair{background:#e3f4ea;color:#14633f}
+.tag.reuse{background:#f1f7d1;color:#4d5c06}
+.tag.recycle{background:#ddefef;color:#0b5c5c}
+.tag.battery{background:#fdf0e1;color:#8a4b08}
+.dist{font-size:.8125rem;color:var(--ink-soft)}
+.fac h3{font-size:1.25rem;font-weight:500;letter-spacing:-.01em;line-height:1.2}
+.fac .area{font-size:.8125rem;color:var(--ink-soft);margin-top:.25rem}
+.accepts{display:flex;flex-wrap:wrap;gap:.375rem}
+.accepts li{font-size:.7rem;padding:.25rem .6rem;border-radius:var(--radius-pill);background:var(--surface)}
+.fac-meta{font-size:.8125rem;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.25rem 1rem}
+.fac-meta b{font-weight:500;color:var(--brand)}
+.fac-foot{margin-top:auto;padding-top:1rem;border-top:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.8125rem;color:var(--ink-soft)}
+.logbtn{flex:none;font-size:.7rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;padding:.6rem 1rem;border-radius:var(--radius-pill);background:var(--ink);color:#fff;transition:background .2s}
+.logbtn:hover{background:var(--brand-deep)}
+.empty{grid-column:1/-1;padding:3rem 1.5rem;text-align:center;background:var(--background);border-radius:var(--radius-card);color:var(--ink-soft);font-size:.9375rem}
+.demo-note{margin-top:1.5rem;font-size:.75rem;color:var(--ink-soft);max-width:44rem;line-height:1.6}
+
+/* ---------- floating bar ---------- */
+.stick{position:fixed;top:.75rem;left:50%;z-index:60;display:flex;align-items:center;gap:1.5rem;width:max-content;max-width:calc(100vw - 1rem);padding:.375rem .375rem .375rem 1.25rem;border-radius:var(--radius-pill);background:rgba(13,58,43,.86);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);color:#fff;box-shadow:0 14px 40px rgba(13,58,43,.28);transform:translate(-50%,-160%);transition:transform .7s var(--e-expo)}
+.stick.show{transform:translate(-50%,0)}
+.stick .brand{font-size:.8125rem}
+.stick .brand .ico{width:1.1rem;height:1.1rem}
+.stick-links{display:none;gap:1.25rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+.stick-links a{opacity:.8;transition:opacity .2s}
+.stick-links a:hover{opacity:1}
+.stick-right{display:flex;align-items:center;gap:1rem}
+.stick-check{display:none;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;text-underline-offset:4px}
+.stick-check:hover{text-decoration:underline}
+@media (min-width:640px){.stick-check{display:inline}}
+@media (min-width:1024px){.stick-links{display:flex}}
+.av.ini{font-size:.65rem;font-weight:500;letter-spacing:0}
+
+/* ---------- members (dashboard teaser) ---------- */
+.members{position:relative;isolation:isolate;overflow:hidden;padding-top:5rem;padding-bottom:5rem}
+@media (min-width:640px){.members{padding-top:6rem;padding-bottom:6rem}}
+.members .bgpat{position:absolute;inset:0;z-index:-1;opacity:.9}
+.members .bgpat svg{width:100%;height:100%}
+.mem-grid{display:grid;gap:3.5rem;align-items:center}
+@media (min-width:1024px){.mem-grid{grid-template-columns:1fr 1.1fr}}
+.mem-body{margin-top:1.5rem;font-size:1rem;line-height:1.65;color:rgba(255,255,255,.72);max-width:30rem}
+.mem-feats{margin-top:2rem;display:grid;gap:1rem}
+@media (min-width:640px){.mem-feats{grid-template-columns:1fr 1fr;column-gap:1.5rem}}
+.mem-feats li{display:flex;gap:.9rem;align-items:flex-start}
+.mf-ico{width:2.5rem;height:2.5rem;flex:none;border-radius:var(--radius-pill);display:grid;place-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:var(--brand-light)}
+.mf-ico .ico{width:1.1rem;height:1.1rem}
+.mem-feats strong{display:block;font-size:.9375rem;font-weight:500}
+.mem-feats div>span{display:block;font-size:.8125rem;line-height:1.5;color:rgba(255,255,255,.62);margin-top:.125rem}
+.mem-ctas{margin-top:2.5rem;display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+.mem-note{margin-top:1rem;font-size:.75rem;color:rgba(255,255,255,.5)}
+.mock-wrap{position:relative;padding:2.5rem 0}
+.mock-par{will-change:transform}
+.mock{max-width:34rem;margin:0 auto;background:var(--surface);border-radius:1.5rem;padding:.75rem;display:grid;grid-template-columns:3rem 1fr;gap:.75rem;color:var(--ink);box-shadow:0 40px 90px rgba(0,0,0,.35);transform:rotate(-3deg)}
+.mock-side{background:var(--brand-deep);border-radius:1rem;padding:.75rem .4rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(255,255,255,.55)}
+.mock-side span{display:grid;place-items:center;width:2rem;height:2rem;border-radius:.6rem}
+.mock-side span.on{background:rgba(255,255,255,.14);color:#fff}
+.mock-side .ico{width:.95rem;height:.95rem}
+.mock-main{display:flex;flex-direction:column;gap:.55rem;padding:.25rem 0;min-width:0}
+.mock-hi{font-size:1.25rem;font-weight:500;letter-spacing:-.02em;line-height:1}
+.mock-hi small{display:block;font-size:.55rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.4rem}
+.mock-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem}
+.mt{background:#fff;border-radius:.75rem;padding:.6rem .65rem}
+.mt b{display:block;font-size:1.25rem;font-weight:500;line-height:1;letter-spacing:-.02em}
+.mt span{display:block;font-size:.55rem;color:var(--ink-soft);margin-top:.3rem}
+.mt.d{background:var(--brand-deep);color:#fff}
+.mt.d span{color:rgba(255,255,255,.6)}
+.mock-pk{background:var(--brand-deep);color:#fff;border-radius:.875rem;padding:.75rem .85rem}
+.mock-pk small{font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+.mock-pk b{display:block;font-size:1rem;font-weight:500;margin-top:.25rem}
+.mock-pk span{font-size:.6rem;opacity:.75}
+.mock-track{display:grid;grid-template-columns:repeat(4,1fr);gap:.25rem;margin-top:.6rem}
+.mock-track i{height:3px;border-radius:var(--radius-pill);background:rgba(255,255,255,.2)}
+.mock-track i.on{background:var(--brand-light)}
+.ml{display:flex;align-items:center;gap:.5rem;background:#fff;border-radius:.75rem;padding:.5rem .6rem;font-size:.65rem}
+.ml .ico{width:.9rem;height:.9rem;color:var(--brand)}
+.ml span{flex:1}
+.ml em{font-style:normal;font-size:.5rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;padding:.2rem .45rem;border-radius:var(--radius-pill);background:#e3f4ea;color:#14633f}
+.ml em.r{background:var(--danger-bg);color:var(--danger)}
+.float{position:absolute;z-index:2;display:flex;align-items:center;gap:.6rem;background:#fff;color:var(--ink);border-radius:1rem;padding:.65rem .9rem .65rem .65rem;font-size:.75rem;line-height:1.3;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.float small{display:block;color:var(--ink-soft);font-size:.65rem}
+.float .fi{width:2rem;height:2rem;border-radius:var(--radius-pill);display:grid;place-items:center;background:var(--brand-light);color:var(--brand-deep)}
+.float .fi .ico{width:1rem;height:1rem}
+.float.f1{top:0;left:0}
+.float.f2{bottom:0;right:0}
+.float.f2 .fi{background:var(--lime)}
+.impact-link{display:inline-block;margin-top:.375rem;font-size:.75rem;font-weight:500;color:var(--brand);text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- SDGs (testimonials-style) ---------- */
+.sdg{padding-top:5rem;padding-bottom:5rem}
+@media (min-width:640px){.sdg{padding-top:6rem;padding-bottom:6rem}}
+.sdg-grid{margin-top:3.5rem;display:grid;gap:1.25rem}
+@media (min-width:768px){.sdg-grid{grid-template-columns:1fr 1fr}}
+@media (min-width:1024px){.sdg-grid{grid-template-columns:repeat(4,1fr)}}
+.sdg-card{height:100%;display:flex;flex-direction:column;justify-content:space-between;border-radius:var(--radius-card);background:var(--surface);padding:1.75rem}
+.sdg-n{font-size:2.25rem;font-weight:500;color:var(--brand);line-height:1;letter-spacing:-.02em}
+.sdg-n small{font-size:.4em;letter-spacing:.18em;margin-right:.35em;vertical-align:.55em}
+.sdg-card blockquote{margin-top:1rem;font-size:1.125rem;line-height:1.55;color:var(--ink)}
+.sdg-card figcaption{margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--hairline)}
+.sdg-card figcaption strong{display:block;font-weight:500}
+.sdg-card figcaption span{display:block;font-size:.875rem;color:var(--ink-soft);line-height:1.5;margin-top:.125rem}
+
+/* ---------- footer ---------- */
+.footer{padding-top:3.5rem;padding-bottom:3.5rem}
+@media (min-width:640px){.footer{padding-top:4rem;padding-bottom:4rem}}
+.fcta{border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:3.5rem;display:flex;flex-direction:column;gap:2rem}
+@media (min-width:640px){.fcta{flex-direction:row;justify-content:space-between;align-items:flex-end}}
+.fcta-t{font-size:3.75rem;font-weight:500;line-height:.92;letter-spacing:-.02em;margin-top:1rem}
+.fcols{padding:3.5rem 0;display:grid;gap:2.5rem}
+@media (min-width:768px){.fcols{grid-template-columns:1.4fr 1fr 1fr 1fr}}
+.fbrand{max-width:20rem}
+.fbrand .brand{font-size:1.125rem}
+.fblurb{font-size:.875rem;color:rgba(255,255,255,.65);margin-top:1rem;line-height:1.6}
+.fnote{margin-top:1.5rem;font-size:.75rem;color:rgba(255,255,255,.5);line-height:1.6}
+.fnav h3{font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.5)}
+.fnav ul{margin-top:1rem;font-size:.875rem;color:rgba(255,255,255,.8);display:grid;gap:.75rem}
+.fnav a,.fnav button{text-align:left;transition:color .2s}
+.fnav a:hover,.fnav button:hover{color:#fff}
+.soon{display:inline-block;margin-left:.4rem;font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;padding:.1rem .4rem;border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6);vertical-align:middle}
+.fbar{border-top:1px solid rgba(255,255,255,.15);padding-top:2rem;font-size:.875rem;color:rgba(255,255,255,.6);display:flex;flex-direction:column;gap:1.25rem}
+.fbar nav{display:flex;flex-wrap:wrap;gap:1.25rem}
+.fbar a:hover{color:#fff}
+@media (min-width:640px){.fbar{flex-direction:row;justify-content:space-between;align-items:center}}
+
+/* ---------- menu overlay ---------- */
+.overlay{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;pointer-events:none;visibility:hidden}
+.overlay.vis{visibility:visible}
+.overlay.open{pointer-events:auto}
+.menu-bd{position:absolute;inset:0;background:var(--brand-deep);opacity:0}
+.menu-panel{position:relative;height:100%;padding:.5rem;color:#fff;display:flex;opacity:0}
+.menu-in{flex:1;display:flex;flex-direction:column;padding:1.5rem}
+@media (min-width:640px){.menu-panel{padding:.75rem}.menu-in{padding:2rem 2.5rem}}
+.menu-top{display:flex;justify-content:space-between;align-items:center;font-size:.75rem}
+.menu-nav{flex:1;display:flex;flex-direction:column;justify-content:center;gap:.5rem;padding:2rem 0}
+.menu-nav a{display:block;font-size:3rem;font-weight:500;letter-spacing:-.02em;line-height:1.05;transition:color .25s;opacity:0}
+.menu-nav a:hover{color:var(--brand-light)}
+@media (min-width:640px){.menu-nav a{font-size:4.5rem}}
+.menu-bot{border-top:1px solid rgba(255,255,255,.15);padding-top:2rem;display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem}
+.menu-ctas{display:flex;flex-wrap:wrap;gap:.75rem}
+.pill.ghostlight{border-color:rgba(255,255,255,.35);color:#fff}
+.pill.ghostlight:hover{background:#fff;color:var(--brand-deep);border-color:#fff}
+.menu-bot nav{display:flex;flex-wrap:wrap;gap:1.25rem;font-size:.875rem;color:rgba(255,255,255,.7)}
+.menu-bot nav a:hover{color:#fff}
+@media (min-width:640px){.menu-bot{flex-direction:row;justify-content:space-between;align-items:center}}
+
+/* ---------- device check modal ---------- */
+.modal{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;padding:.75rem;pointer-events:none;visibility:hidden}
+.modal.vis{visibility:visible}
+.modal.open{pointer-events:auto}
+@media (min-width:640px){.modal{align-items:center;padding:1.5rem}}
+.modal-bd{position:absolute;inset:0;background:rgba(13,58,43,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0}
+.modal-panel{position:relative;width:100%;max-height:92svh;overflow-y:auto;overscroll-behavior:contain;border-radius:var(--radius-card-lg);background:var(--surface-card);padding:1.5rem;color:var(--ink);box-shadow:0 30px 80px rgba(13,58,43,.35);opacity:0}
+@media (min-width:640px){.modal-panel{padding:2rem;max-width:36rem}}
+.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.mtitle{font-size:2.25rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:.75rem}
+@media (min-width:640px){.mtitle{font-size:3rem}}
+.prog{margin-top:1.5rem;display:flex;gap:.375rem}
+.prog i{flex:1;height:3px;border-radius:var(--radius-pill);background:var(--hairline);transition:background .35s}
+.prog i.on{background:var(--brand)}
+.qmeta{margin-top:1.25rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.7rem;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-soft)}
+.back{display:inline-flex;align-items:center;gap:.375rem;text-transform:inherit;letter-spacing:inherit;color:var(--ink)}
+.back .ico{transform:scaleX(-1);width:.9rem;height:.9rem}
+.back:hover{color:var(--brand)}
+.q{margin-top:.5rem;font-size:1.5rem;font-weight:500;letter-spacing:-.02em;line-height:1.2}
+.opts{margin-top:1.25rem;display:grid;gap:.5rem;grid-template-columns:1fr 1fr}
+.opts.list{grid-template-columns:1fr}
+.opt{display:flex;align-items:center;gap:.75rem;text-align:left;padding:.7rem .85rem;border-radius:.875rem;border:1px solid var(--hairline);background:var(--background);font-size:.875rem;font-weight:500;line-height:1.25;transition:border-color .2s,background .2s}
+.opt:hover{border-color:var(--ink)}
+.opt.sel{border-color:var(--brand);background:#eef8f2}
+.oi{width:2.25rem;height:2.25rem;flex:none;border-radius:.625rem;background:var(--surface);display:grid;place-items:center}
+.oi .ico{width:1.15rem;height:1.15rem}
+.opt small{display:block;font-weight:400;font-size:.75rem;color:var(--ink-soft);margin-top:.125rem}
+.opt.warn .oi{background:var(--danger-bg);color:var(--danger)}
+.hazard{margin-top:1.5rem;display:flex;gap:.75rem;align-items:flex-start;padding:1rem 1.1rem;border-radius:1rem;background:var(--danger-bg);color:var(--danger);font-size:.875rem;line-height:1.55}
+.hazard .ico{width:1.25rem;height:1.25rem;margin-top:.1rem}
+.hazard strong{font-weight:500}
+.verdict{margin-top:1.25rem;border-radius:var(--radius-card);padding:1.5rem;background:var(--brand-deep);color:#fff}
+.verdict.v-reuse{background:var(--brand)}
+.verdict.v-recycle{background:var(--accent-teal)}
+.v-ico{width:3rem;height:3rem;border-radius:var(--radius-pill);display:grid;place-items:center;background:var(--brand-light);color:var(--brand-deep)}
+.v-reuse .v-ico{background:var(--lime)}
+.v-recycle .v-ico{background:#fff;color:var(--accent-teal)}
+.v-ico .ico{width:1.4rem;height:1.4rem}
+.verdict h3{margin-top:1rem;font-size:2.25rem;font-weight:500;letter-spacing:-.02em;line-height:1}
+.verdict p{margin-top:.75rem;font-size:.9rem;line-height:1.6;color:rgba(255,255,255,.85)}
+.why{margin-top:1rem!important;padding-top:1rem;border-top:1px solid rgba(255,255,255,.18);font-size:.8125rem!important;color:rgba(255,255,255,.75)!important}
+.why b{font-weight:500;color:#fff}
+.verdict .pill{margin-top:1.25rem;white-space:normal;text-align:left}
+.checklist{margin-top:1.75rem}
+.checklist h4{font-size:.7rem;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-soft)}
+.checklist ol{margin-top:.75rem;display:grid;gap:.5rem}
+.ck{display:flex;gap:.75rem;align-items:flex-start;padding:.75rem .9rem;border-radius:.875rem;background:var(--surface);font-size:.875rem;line-height:1.45;cursor:pointer}
+.ck input{appearance:none;-webkit-appearance:none;width:1.15rem;height:1.15rem;flex:none;margin-top:.1rem;border:1.5px solid var(--ink-soft);border-radius:.35rem;display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s}
+.ck input:checked{background:var(--brand);border-color:var(--brand)}
+.ck input:checked::after{content:"";width:.55rem;height:.3rem;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:translateY(-1px) rotate(-45deg)}
+.ck input:checked+span{text-decoration:line-through;color:var(--ink-soft)}
+.mfoot{margin-top:1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.linkbtn{font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.12em;text-decoration:underline;text-underline-offset:4px;color:var(--ink-soft)}
+.linkbtn:hover{color:var(--ink)}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;bottom:1.25rem;z-index:120;transform:translate(-50%,180%);width:max-content;max-width:calc(100vw - 2rem);background:var(--ink);color:#fff;padding:.9rem 1.25rem;border-radius:1rem;font-size:.875rem;line-height:1.45;box-shadow:0 18px 40px rgba(0,0,0,.25);transition:transform .55s var(--e-expo)}
+.toast.show{transform:translate(-50%,0)}
+.toast small{display:block;color:var(--brand-light);font-size:.8125rem;margin-top:.25rem}
+
+/* ================= MOTION POLISH ================= */
+:root{--ease-out:cubic-bezier(.23,1,.32,1);--e-spring:cubic-bezier(.34,1.4,.64,1)}
+/* press feedback */
+.pill{transition:background .25s,color .25s,border-color .25s,transform 160ms var(--ease-out)}
+.abtn{transition:background .25s,border-color .25s,transform 160ms var(--ease-out)}
+.chip{transition:background .2s,color .2s,border-color .2s,transform 160ms var(--ease-out)}
+.logbtn{transition:background .2s,transform 160ms var(--ease-out)}
+.opt{transition:border-color .2s,background .2s,transform 160ms var(--ease-out)}
+.hlogin{transition:background .25s,color .25s,transform 160ms var(--ease-out)}
+.xbtn,.burger{transition:background .25s,transform 160ms var(--ease-out)}
+.pill:active,.abtn:active,.chip:active,.logbtn:active,.hlogin:active,.xbtn:active,.burger:active,.qbtn:active,.lang button:active,.locbtn:active,.dist-btn:active{transform:scale(.97)}
+.opt:active{transform:scale(.98)}
+@keyframes up8{from{opacity:0;transform:translateY(10px)}}
+@keyframes vreveal{from{clip-path:circle(0% at 3rem 3rem)}to{clip-path:circle(160% at 3rem 3rem)}}
+@keyframes vpop{from{opacity:0;transform:scale(.4) rotate(-25deg)}}
+@keyframes nudge{0%,100%{transform:none}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+/* verdict reveal */
+.vr{animation:vreveal .9s var(--e-expo) both}
+.vr .v-ico{animation:vpop .7s var(--e-spring) both .25s}
+.vr>:not(.v-ico){animation:up8 .5s var(--ease-out) both;animation-delay:calc(320ms + var(--i,0) * 60ms)}
+.stag-list>li{animation:up8 .45s var(--ease-out) both;animation-delay:calc(560ms + var(--i,0) * 50ms)}
+.hazard.nudge{animation:up8 .35s var(--ease-out) both,nudge .45s ease-in-out .4s}
+/* toast medal */
+.toast.has-medal{display:flex;align-items:center;gap:.9rem;text-align:left}
+.medal{position:relative;width:2.75rem;height:2.75rem;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--lime);color:var(--brand-deep)}
+.medal .ico{width:1.3rem;height:1.3rem}
+.medal::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--lime);opacity:0}
+.toast.show .medal{animation:vpop .7s var(--e-spring) both .2s}
+.toast.show .medal::after{animation:ring 1s var(--ease-out) .45s}
+@keyframes ring{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.9)}}
+/* floating +kg label & particle burst */
+.floaty{position:fixed;z-index:130;pointer-events:none;transform:translate(-50%,0);font-size:.8125rem;font-weight:500;color:var(--brand-deep);background:var(--lime);padding:.3rem .75rem;border-radius:var(--radius-pill);box-shadow:0 8px 20px rgba(13,58,43,.2);animation:floaty 1.15s var(--ease-out) forwards;white-space:nowrap}
+@keyframes floaty{0%{opacity:0;transform:translate(-50%,4px) scale(.9)}15%{opacity:1;transform:translate(-50%,-10px) scale(1)}100%{opacity:0;transform:translate(-50%,-60px)}}
+.burst{position:absolute;inset:0;pointer-events:none;z-index:3}
+.burst i{position:absolute;left:50%;top:50%;width:.5rem;height:.5rem;border-radius:2px;background:var(--c);animation:burst .9s var(--ease-out) forwards}
+@keyframes burst{from{transform:translate(-50%,-50%)}to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--r)) scale(.3);opacity:0}}
+.rn{font-variant-numeric:tabular-nums}
+
+/* ================= LANGUAGE SWITCH ================= */
+.lang{display:none;padding:.2rem;border-radius:var(--radius-pill);background:rgba(255,255,255,.15);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.lang button{min-width:2.1rem;padding:.4rem .6rem;border-radius:var(--radius-pill);font-size:.72rem;font-weight:500;line-height:1;color:#fff;opacity:.8;transition:background .2s,color .2s,opacity .2s,transform 160ms var(--ease-out)}
+.lang button:hover{opacity:1}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--brand-deep);opacity:1}
+@media (min-width:640px){.site-header .lang,.stick .lang{display:inline-flex}}
+.menu-bot .lang{display:inline-flex}
+html[lang="kn"] body{font-family:"Onest","Noto Sans Kannada","Nirmala UI",system-ui,sans-serif}
+html[lang="hi"] body{font-family:"Onest","Noto Sans Devanagari","Nirmala UI",system-ui,sans-serif}
+html:not([lang="en"]) .hero-title,html:not([lang="en"]) .tagline,html:not([lang="en"]) .h2,html:not([lang="en"]) .mtitle,html:not([lang="en"]) .fcta-t,html:not([lang="en"]) .ph-title{line-height:1.25;letter-spacing:0}
+html:not([lang="en"]) .m{padding-top:.08em;padding-bottom:.22em}
+html:not([lang="en"]) .hero-title{font-size:10vw}
+@media (max-width:640px){html:not([lang="en"]) .hero-title{font-size:15vw}}
+
+/* ================= TRUCKS AROUND THE EQUATOR ================= */
+.trucks{margin-top:4rem;padding-top:2.5rem;border-top:1px solid rgba(255,255,255,.15);display:grid;gap:2.5rem;align-items:center}
+@media (min-width:900px){.trucks{grid-template-columns:1fr 1fr}}
+.tk-lead{font-size:1.25rem;font-weight:500;line-height:1.35;max-width:28rem}
+.tk-count{margin-top:2rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.tk-count b{font-size:4rem;font-weight:500;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--lime)}
+@media (min-width:640px){.tk-count b{font-size:5.5rem}}
+.tk-count span{font-size:.875rem;color:rgba(255,255,255,.7)}
+.tk-bar{margin-top:1rem;height:3px;max-width:24rem;border-radius:var(--radius-pill);background:rgba(255,255,255,.15);overflow:hidden}
+.tk-bar i{display:block;height:100%;width:100%;background:var(--lime);transform-origin:left;transform:scaleX(0)}
+.tk-body{margin-top:1.5rem;font-size:.9375rem;line-height:1.6;color:rgba(255,255,255,.8);max-width:30rem}
+.tk-body cite{display:block;margin-top:.5rem;font-style:normal;font-size:.75rem;color:rgba(255,255,255,.5)}
+.globe{width:100%;max-width:30rem;margin:0 auto;overflow:visible}
+
+/* ================= WHAT'S INSIDE (exploding phone) ================= */
+.inside{position:relative;height:330vh;margin-top:.75rem}
+.inside-pin{position:sticky;top:.5rem;height:calc(100svh - 1rem);min-height:34rem;border-radius:var(--radius-card-lg);background:var(--brand-deep);color:#fff;overflow:hidden;isolation:isolate;display:grid;grid-template-rows:auto 1fr;padding-top:2rem;padding-bottom:1.5rem}
+.inside-pin .bgpat{position:absolute;inset:0;z-index:-1;opacity:.7}
+.inside-pin .bgpat svg{width:100%;height:100%}
+@media (min-width:900px){.inside-pin{grid-template-rows:1fr;grid-template-columns:1fr 1.05fr;align-items:center;padding-top:0;padding-bottom:0}}
+.in-copy{position:relative;z-index:2}
+.in-lead{margin-top:1rem;font-size:.9375rem;line-height:1.6;color:rgba(255,255,255,.72);max-width:30rem;display:none}
+@media (min-width:900px){.in-lead{display:block}}
+.parts{margin-top:1.25rem;display:grid;gap:.4rem;max-width:32rem}
+.part{display:grid;grid-template-columns:2rem 1fr;column-gap:.75rem;padding:.7rem .9rem;border-radius:1rem;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);opacity:.5;transition:opacity .4s,background .4s,border-color .4s}
+.part.on{opacity:1;background:rgba(255,255,255,.09);border-color:rgba(194,224,41,.55)}
+.part>span{grid-row:span 3;width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:500;background:rgba(255,255,255,.1);transition:background .4s,color .4s}
+.part.on>span{background:var(--lime);color:var(--brand-deep)}
+.part b{font-size:.9375rem;font-weight:500;line-height:1.3}
+.part em{font-style:normal;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--brand-light);margin-top:.15rem}
+.part p{font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.7);max-height:0;overflow:hidden;opacity:0;transition:max-height .45s var(--e-expo),opacity .35s,margin .35s}
+.part.on p{max-height:6rem;opacity:1;margin-top:.35rem}
+.in-foot{margin-top:1rem;font-size:.72rem;color:rgba(255,255,255,.55);max-width:32rem;display:none}
+@media (min-width:900px){.in-foot{display:block}}
+.in-stage{position:relative;height:100%;min-height:12rem;display:grid;place-items:center;perspective:1800px}
+.ph3d{position:relative;width:6rem;height:12rem;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateZ(var(--rz,0deg))}
+@media (max-width:899px){
+  .inside-pin{padding-top:4.75rem}
+  .inside-pin .h2{font-size:2.25rem}
+  .parts{margin-top:1rem;gap:.3rem}
+  .part{padding:.5rem .75rem}
+  .part>span{width:1.6rem;height:1.6rem;font-size:.6rem}
+  .part em{display:none}
+  .in-stage{transform:scale(.85)}
+}
+@media (max-width:899px) and (max-height:720px){.part:not(.on){display:none}}
+@media (min-width:900px){.ph3d{width:11rem;height:22rem}}
+.ly{position:absolute;inset:0;border-radius:1.4rem;transform:translateZ(var(--z,0px));outline:2px solid transparent;outline-offset:5px;transition:outline-color .35s,box-shadow .35s}
+.ly.on{outline-color:var(--lime);box-shadow:0 0 50px rgba(194,224,41,.35)}
+.ly-frame{background:linear-gradient(150deg,#2c4a3e,#13251e);border:1px solid rgba(255,255,255,.18)}
+.ly-frame .cam{position:absolute;top:8%;left:10%;width:34%;aspect-ratio:1;border-radius:28%;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15)}
+.ly-frame .cam i{position:absolute;width:38%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 35%,#4c6d8f,#0b1520);border:2px solid #3a3f44}
+.ly-frame .cam i:nth-child(1){top:8%;left:8%}.ly-frame .cam i:nth-child(2){bottom:8%;left:8%}.ly-frame .cam i:nth-child(3){top:30%;right:8%}
+.ly-batt{inset:16% 12% 20%;border-radius:.8rem;background:linear-gradient(160deg,#d7ee5a,#a8c41d);color:var(--brand-deep);display:grid;place-items:center;font-size:.8rem;font-weight:500;letter-spacing:.1em;box-shadow:inset 0 0 0 2px rgba(13,58,43,.2)}
+.ly-board{inset:6% 8%;border-radius:1rem;background:#1f8a5b;overflow:hidden}
+.ly-board svg{position:absolute;inset:0;width:100%;height:100%}
+.ly-board .chip3{position:absolute;border-radius:.25rem;background:#0b1712;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.ly-disp{background:radial-gradient(120% 80% at 30% 20%,#1f8a5b,#071a13 70%);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;color:rgba(255,255,255,.85)}
+.ly-disp .ico{width:2.25rem;height:2.25rem}
+.ly-glass{background:linear-gradient(125deg,rgba(255,255,255,.28),rgba(255,255,255,.04) 45%,rgba(255,255,255,.14));border:1.5px solid rgba(255,255,255,.5)}
+.in-hint{position:absolute;left:50%;bottom:1rem;transform:translateX(-50%);font-size:.65rem;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.5);transition:opacity .4s}
+.in-prog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.08)}
+.in-prog i{display:block;height:100%;background:var(--lime);transform-origin:left;transform:scaleX(0)}
+.inside.static{height:auto}
+.inside.static .inside-pin{position:relative;top:0;height:auto;padding-top:3rem;padding-bottom:3rem}
+.inside.static .part{opacity:1}
+.inside.static .part p{max-height:none;opacity:1;margin-top:.35rem}
+.inside.static .in-stage{min-height:24rem}
+
+/* ================= DRAWER CALCULATOR ================= */
+.drawer{background:var(--background);padding-top:5rem;padding-bottom:5rem}
+.dr-grid{display:grid;gap:2.5rem;align-items:start}
+@media (min-width:1024px){.dr-grid{grid-template-columns:1fr 1fr;gap:3.5rem}}
+.dr-body{margin-top:1.25rem;font-size:.9375rem;line-height:1.65;color:var(--ink-soft);max-width:30rem}
+.dr-rows{margin-top:2rem;display:grid;gap:.5rem}
+.dr-row{display:flex;align-items:center;gap:1rem;padding:.75rem .9rem;border-radius:1rem;background:var(--surface)}
+.dr-row .oi{width:2.5rem;height:2.5rem;flex:none;border-radius:.75rem;background:#fff;display:grid;place-items:center;color:var(--brand)}
+.dr-row .oi .ico{width:1.2rem;height:1.2rem}
+.dr-row>span:nth-child(2){flex:1;font-size:.9375rem;font-weight:500}
+.qty{display:flex;align-items:center;gap:.25rem}
+.qbtn{width:2.25rem;height:2.25rem;border-radius:50%;background:#fff;border:1px solid var(--hairline);font-size:1.1rem;line-height:1;display:grid;place-items:center}
+.qbtn:hover{border-color:var(--ink)}
+.qty output{min-width:2rem;text-align:center;font-weight:500;font-variant-numeric:tabular-nums}
+.dr-out{position:relative;isolation:isolate;overflow:hidden;border-radius:var(--radius-card-lg);background:var(--brand-deep);color:#fff;padding:1.75rem}
+@media (min-width:640px){.dr-out{padding:2.25rem}}
+.dr-out .bgpat{position:absolute;inset:0;z-index:-1;opacity:.6}
+.dr-box{position:relative;height:7.5rem;border-radius:1rem;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.2);display:flex;flex-wrap:wrap;align-content:flex-end;gap:.35rem;padding:.75rem;overflow:hidden}
+.dr-box::after{content:"";position:absolute;left:50%;bottom:.6rem;width:3rem;height:.35rem;margin-left:-1.5rem;border-radius:var(--radius-pill);background:rgba(255,255,255,.25)}
+.dr-tok{width:2.25rem;height:2.25rem;border-radius:.7rem;display:grid;place-items:center;background:var(--brand-light);color:var(--brand-deep);animation:tokin .5s var(--e-spring) both}
+.dr-tok .ico{width:1.1rem;height:1.1rem}
+.dr-tok.t-laptop{background:var(--lime)}.dr-tok.t-tablet{background:#fff;color:var(--accent-teal)}.dr-tok.t-chargers{background:rgba(255,255,255,.2);color:#fff}.dr-tok.t-batteries{background:#f5b44a}
+@keyframes tokin{from{opacity:0;transform:translateY(-2.5rem) rotate(-14deg)}}
+.dr-empty{position:absolute;inset:0;display:grid;place-items:center;font-size:.8125rem;color:rgba(255,255,255,.5);text-align:center;padding:1rem}
+.dr-val{margin-top:1.75rem;font-size:3.5rem;font-weight:500;letter-spacing:-.03em;line-height:1;color:var(--lime)}
+@media (min-width:640px){.dr-val{font-size:4.5rem}}
+.dr-val-l{margin-top:.5rem;font-size:.875rem;color:rgba(255,255,255,.7)}
+.dr-mets{margin-top:1.5rem;display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem}
+@media (min-width:640px){.dr-mets{grid-template-columns:repeat(4,1fr)}}
+.dr-mets div{padding:.75rem .85rem;border-radius:.9rem;background:rgba(255,255,255,.08)}
+.dr-mets b{display:block;font-size:1.25rem;font-weight:500;font-variant-numeric:tabular-nums}
+.dr-mets small{font-size:.7rem;color:rgba(255,255,255,.6)}
+.dr-cta{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:.6rem}
+.dr-note{margin-top:1.25rem;font-size:.7rem;line-height:1.55;color:rgba(255,255,255,.5)}
+
+/* ================= LIVE MAP ================= */
+.map-wrap{margin-top:2rem;position:relative;height:22rem;border-radius:var(--radius-card);overflow:hidden;background:#e7ede8}
+@media (min-width:768px){.map-wrap{height:27rem}}
+.map{position:absolute;inset:0;z-index:0}
+.map-tools{position:absolute;z-index:500;top:.75rem;right:.75rem;display:flex;gap:.5rem}
+.locbtn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:var(--radius-pill);background:#fff;color:var(--ink);font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 8px 24px rgba(13,58,43,.18);transition:background .2s,color .2s,transform 160ms var(--ease-out)}
+.locbtn:hover{background:var(--ink);color:#fff}
+.locbtn .ico{width:1rem;height:1rem}
+.map-legend{position:absolute;z-index:500;left:.75rem;bottom:.75rem;display:flex;flex-wrap:wrap;gap:.35rem .75rem;padding:.5rem .8rem;border-radius:.8rem;background:rgba(255,255,255,.92);font-size:.68rem;color:var(--ink-soft);max-width:calc(100% - 1.5rem)}
+.map-legend span{display:inline-flex;align-items:center;gap:.35rem}
+.map-legend i{width:.6rem;height:.6rem;border-radius:50%;background:var(--c)}
+.map-off{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:1.5rem;font-size:.875rem;color:var(--ink-soft)}
+.map-wrap.off .map-off{display:grid}
+.map-wrap.off .map-tools,.map-wrap.off .map-legend{display:none}
+.mk-drop{display:block;width:32px;height:32px;animation:mkdrop .55s var(--e-spring) both}
+@keyframes mkdrop{from{opacity:0;transform:translateY(-26px) scale(.6)}}
+.mk{display:grid;place-items:center;width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--c);border:2px solid #fff;box-shadow:0 6px 14px rgba(13,58,43,.3);color:#fff}
+.mk .ico{width:15px;height:15px;transform:rotate(45deg)}
+.me-dot{width:18px;height:18px;border-radius:50%;background:#2563eb;border:3px solid #fff;box-shadow:0 0 0 0 rgba(37,99,235,.5);animation:mepulse 1.8s ease-out infinite}
+@keyframes mepulse{to{box-shadow:0 0 0 18px rgba(37,99,235,0)}}
+.leaflet-popup-content-wrapper{border-radius:1rem!important;font-family:"Onest",system-ui,sans-serif}
+.leaflet-popup-content{margin:.85rem 1rem!important;font-size:.8125rem;line-height:1.45}
+.leaflet-popup-content b{display:block;font-size:.95rem;font-weight:500}
+.leaflet-container{font-family:"Onest",system-ui,sans-serif}
+.map .leaflet-tile-pane{filter:saturate(.35) hue-rotate(-8deg) brightness(1.04) contrast(.92)}
+.dist-btn{display:inline-flex;align-items:center;gap:.3rem;font-size:.8125rem;color:var(--ink-soft);padding:.25rem .55rem;margin:-.25rem -.55rem;border-radius:var(--radius-pill);transition:background .2s,color .2s,transform 160ms var(--ease-out)}
+.dist-btn:hover{background:var(--surface);color:var(--ink)}
+.dist-btn .ico{width:.9rem;height:.9rem}
+
+@media (prefers-reduced-motion:reduce){
+  .vr,.vr>*,.vr .v-ico,.stag-list>li,.hazard.nudge,.toast.show .medal,.toast.show .medal::after,.dr-tok,.mk-drop,.me-dot{animation:none!important}
+  .pill:active,.abtn:active,.chip:active,.logbtn:active,.opt:active{transform:none}
+}
+</style>
+<noscript><style>[data-iv],.menu-bd,.menu-panel,.menu-nav a{opacity:1!important}.m>span{transform:none!important;opacity:1!important}.loader{display:none!important}</style></noscript>
+</head>
+<body>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-brand" viewBox="0 0 24 24"><path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1"/><path d="M18.2 2.6v3.6h-3.6"/><circle cx="12" cy="12" r="2.4"/><path d="M12 9.6V6.4M14.4 12h3"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19.5h20"/></symbol>
+  <symbol id="i-tablet" viewBox="0 0 24 24"><rect x="4.5" y="3" width="15" height="18" rx="2"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-desktop" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></symbol>
+  <symbol id="i-tv" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M8 3l4 4 4-4"/></symbol>
+  <symbol id="i-small" viewBox="0 0 24 24"><path d="M6 20h11l-1-11H7z"/><path d="M9 9V6h5v3"/><path d="M16.6 11.5H19a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/></symbol>
+  <symbol id="i-large" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2"/><circle cx="12" cy="13.5" r="4"/><path d="M8 6h2"/></symbol>
+  <symbol id="i-chargers" viewBox="0 0 24 24"><path d="M9 2v5M15 2v5"/><path d="M6 7h12v3a6 6 0 0 1-12 0z"/><path d="M12 16v6"/></symbol>
+  <symbol id="i-batteries" viewBox="0 0 24 24"><rect x="2.5" y="7" width="17" height="10" rx="2"/><path d="M21.5 10.5v3"/><path d="M11.5 9l-2 3h3l-2 3"/></symbol>
+  <symbol id="i-earbuds" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6.5" rx="1.5"/><rect x="17" y="14" width="4" height="6.5" rx="1.5"/></symbol>
+  <symbol id="i-other" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2.5V6M15 2.5V6M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5l3 3 5.8-5.8a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></symbol>
+  <symbol id="i-reuse" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7"/><path d="M20 4v4.7h-4.7"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.3"/><path d="M4 20v-4.7h4.7"/></symbol>
+  <symbol id="i-recycle" viewBox="0 0 24 24"><path d="M7.2 19.5H4.6a1.6 1.6 0 0 1-1.4-2.4l2.6-4.4"/><path d="M11 19.5h8.4a1.6 1.6 0 0 0 1.4-2.4l-1.3-2.2"/><path d="M14 16.5l-3 3 3 3"/><path d="M8.6 8.3l2-3.4a1.6 1.6 0 0 1 2.8 0l2.3 3.9"/><path d="M17.6 6.9l-1.9 3.3-3.3-1.9"/><path d="M3 13.6l2.8-.9.9 2.8"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.5v.01"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 21.5c3.9 0 7-2.7 7-6.6 0-3.6-2.6-6-4-8.3-.6 2-1.6 3-3 3.6.6-3-.5-5.8-3-8.2 0 4.1-5 6.7-5 12.9 0 3.9 3.1 6.6 8 6.6z"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19l7-7"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c1.5-4 4.5-6 8-6s6.5 2 8 6"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2.5 6.5h11v9h-11z"/><path d="M13.5 9.5h4l3 3.2v2.8h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 21H20"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+</svg>
+
+<!-- ============ LOADER ============ -->
+<div id="loader" class="loader" aria-hidden="true">
+  <div class="ld-mark" id="ld-mark"><svg class="ico"><use href="#i-brand"/></svg><span>ReCircuit</span></div>
+  <div class="ld-track"><div class="ld-fill" id="ld-fill"></div></div>
+</div>
+
+<div class="stick" id="stick" inert>
+  <a class="brand" href="#top" aria-label="ReCircuit, back to top"><svg class="ico"><use href="#i-brand"/></svg><span>ReCircuit</span></a>
+  <nav class="stick-links" aria-label="Sections"><a href="#problem">Problem</a><a href="#solution">Solution</a><a href="#locator">Locator</a><a href="#members">Dashboard</a></nav>
+  <div class="stick-right">
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button><button type="button" data-lang="kn" aria-pressed="false" lang="kn" aria-label="ಕನ್ನಡ">ಕ</button><button type="button" data-lang="hi" aria-pressed="false" lang="hi" aria-label="हिंदी">हि</button></div>
+    <button class="stick-check" type="button" data-open-check data-i18n="nav.check">Check my device</button>
+    <a class="hlogin" href="app.html" data-login><span class="av"><svg class="ico"><use href="#i-user"/></svg></span><span data-login-t>Log in</span></a>
+  </div>
+</div>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero-plate" aria-hidden="true">
+      <div class="hero-plate-in" data-par="y:0:12">
+        <svg viewBox="0 0 1600 1200" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="cp" width="180" height="180" patternUnits="userSpaceOnUse">
+              <g fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M0 40h52l20 20h44l20-20h44"/><path d="M40 180v-44l22-22V70"/><path d="M118 0v34l22 22v52l-22 22v50"/><path d="M0 128h30l16-16h50"/><path d="M150 180v-28l20-20h10"/>
+              </g>
+              <g fill="rgba(255,255,255,.16)"><circle cx="52" cy="40" r="3.2"/><circle cx="62" cy="70" r="3.2"/><circle cx="140" cy="56" r="3.2"/><circle cx="96" cy="112" r="3.2"/><circle cx="170" cy="132" r="3.2"/></g>
+            </pattern>
+            <radialGradient id="g1" cx="78%" cy="30%" r="55%"><stop offset="0" stop-color="#1f8a5b" stop-opacity=".95"/><stop offset="1" stop-color="#1f8a5b" stop-opacity="0"/></radialGradient>
+            <radialGradient id="g2" cx="8%" cy="92%" r="50%"><stop offset="0" stop-color="#0b6e6e" stop-opacity=".9"/><stop offset="1" stop-color="#0b6e6e" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="1600" height="1200" fill="#0d3a2b"/>
+          <rect width="1600" height="1200" fill="url(#g1)"/>
+          <rect width="1600" height="1200" fill="url(#g2)"/>
+          <rect width="1600" height="1200" fill="url(#cp)"/>
+          <g transform="translate(1040 160) scale(26)" fill="none" stroke="rgba(255,255,255,.10)" stroke-width=".5" stroke-linecap="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1"/><path d="M18.2 2.6v3.6h-3.6"/><circle cx="12" cy="12" r="2.4"/><path d="M12 9.6V6.4M14.4 12h3"/></g>
+        </svg>
+      </div>
+      <div class="hero-shade"></div>
+    </div>
+
+    <header class="site-header">
+      <nav class="hnav" aria-label="Primary">
+        <a href="#problem" data-i18n="nav.problem">The Problem</a>
+        <a href="#solution" data-i18n="nav.how">How It Works</a>
+      </nav>
+      <div class="hbrand"><a class="brand" href="#top" aria-label="ReCircuit home"><svg class="ico"><use href="#i-brand"/></svg><span>ReCircuit</span></a></div>
+      <div class="hright">
+        <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button><button type="button" data-lang="kn" aria-pressed="false" lang="kn" aria-label="ಕನ್ನಡ">ಕ</button><button type="button" data-lang="hi" aria-pressed="false" lang="hi" aria-label="हिंदी">हि</button></div>
+        <button class="hbtn" type="button" data-open-check data-i18n="nav.check">Check my device</button>
+        <a class="hlogin" href="app.html" data-login><span class="av"><svg class="ico"><use href="#i-user"/></svg></span><span data-login-t>Log in</span></a>
+        <button class="burger" type="button" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+      </div>
+    </header>
+
+    <div class="hero-title-wrap px">
+      <h1 class="hero-title" id="hero-title"><span class="sr-only">Your old phone isn't trash. It's a decision.</span><span class="wr" aria-hidden="true" data-stagger="140" data-dur="1100" data-gate data-i18n-words="hero.title">Not Trash.</span></h1>
+    </div>
+
+    <div class="hero-bottom px">
+      <div class="hero-left">
+        <p class="tagline sl" aria-hidden="true" data-base="350" data-stagger="110" data-dur="900" data-gate data-i18n-lines="hero.tag">Your old phone?|It's a decision.</p>
+        <p class="hero-sub" data-iv="opacity:0,y:20" data-delay="560" data-t="200" data-f="26" data-gate data-i18n="hero.sub">ReCircuit tells you whether to repair, pass on, or recycle any electronic device, and shows you exactly where to take it in Bengaluru, safely.</p>
+        <div class="hero-ctas" data-iv="opacity:0,y:20" data-delay="660" data-t="200" data-f="26" data-gate>
+          <button class="pill light" type="button" data-open-check data-hover="x:5" data-hover-target=".arr" data-ht="320" data-hf="20"><span data-i18n="hero.cta">What should I do with my device?</span> <span class="arr"><svg class="ico"><use href="#i-arrow"/></svg></span></button>
+          <a class="textlink" href="#problem" data-i18n="hero.why">Why this matters ↓</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="vslider" data-iv="opacity:0,y:28" data-delay="650" data-t="200" data-f="26" data-gate aria-roledescription="carousel" aria-label="Three possible verdicts">
+          <div class="vstack" id="vstack" aria-live="polite"></div>
+          <div class="dots light" id="vdots"></div>
+        </div>
+        <article class="mcard glass" data-iv="opacity:0,y:28" data-delay="780" data-t="200" data-f="26" data-gate>
+          <div class="mcard-l">
+            <span class="mv">60s</span>
+            <span class="avs" aria-hidden="true"><i style="background:#62c792"></i><i style="background:#c2e029"></i><i style="background:#0b6e6e"></i><i style="background:#ffffff"></i></span>
+            <span class="mcap" data-i18n="hero.mcap">From drawer to a safe, nearby drop-off</span>
+          </div>
+          <div class="mthumb" aria-hidden="true"><svg class="ico"><use href="#i-phone"/></svg></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEM / STATS ============ -->
+  <section class="band stats px" id="problem" aria-labelledby="stats-title">
+    <div class="stats-head">
+      <div>
+        <span class="eyebrow light" data-i18n="stats.eyebrow">The problem</span>
+        <h2 class="h2 sl" id="stats-title" data-i18n-lines="stats.title">The fastest-|growing waste|stream</h2>
+      </div>
+      <p class="intro" data-iv="opacity:0,y:24" data-delay="150" data-t="190" data-f="26" data-i18n="stats.intro">Every year we buy more electronics and keep them for less time. When they stop working, or simply get replaced, most never reach a proper recycler. They're stored and forgotten, thrown in the general bin, or sold to informal scrap dealers who burn and acid-strip them for a few grams of metal.</p>
+    </div>
+    <dl class="stat-grid">
+      <div class="stat" data-iv="opacity:0,y:30" data-delay="0" data-t="180" data-f="24"><dt class="sr-only">E-waste generated worldwide in 2022</dt><dd><span class="stat-v">62M<small>tonnes</small></span><span class="stat-l" data-i18n="stat1">of e-waste generated worldwide in 2022</span></dd></div>
+      <div class="stat" data-iv="opacity:0,y:30" data-delay="110" data-t="180" data-f="24"><dt class="sr-only">Share formally collected and recycled</dt><dd><span class="stat-v">22.3%</span><span class="stat-l" data-i18n="stat2">of it was formally collected and recycled</span></dd></div>
+      <div class="stat" data-iv="opacity:0,y:30" data-delay="220" data-t="180" data-f="24"><dt class="sr-only">Projected e-waste by 2030</dt><dd><span class="stat-v">82M<small>tonnes</small></span><span class="stat-l" data-i18n="stat3">expected by 2030 if nothing changes</span></dd></div>
+      <div class="stat" data-iv="opacity:0,y:30" data-delay="330" data-t="180" data-f="24"><dt class="sr-only">Value of materials lost each year</dt><dd><span class="stat-v">$62B</span><span class="stat-l" data-i18n="stat4">worth of recoverable materials lost each year</span></dd></div>
+    </dl>
+    <div class="trucks" id="trucks">
+      <div data-iv="opacity:0,y:24" data-t="190" data-f="26">
+        <p class="tk-lead" data-i18n="tk.lead">E-waste is growing about five times faster than our capacity to recycle it.</p>
+        <div class="tk-count" aria-hidden="true"><b id="tk-n">0.00M</b><span data-i18n="tk.unit">40-tonne trucks</span></div>
+        <div class="tk-bar" aria-hidden="true"><i id="tk-bar"></i></div>
+        <p class="tk-body"><span data-i18n="tk.body">62 million tonnes would fill about 1.55 million 40-tonne trucks, enough to form a bumper-to-bumper line around the equator.</span><cite>Source: UN Global E-waste Monitor 2024</cite></p>
+      </div>
+      <svg class="globe" id="globe" viewBox="0 0 400 400" role="img" aria-label="A line of trucks wrapping around the equator of a globe as you scroll">
+        <defs>
+          <radialGradient id="gl-fill" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#1f8a5b" stop-opacity=".55"/><stop offset="1" stop-color="#0d3a2b" stop-opacity=".92"/></radialGradient>
+          <clipPath id="gl-disc"><circle cx="200" cy="200" r="160"/></clipPath>
+          <clipPath id="gl-front"><rect x="0" y="200" width="400" height="200"/></clipPath>
+          <mask id="gl-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="400"><path id="gl-mpath" d="M40 200 A160 45 0 0 0 360 200 A160 45 0 0 0 40 200" fill="none" stroke="#fff" stroke-width="16" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1"/></mask>
+        </defs>
+        <circle cx="200" cy="200" r="182" fill="none" stroke="rgba(98,199,146,.12)" stroke-width="1"/>
+        <path d="M40 200 A160 45 0 0 0 360 200 A160 45 0 0 0 40 200" fill="none" stroke="#c2e029" stroke-width="7" stroke-dasharray="6 4" stroke-linecap="round" mask="url(#gl-mask)" opacity=".4"/>
+        <circle cx="200" cy="200" r="160" fill="url(#gl-fill)" stroke="rgba(255,255,255,.22)" stroke-width="1.2"/>
+        <g clip-path="url(#gl-disc)" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1">
+          <ellipse cx="200" cy="200" rx="56" ry="160"/><ellipse cx="200" cy="200" rx="112" ry="160"/><path d="M200 40v320"/>
+          <ellipse cx="200" cy="120" rx="139" ry="39"/><ellipse cx="200" cy="280" rx="139" ry="39"/><ellipse cx="200" cy="62" rx="80" ry="22"/><ellipse cx="200" cy="338" rx="80" ry="22"/>
+        </g>
+        <path d="M40 200 A160 45 0 0 0 360 200 A160 45 0 0 0 40 200" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1" stroke-dasharray="2 5"/>
+        <g clip-path="url(#gl-front)"><path id="gl-path" d="M40 200 A160 45 0 0 0 360 200 A160 45 0 0 0 40 200" fill="none" stroke="#c2e029" stroke-width="7" stroke-dasharray="6 4" stroke-linecap="round" mask="url(#gl-mask)"/></g>
+        <g transform="translate(262 168)"><circle r="9" fill="rgba(194,224,41,.25)"><animate attributeName="r" values="5;13;5" dur="2.4s" repeatCount="indefinite"/></circle><circle r="4" fill="#c2e029"/><text x="12" y="-8" fill="rgba(255,255,255,.75)" font-size="11" font-family="Onest, system-ui">Bengaluru</text></g>
+        <g id="gl-truck" opacity="0"><circle r="15" fill="#c2e029"/><svg x="-10" y="-10" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d3a2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-truck"/></svg></g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ WHY IT HAPPENS (carousel) ============ -->
+  <section class="trust px" id="gap" aria-labelledby="gap-title" aria-roledescription="carousel">
+    <div class="trust-top">
+      <div class="pbadge" data-iv="opacity:0,scale:0.9" data-t="220" data-f="22">
+        <span class="pb-v">22.3%</span>
+        <span class="pb-c">of e-waste reaches a formal recycler</span>
+      </div>
+      <article class="bcard" data-iv="opacity:0,y:24" data-delay="120" data-t="200" data-f="26">
+        <span class="bchip" id="gap-chip">#01</span>
+        <div>
+          <h2 id="gap-title" data-i18n="gap.title">People care. The right action is hard to find.</h2>
+          <p data-i18n="gap.body">Five things we hear again and again, and why each one keeps devices out of the right hands.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="ghost" id="ghost" aria-hidden="true">
+      <div class="grow">
+        <span class="gwp" data-par="x:-3:3"><span class="gw"></span></span>
+        <span class="gwp" data-par="x:3:-3"><span class="gw"></span></span>
+      </div>
+      <div class="grow">
+        <span class="gwp" data-par="x:-2:4"><span class="gw ink"></span></span>
+        <span class="gwp" data-par="x:4:-3"><span class="gw"></span></span>
+      </div>
+    </div>
+
+    <div class="coach-pos">
+      <div data-iv="opacity:0,y:60,scale:0.92" data-t="170" data-f="26">
+        <figure class="coach" aria-live="polite">
+          <svg class="coach-pat" aria-hidden="true" width="100%" height="100%"><rect width="100%" height="100%" fill="url(#cp)"/></svg>
+          <div class="coach-in" id="coach-in"></div>
+        </figure>
+      </div>
+    </div>
+
+    <div class="ctrls">
+      <button class="abtn prev" type="button" id="gap-prev" aria-label="Previous reason" data-hover="scale:1.15" data-hover-target=".sp" data-ht="320" data-hf="18"><span class="sp"><svg class="ico"><use href="#i-arrow"/></svg></span></button>
+      <div class="dots" id="gap-dots"></div>
+      <button class="abtn solid" type="button" id="gap-next" aria-label="Next reason" data-hover="scale:1.15" data-hover-target=".sp" data-ht="320" data-hf="18"><span class="sp"><svg class="ico"><use href="#i-arrow"/></svg></span></button>
+    </div>
+  </section>
+
+  <!-- ============ SOLUTION ============ -->
+  <section class="programs px" id="solution" aria-labelledby="solution-title">
+    <span class="eyebrow" data-i18n="sol.eyebrow">Our solution</span>
+    <h2 class="h2 sl" id="solution-title" data-i18n-lines="sol.title">One clear, safe,|nearby action</h2>
+    <ul class="plist" id="plist"></ul>
+
+    <div class="steps">
+      <div class="steps-head" data-iv="opacity:0,y:20" data-t="190" data-f="26">
+        <h3 class="h3" data-i18n="how.title">How it works</h3>
+        <p data-i18n="how.sub">Three steps, under a minute.</p>
+      </div>
+      <ol class="step-grid">
+        <li data-iv="opacity:0,y:30" data-delay="0" data-t="180" data-f="26"><div class="step"><span class="step-n">1</span><h4 data-i18n="s1.t">Tell us about your device</h4><p data-i18n="s1.p">Pick what it is and how it's doing: working, broken or dead.</p></div></li>
+        <li data-iv="opacity:0,y:30" data-delay="120" data-t="180" data-f="26"><div class="step"><span class="step-n">2</span><h4 data-i18n="s2.t">Get your answer</h4><p data-i18n="s2.p">We'll tell you whether to repair, pass it on, or recycle it, and why.</p></div></li>
+        <li data-iv="opacity:0,y:30" data-delay="240" data-t="180" data-f="26"><div class="step"><span class="step-n">3</span><h4 data-i18n="s3.t">Drop it off</h4><p data-i18n="s3.p">Find the nearest place that accepts it, follow the prep checklist, and log your impact.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ REPAIR FIRST ============ -->
+  <section class="facil px" id="repair" aria-labelledby="repair-title">
+    <div class="fgrid">
+      <div class="fintro">
+        <div class="ficon" data-iv="opacity:0,scale:0.85" data-t="240" data-f="20" aria-hidden="true"><svg class="ico"><use href="#i-wrench"/></svg></div>
+        <h2 class="h2 sl" id="repair-title" data-stagger="120" data-i18n-lines="repair.title">Repair|Before|Recycle</h2>
+        <p class="fbody wf" data-delay="250" data-i18n-fade="repair.body">ReCircuit follows the waste hierarchy. The best option is always the one that keeps a device in use longest. Most of a smartphone's lifetime carbon footprint comes from manufacturing it, so keeping it going an extra year or two often does more good than recycling it perfectly.</p>
+      </div>
+      <div class="fcards">
+        <figure class="fcard" data-iv="opacity:0,y:48" data-delay="0" data-t="180" data-f="26">
+          <div class="ftile" data-hover="scale:1.03" data-hover-target=".ftile-art" data-ht="300" data-hf="22">
+            <div class="ftile-art art-ladder" aria-hidden="true">
+              <div class="rung" style="background:var(--brand-light);color:var(--brand-deep)">Repair <em>best</em></div>
+              <div class="rung" style="background:var(--lime);color:var(--brand-deep);width:86%">Reuse</div>
+              <div class="rung" style="background:rgba(255,255,255,.75);color:var(--brand-deep);width:72%">Recycle</div>
+              <div class="rung" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);width:58%">Dispose <em>last</em></div>
+            </div>
+            <figcaption class="fcap deep"><strong>The waste hierarchy</strong><span>Repair → Reuse → Recycle → Dispose, in that order, on purpose.</span></figcaption>
+          </div>
+        </figure>
+        <figure class="fcard" data-iv="opacity:0,y:48" data-delay="140" data-t="180" data-f="26">
+          <div class="ftile" data-hover="scale:1.03" data-hover-target=".ftile-art" data-ht="300" data-hf="22">
+            <div class="ftile-art art-foot" aria-hidden="true">
+              <div class="phone-art"><div class="use">Use</div><div class="make">Made<br>before<br>switch-on</div></div>
+            </div>
+            <figcaption class="fcap blue"><strong>Footprint is front-loaded</strong><span>Most of a phone's carbon is emitted before you ever turn it on.</span></figcaption>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHAT'S INSIDE (exploding phone) ============ -->
+  <section class="inside" id="inside" aria-labelledby="inside-title">
+    <div class="inside-pin px">
+      <div class="bgpat" aria-hidden="true"><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><rect width="1600" height="900" fill="url(#g2)"/><rect width="1600" height="900" fill="url(#cp)"/></svg></div>
+      <div class="in-copy">
+        <span class="eyebrow light" data-i18n="in.eyebrow">What’s inside</span>
+        <h2 class="h2 sl" id="inside-title" data-i18n-lines="in.title">What’s inside|your old phone</h2>
+        <p class="in-lead" data-i18n="in.lead">Scroll to take one apart. Every layer holds materials that were mined, shipped and refined, and most of them can be recovered.</p>
+        <ol class="parts" id="parts">
+          <li class="part"><span>01</span><b data-i18n="p1.n">Screen &amp; glass</b><em>Indium · Silicon · Glass</em><p data-i18n="p1.d">Indium tin oxide makes the touchscreen work. Indium is scarce, and comes mostly as a by-product of zinc mining.</p></li>
+          <li class="part"><span>02</span><b data-i18n="p2.n">Logic board</b><em>Gold · Silver · Copper · Palladium</em><p data-i18n="p2.d">A tonne of old phones holds far more gold than a tonne of gold ore. Certified recyclers recover it without burning.</p></li>
+          <li class="part"><span>03</span><b data-i18n="p3.n">Battery</b><em>Cobalt · Lithium · Nickel</em><p data-i18n="p3.d">Cobalt mining is linked to unsafe work, including child labour. A swollen battery is also a fire risk, so it never goes in the bin.</p></li>
+          <li class="part"><span>04</span><b data-i18n="p4.n">Frame, camera &amp; speakers</b><em>Aluminium · Steel · Neodymium</em><p data-i18n="p4.d">Recycled aluminium needs about 95% less energy than new. The tiny magnets use rare-earth metals.</p></li>
+        </ol>
+        <p class="in-foot" data-i18n="in.foot">One phone holds roughly 0.034 g gold, 0.34 g silver, 15 g copper and 6 g cobalt. Indicative figures.</p>
+      </div>
+      <div class="in-stage" aria-hidden="true">
+        <div class="ph3d" id="ph3d">
+          <div class="ly ly-frame"><div class="cam"><i></i><i></i><i></i></div></div>
+          <div class="ly ly-batt">Li-ion</div>
+          <div class="ly ly-board">
+            <svg viewBox="0 0 100 200" preserveAspectRatio="none" fill="none" stroke="rgba(194,224,41,.6)" stroke-width="1.2" stroke-linecap="round"><path d="M10 20h30l10 10v40M90 40H62l-8 8v26M14 120h26l10-10h40M15 160h40v28M85 150v30H62M50 120v30M30 70v34M72 92h18"/><g fill="#e8c35a" stroke="none"><circle cx="10" cy="20" r="2"/><circle cx="90" cy="40" r="2"/><circle cx="14" cy="120" r="2"/><circle cx="85" cy="150" r="2"/><circle cx="55" cy="188" r="2"/></g></svg>
+            <span class="chip3" style="left:28%;top:34%;width:44%;height:20%"></span>
+            <span class="chip3" style="left:18%;top:62%;width:22%;height:11%"></span>
+            <span class="chip3" style="left:58%;top:64%;width:26%;height:9%"></span>
+            <span class="chip3" style="left:20%;top:8%;width:18%;height:7%"></span>
+          </div>
+          <div class="ly ly-disp"><svg class="ico"><use href="#i-brand"/></svg></div>
+          <div class="ly ly-glass"></div>
+        </div>
+        <span class="in-hint" id="in-hint" data-i18n="in.hint">Scroll to take it apart ↓</span>
+      </div>
+      <div class="in-prog" aria-hidden="true"><i id="in-prog"></i></div>
+    </div>
+  </section>
+
+  <!-- ============ DRAWER CALCULATOR ============ -->
+  <section class="drawer px" id="drawer" aria-labelledby="drawer-title">
+    <div class="dr-grid">
+      <div>
+        <span class="eyebrow" data-i18n="dr.eyebrow">Drawer calculator</span>
+        <h2 class="h2 sl" id="drawer-title" data-i18n-lines="dr.title">What’s hiding|in your drawer?</h2>
+        <p class="dr-body" data-iv="opacity:0,y:24" data-delay="150" data-t="190" data-f="26" data-i18n="dr.body">Count the old devices at home. Here’s roughly what’s locked inside them, and what you save by giving each one its next life.</p>
+        <ul class="dr-rows" id="dr-rows"></ul>
+      </div>
+      <div class="dr-out" data-iv="opacity:0,y:40" data-delay="120" data-t="180" data-f="26">
+        <div class="bgpat" aria-hidden="true"><svg viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><rect width="800" height="800" fill="url(#g1)"/><rect width="800" height="800" fill="url(#cp)"/></svg></div>
+        <div class="dr-box" id="dr-box" aria-hidden="true"></div>
+        <p class="dr-val rn" id="dr-val" aria-live="polite">₹0</p>
+        <p class="dr-val-l" data-i18n="dr.val">of recoverable metal, roughly</p>
+        <div class="dr-mets">
+          <div><b id="dr-au">0 mg</b><small data-i18n="dr.au">Gold</small></div>
+          <div><b id="dr-cu">0 g</b><small data-i18n="dr.cu">Copper</small></div>
+          <div><b id="dr-co">0 g</b><small data-i18n="dr.co">Cobalt</small></div>
+          <div><b id="dr-co2">0 kg</b><small data-i18n="dr.co2">CO₂ avoided if reused</small></div>
+        </div>
+        <div class="dr-cta">
+          <button class="pill light" type="button" data-open-check><span data-i18n="nav.check">Check my device</span> <span class="arr"><svg class="ico"><use href="#i-arrow"/></svg></span></button>
+          <a class="pill ghostlight" href="#locator" data-loc="recycle" data-i18n="dr.find">Find a recycler</a>
+        </div>
+        <p class="dr-note" data-i18n="dr.note">Indicative: average metal content from published studies, valued at approximate 2025 prices. Real recovery is lower, and the biggest saving is keeping a device in use.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOCATOR ============ -->
+  <section class="locator px" id="locator" aria-labelledby="locator-title">
+    <div class="loc-head">
+      <div>
+        <span class="eyebrow" data-i18n="loc.eyebrow">Locator · Bengaluru</span>
+        <h2 class="h2 sl" id="locator-title" data-i18n-lines="loc.title">Find the right|place nearby</h2>
+      </div>
+      <div class="impact" id="impact" data-iv="opacity:0,y:24" data-delay="150" data-t="200" data-f="26" aria-live="polite"></div>
+    </div>
+
+    <div class="filters">
+      <div class="chips" role="group" aria-label="Facility type" id="type-chips"></div>
+      <label class="sel"><span data-i18n="loc.device">Device</span>
+        <select id="dev-select" aria-label="Filter by device"></select>
+      </label>
+    </div>
+    <div class="map-wrap off" id="map-wrap">
+      <div class="map" id="map" role="region" aria-label="Map of drop-off places in Bengaluru"></div>
+      <div class="map-tools"><button class="locbtn" type="button" id="locate"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="map.me">Use my location</span></button></div>
+      <div class="map-legend" aria-hidden="true"><span style="--c:#1f8a5b"><i></i>Repair</span><span style="--c:#8aa313"><i></i>Reuse</span><span style="--c:#0b6e6e"><i></i>Recycle</span><span style="--c:#d97706"><i></i>Battery</span></div>
+      <p class="map-off" id="map-off">Loading the map…</p>
+    </div>
+    <p class="fcount" id="fcount" aria-live="polite"></p>
+    <ul class="fac-grid" id="fac-grid"></ul>
+    <p class="demo-note" data-i18n="loc.note">Demo data: every location above is fictional, made up for this prototype. Map pins sit in the right neighbourhood, not at real addresses. Distances are illustrative until you share your location. CO₂ figures are indicative estimates, not exact measurements.</p>
+  </section>
+
+  <!-- ============ MEMBER DASHBOARD ============ -->
+  <section class="band members px" id="members" aria-labelledby="members-title">
+    <div class="bgpat" aria-hidden="true"><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><rect width="1600" height="900" fill="#0d3a2b"/><rect width="1600" height="900" fill="url(#g1)"/><rect width="1600" height="900" fill="url(#cp)"/></svg></div>
+    <div class="mem-grid">
+      <div>
+        <span class="eyebrow light" data-i18n="mem.eyebrow">Member dashboard</span>
+        <h2 class="h2 sl" id="members-title" data-i18n-lines="mem.title">Your drawer,|sorted.</h2>
+        <p class="mem-body" data-iv="opacity:0,y:24" data-delay="150" data-t="190" data-f="26" data-i18n="mem.body">Log in to book doorstep pickups, keep your prep checklists, and watch your impact add up with every device you divert.</p>
+        <ul class="mem-feats">
+          <li data-iv="opacity:0,y:24" data-delay="0" data-t="190" data-f="26"><span class="mf-ico"><svg class="ico"><use href="#i-truck"/></svg></span><div><strong>Doorstep pickups</strong><span>Phones within 2 hours, TVs and fridges by truck.</span></div></li>
+          <li data-iv="opacity:0,y:24" data-delay="90" data-t="190" data-f="26"><span class="mf-ico"><svg class="ico"><use href="#i-list"/></svg></span><div><strong>Prep checklists</strong><span>Wipe, back up and tape batteries, step by step.</span></div></li>
+          <li data-iv="opacity:0,y:24" data-delay="180" data-t="190" data-f="26"><span class="mf-ico"><svg class="ico"><use href="#i-leaf"/></svg></span><div><strong>Impact tracker</strong><span>CO₂ saved, materials recovered, streaks and badges.</span></div></li>
+          <li data-iv="opacity:0,y:24" data-delay="270" data-t="190" data-f="26"><span class="mf-ico"><svg class="ico"><use href="#i-book"/></svg></span><div><strong>Safety guides</strong><span>Two-minute reads on batteries, data and repair.</span></div></li>
+        </ul>
+        <div class="mem-ctas" data-iv="opacity:0,y:20" data-delay="200" data-t="200" data-f="24">
+          <a class="pill light" href="app.html" data-login data-hover="x:5" data-hover-target=".arr" data-ht="320" data-hf="20"><span data-login-t>Log in</span> <span class="arr"><svg class="ico"><use href="#i-arrow"/></svg></span></a>
+          <a class="pill ghostlight" href="app.html#/signup" data-signup>Create free account</a>
+        </div>
+        <p class="mem-note">Prototype: the login is a showcase and opens a demo account.</p>
+      </div>
+
+      <div class="mock-wrap" aria-hidden="true">
+        <div class="mock-par" data-par="y:8:-8">
+          <div data-iv="opacity:0,y:60,scale:0.94" data-t="170" data-f="26">
+            <div class="mock">
+              <div class="mock-side"><span class="on"><svg class="ico"><use href="#i-home"/></svg></span><span><svg class="ico"><use href="#i-truck"/></svg></span><span><svg class="ico"><use href="#i-list"/></svg></span><span><svg class="ico"><use href="#i-leaf"/></svg></span><span><svg class="ico"><use href="#i-book"/></svg></span></div>
+              <div class="mock-main">
+                <p class="mock-hi"><small>Dashboard</small>Good evening, Aanya</p>
+                <div class="mock-tiles"><div class="mt d"><b>9</b><span>Devices diverted</span></div><div class="mt"><b>168<small style="font-size:.5em"> kg</small></b><span>CO₂ saved</span></div><div class="mt"><b>3</b><span>Month streak</span></div></div>
+                <div class="mock-pk"><small>Next pickup · RC-4821</small><b>Sat, 28 Nov · 11am – 1pm</b><span>Smartphone + charger · bag pickup</span><div class="mock-track"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+                <div class="ml"><svg class="ico"><use href="#i-phone"/></svg><span>Old smartphone</span><em>Recycle</em></div>
+                <div class="ml"><svg class="ico"><use href="#i-batteries"/></svg><span>Power bank · bulging</span><em class="r">Hazard</em></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="float f1" data-iv="opacity:0,y:20" data-delay="350" data-t="200" data-f="22"><span class="fi"><svg class="ico"><use href="#i-check"/></svg></span><div>Pickup confirmed<small>Truck · Fri, 9 – 11am</small></div></div>
+        <div class="float f2" data-iv="opacity:0,y:20" data-delay="500" data-t="200" data-f="22"><span class="fi"><svg class="ico"><use href="#i-leaf"/></svg></span><div>+12 kg CO₂ saved<small>New badge: Fixer</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SDGs ============ -->
+  <section class="sdg px" id="sdg" aria-labelledby="sdg-title">
+    <span class="eyebrow" data-i18n="sdg.eyebrow">Global goals</span>
+    <h2 class="h2 sl" id="sdg-title" data-i18n-lines="sdg.title">Built around|the SDGs</h2>
+    <ul class="sdg-grid" id="sdg-grid"></ul>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="band footer px" id="about">
+    <div class="fcta">
+      <div>
+        <span class="eyebrow light">Get started</span>
+        <p class="fcta-t sl" data-i18n-lines="fcta">Clear out|your drawer?</p>
+      </div>
+      <div data-iv="opacity:0,y:20" data-delay="150" data-t="200" data-f="24">
+        <div class="menu-ctas">
+          <a class="pill ghostlight" href="app.html" data-login><span data-login-t>Log in</span></a>
+          <button class="pill light" type="button" data-open-check data-hover="x:5" data-hover-target=".arr" data-ht="320" data-hf="20">Check my device <span class="arr"><svg class="ico"><use href="#i-arrow"/></svg></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="fcols">
+      <div class="fbrand">
+        <a class="brand" href="#top"><svg class="ico"><use href="#i-brand"/></svg><span>ReCircuit</span></a>
+        <p class="fblurb">Every old device has a next life. Find it in 60 seconds.</p>
+        <p class="fnote">ReCircuit is a frontend prototype built to show the idea. Facility locations are fictional demo data for Bengaluru. Impact figures are indicative estimates based on published lifecycle studies, not exact measurements. In a real deployment, facility data would come from the municipal corporation, the national pollution control board's list of authorised recyclers, and verified repair partners.</p>
+      </div>
+      <nav class="fnav" aria-label="Explore">
+        <h3>Explore</h3>
+        <ul>
+          <li><a href="#problem">The problem</a></li>
+          <li><a href="#gap">Why it happens</a></li>
+          <li><a href="#solution">Our solution</a></li>
+          <li><a href="#repair">Repair first</a></li>
+          <li><a href="#sdg">SDG alignment</a></li>
+        </ul>
+      </nav>
+      <nav class="fnav" aria-label="Tools">
+        <h3>Tools</h3>
+        <ul>
+          <li><button type="button" data-open-check>Device check</button></li>
+          <li><a href="#locator">Smart locator</a></li>
+          <li><button type="button" data-open-check>Prep checklist</button></li>
+          <li><a href="app.html#/pickup">Pickup request</a></li>
+          <li><a href="app.html#/impact">Impact dashboard</a></li>
+          <li><a href="app.html#/learn">Learn &amp; safety</a></li>
+          <li><a href="app.html" data-login><span data-login-t>Member log in</span></a></li>
+        </ul>
+      </nav>
+      <nav class="fnav" aria-label="Sources">
+        <h3>Sources</h3>
+        <ul>
+          <li><a href="https://ewastemonitor.info/" target="_blank" rel="noopener">UN Global E-waste Monitor 2024</a></li>
+          <li><a href="https://sdgs.un.org/goals" target="_blank" rel="noopener">UN Sustainable Development Goals</a></li>
+          <li><span>Manufacturer lifecycle reports</span></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="fbar">
+      <p>© 2026 ReCircuit · A Tech Fest prototype.</p>
+      <nav aria-label="Footer">
+        <a href="#locator">Locator</a>
+        <a href="#sdg">SDGs</a>
+        <a href="#top">Back to top ↑</a>
+      </nav>
+    </div>
+  </footer>
+</main>
+
+<!-- ============ MENU OVERLAY ============ -->
+<div class="overlay" id="menu" aria-hidden="true">
+  <div class="menu-bd" id="menu-bd"></div>
+  <div class="menu-panel" id="menu-panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="menu-in">
+      <div class="menu-top">
+        <a class="brand" href="#top"><svg class="ico"><use href="#i-brand"/></svg><span>ReCircuit</span></a>
+        <button class="xbtn" type="button" id="menu-close" aria-label="Close menu" data-hover="rotate:90" data-hover-target=".sp" data-ht="300" data-hf="18"><span class="sp"><svg class="ico"><use href="#i-x"/></svg></span></button>
+      </div>
+      <nav class="menu-nav" aria-label="Menu">
+        <a href="#problem">The Problem</a>
+        <a href="#gap">Why It Happens</a>
+        <a href="#solution">Solution</a>
+        <a href="#locator">Locator</a>
+        <a href="#members">Dashboard</a>
+        <a href="#sdg">Goals</a>
+      </nav>
+      <div class="menu-bot">
+        <div class="menu-ctas">
+          <button class="pill light" type="button" data-open-check data-hover="x:5" data-hover-target=".arr" data-ht="320" data-hf="20">Check my device <span class="arr"><svg class="ico"><use href="#i-arrow"/></svg></span></button>
+          <a class="pill ghostlight" href="app.html" data-login><svg class="ico" style="width:1rem;height:1rem"><use href="#i-user"/></svg> <span data-login-t>Log in</span></a>
+        </div>
+        <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true" lang="en">English</button><button type="button" data-lang="kn" aria-pressed="false" lang="kn">ಕನ್ನಡ</button><button type="button" data-lang="hi" aria-pressed="false" lang="hi">हिंदी</button></div>
+        <nav aria-label="Menu secondary"><a href="#members">Member dashboard</a><a href="#repair">Repair first</a><a href="#about">About</a><a href="https://ewastemonitor.info/" target="_blank" rel="noopener">Sources</a></nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DEVICE CHECK MODAL ============ -->
+<div class="modal" id="check" aria-hidden="true">
+  <div class="modal-bd" id="check-bd"></div>
+  <div class="modal-panel" id="check-panel" role="dialog" aria-modal="true" aria-labelledby="check-title" data-lenis-prevent>
+    <div class="mhead">
+      <div>
+        <span class="eyebrow">Device check</span>
+        <h2 class="mtitle sl" id="check-title" data-stagger="90" data-dur="800" data-i18n-lines="chk.title">What should I|do with it?</h2>
+      </div>
+      <button class="xbtn dark" type="button" id="check-close" aria-label="Close" data-hover="rotate:90" data-hover-target=".sp" data-ht="300" data-hf="18"><span class="sp"><svg class="ico"><use href="#i-x"/></svg></span></button>
+    </div>
+    <div id="check-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const html = document.documentElement;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const mobileMQ = matchMedia('(max-width: 768px)');
+const ic = (id, cls = 'ico') => `<svg class="${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+const SIGNED_IN = (() => { try { return JSON.parse(sessionStorage.getItem('rc-user')); } catch { return null; } })();
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const inr = v => '₹' + Math.round(v).toLocaleString('en-IN');
+
+/* ---------- small motion helpers ---------- */
+function rollNum(el, to, fmt = v => Math.round(v).toLocaleString('en-IN'), dur = 600) {
+  if (!el) return;
+  const from = +(el.dataset.v ?? 0); el.dataset.v = to;
+  if (reduce || from === to) { el.textContent = fmt(to); return; }
+  const t0 = performance.now();
+  const tick = now => {
+    const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = fmt(from + (to - from) * e);
+    if (k < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+function floatTag(from, text) {
+  if (reduce || !from) return;
+  const r = from.getBoundingClientRect(), t = document.createElement('span');
+  t.className = 'floaty'; t.textContent = text; t.setAttribute('aria-hidden', 'true');
+  t.style.left = r.left + r.width / 2 + 'px'; t.style.top = r.top - 8 + 'px';
+  document.body.appendChild(t); setTimeout(() => t.remove(), 1250);
+}
+function burst(host, n = 16) {
+  if (reduce || !host) return;
+  const b = document.createElement('div'); b.className = 'burst'; b.setAttribute('aria-hidden', 'true');
+  const cols = ['#62c792', '#c2e029', '#ffffff', '#1f8a5b'];
+  b.innerHTML = Array.from({ length: n }, (_, i) => { const a = (i / n) * Math.PI * 2 + Math.random() * .4, d = 60 + Math.random() * 70; return `<i style="--dx:${(Math.cos(a) * d).toFixed(1)}px;--dy:${(Math.sin(a) * d).toFixed(1)}px;--r:${Math.round(Math.random() * 360)}deg;--c:${cols[i % 4]};${i % 3 ? '' : 'border-radius:50%'}"></i>`; }).join('');
+  host.appendChild(b); setTimeout(() => b.remove(), 1000);
+}
+
+/* ---------- language ---------- */
+let LANG = (() => { try { return localStorage.getItem('rc-lang') || 'en'; } catch { return 'en'; } })();
+const t = (k, en) => (LANG !== 'en' && window.I18N?.[LANG]?.[k]) || en;
+const fill = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k]);
+
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+
+/* ---------- adaptive rem (scale up above 1920) ---------- */
+const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666;
+function fitRem() {
+  const reduction = ((BASE_W - innerWidth) / BASE_W) * 100 * COEF;
+  const size = FONT_BASE - (FONT_BASE * reduction) / 100;
+  if (size > FONT_BASE) html.style.fontSize = size + 'px'; else html.style.removeProperty('font-size');
+}
+fitRem(); addEventListener('resize', fitRem);
+
+/* ---------- Lenis + scroll lock ---------- */
+let lenis = null, locks = 0;
+import('lenis').then(({ default: Lenis }) => {
+  lenis = new Lenis({ smoothWheel: true });
+  if (locks) lenis.stop();
+}).catch(() => {});
+function lock() {
+  locks++; lenis?.stop();
+  html.style.position = 'relative'; html.style.overflow = 'hidden'; html.style.height = '100%';
+}
+function unlock() {
+  locks = Math.max(0, locks - 1);
+  if (locks) return;
+  lenis?.start();
+  ['position', 'overflow', 'height'].forEach(p => html.style.removeProperty(p));
+}
+function goTo(hash) {
+  const el = typeof hash === 'string' ? $(hash) : hash;
+  if (!el) return;
+  if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.4 });
+  else el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+}
+
+/* ---------- tiny spring engine ---------- */
+const DEF = { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 };
+const active = new Set();
+function paint(s) {
+  const x = s.x, st = s.el.style;
+  if ('opacity' in x) st.opacity = x.opacity;
+  if ('x' in x || 'y' in x || 'scale' in x || 'rotate' in x)
+    st.transform = `translate3d(${x.x || 0}px,${x.y || 0}px,0) scale(${x.scale ?? 1}) rotate(${x.rotate || 0}deg)`;
+}
+function makeSpring(el, init) {
+  const s = { el, x: {}, v: {}, t: {}, cfg: { tension: 170, friction: 26 }, tm: 0 };
+  for (const k in init) { s.x[k] = s.t[k] = init[k]; s.v[k] = 0; }
+  paint(s); return s;
+}
+function setNow(s, vals) { for (const k in vals) { s.x[k] = s.t[k] = vals[k]; s.v[k] = 0; } active.delete(s); paint(s); }
+function animate(s, target, cfg, delay = 0) {
+  clearTimeout(s.tm);
+  const go = () => {
+    for (const k in target) { if (!(k in s.x)) { s.x[k] = DEF[k] ?? 0; s.v[k] = 0; } s.t[k] = target[k]; }
+    if (cfg) s.cfg = cfg;
+    if (reduce) { setNow(s, s.t); return; }
+    active.add(s);
+  };
+  delay ? (s.tm = setTimeout(go, delay)) : go();
+}
+function stepSprings(dt) {
+  const n = Math.max(1, Math.ceil(dt / 0.004)), h = dt / n;
+  for (const s of active) {
+    const { tension: k, friction: c } = s.cfg; let moving = false;
+    for (const key in s.t) {
+      let x = s.x[key], v = s.v[key]; const t = s.t[key];
+      for (let i = 0; i < n; i++) { v += (-k * (x - t) - c * v) * h; x += v * h; }
+      const tol = (key === 'opacity' || key === 'scale') ? 5e-4 : 0.02;
+      if (Math.abs(x - t) < tol && Math.abs(v) < tol * 10) { x = t; v = 0; } else moving = true;
+      s.x[key] = x; s.v[key] = v;
+    }
+    paint(s);
+    if (!moving) active.delete(s);
+  }
+}
+const parse = str => { const o = {}; (str || '').split(',').forEach(p => { const [k, v] = p.split(':'); if (k && v !== undefined) o[k.trim()] = parseFloat(v); }); return o; };
+
+/* ---------- parallax ---------- */
+const pars = $$('[data-par]').map(el => { const [prop, from, to] = el.dataset.par.split(':'); return { el, prop, from: +from, to: +to, root: el.closest('section') }; });
+function updatePar() {
+  if (reduce) return;
+  const vh = innerHeight;
+  for (const p of pars) {
+    const r = p.root.getBoundingClientRect();
+    if (r.bottom < -50 || r.top > vh + 50) continue;
+    const t = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
+    const v = p.from + (p.to - p.from) * t;
+    p.el.style.transform = p.prop === 'y' ? `translate3d(0,${v}%,0)` : `translate3d(${v}%,0,0)`;
+  }
+}
+
+/* ---------- main loop ---------- */
+let last = performance.now();
+function raf(t) {
+  lenis?.raf(t);
+  const dt = Math.min(0.05, Math.max(0, (t - last) / 1000)); last = t;
+  if (active.size) stepSprings(dt);
+  updatePar();
+  updateScenes();
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+/* ---------- text reveal builders ---------- */
+const playText = el => requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('is-in')));
+function buildLines(el) {
+  el.dataset.src ??= el.textContent.trim();
+  const lines = el.dataset.src.split('|');
+  const st = +el.dataset.stagger || 120, base = +el.dataset.base || 0, dur = +el.dataset.dur || 950;
+  if (el.getAttribute('aria-hidden') !== 'true') el.setAttribute('aria-label', lines.join(' '));
+  el.classList.remove('is-in');
+  el.innerHTML = lines.map((l, i) => `<span class="m" aria-hidden="true"><span style="--dl:${base + i * st}ms;--d:${dur}ms">${l}</span></span>`).join('');
+}
+function buildWords(el) {
+  el.dataset.src ??= el.textContent.trim();
+  const st = +el.dataset.stagger || 140, dur = +el.dataset.dur || 1100;
+  el.classList.remove('is-in');
+  el.innerHTML = el.dataset.src.split(' ').map((w, i) => `<span class="m"><span style="--dl:${i * st}ms;--d:${dur}ms">${w}</span></span>`).join(' ');
+}
+function buildFade(el) {
+  const delay = +el.dataset.delay || 0;
+  el.setAttribute('aria-label', el.textContent.trim());
+  el.innerHTML = el.textContent.trim().split(/\s+/).map((w, i) => `<span class="w" aria-hidden="true" style="--dl:${delay + i * 28}ms">${w}</span>`).join(' ');
+}
+
+/* ---------- in-view system ---------- */
+const gated = [];
+let ready = false;
+const io = new IntersectionObserver(entries => {
+  for (const e of entries) if (e.isIntersecting) { io.unobserve(e.target); e.target._play?.(); }
+}, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+function register(el, play) {
+  el._play = play;
+  if (el.hasAttribute('data-gate')) gated.push(el); else io.observe(el);
+}
+function setupInview(el) {
+  const from = parse(el.dataset.iv);
+  const to = {}; for (const k in from) to[k] = DEF[k];
+  const s = makeSpring(el, from);
+  const cfg = { tension: +el.dataset.t || 170, friction: +el.dataset.f || 26 };
+  register(el, () => animate(s, to, cfg, +el.dataset.delay || 0));
+}
+$$('[data-i18n-fade]').forEach(el => { el.dataset.en = el.textContent.trim(); });
+$$('.sl').forEach(el => { buildLines(el); if (el.closest('.modal')) return; register(el, () => playText(el)); });
+$$('.wr').forEach(el => { buildWords(el); register(el, () => playText(el)); });
+$$('.wf').forEach(el => { buildFade(el); register(el, () => playText(el)); });
+
+/* ---------- hover springs (disabled ≤768px) ---------- */
+function bindHover(host) {
+  if (host._hb) return; host._hb = 1;
+  const tgt = host.dataset.hoverTarget ? $(host.dataset.hoverTarget, host) : host;
+  if (!tgt) return;
+  const to = parse(host.dataset.hover), from = parse(host.dataset.hoverFrom);
+  for (const k in to) if (!(k in from)) from[k] = DEF[k];
+  const s = makeSpring(tgt, from);
+  const cfg = { tension: +host.dataset.ht || 300, friction: +host.dataset.hf || 22 };
+  host.addEventListener('pointerenter', () => { if (!mobileMQ.matches) animate(s, to, cfg); });
+  host.addEventListener('pointerleave', () => animate(s, from, cfg));
+}
+
+/* ---------- dots ---------- */
+function makeDots(box, n, onPick, label) {
+  box.innerHTML = Array.from({ length: n }, (_, i) => `<button class="dot" type="button" aria-label="${label} ${i + 1}"><i></i></button>`).join('');
+  const btns = $$('.dot', box);
+  btns.forEach((b, i) => b.addEventListener('click', () => onPick(i)));
+  return i => btns.forEach((b, j) => b.setAttribute('aria-current', j === i ? 'true' : 'false'));
+}
+
+/* ================= DATA ================= */
+const CATS = [
+  { k: 'phone', l: 'Smartphone' }, { k: 'laptop', l: 'Laptop' }, { k: 'tablet', l: 'Tablet' },
+  { k: 'desktop', l: 'Desktop / Monitor' }, { k: 'tv', l: 'TV' },
+  { k: 'small', l: 'Small appliance', s: 'Kettle, mixer, iron' }, { k: 'large', l: 'Large appliance', s: 'Fridge, washing machine' },
+  { k: 'chargers', l: 'Chargers & cables' }, { k: 'batteries', l: 'Batteries & power banks' },
+  { k: 'earbuds', l: 'Earbuds / headphones' }, { k: 'other', l: 'Other' },
+];
+const CAT = Object.fromEntries(CATS.map(c => [c.k, c]));
+const TYPES = { repair: 'Repair shop', reuse: 'Donate & resale', recycle: 'Certified recycler', battery: 'Battery drop-off' };
+const ALL = CATS.map(c => c.k);
+const FAC = [
+  { n: 'FixHub Repairs', a: 'Koramangala 5th Block', t: 'repair', d: 1.2, h: '10am – 8pm', acc: ['phone', 'tablet', 'laptop', 'earbuds'], ll: [12.9348, 77.6189] },
+  { n: 'Second Life Electronics', a: 'HSR Layout, Sector 2', t: 'reuse', d: 2.1, h: '10am – 7pm', acc: ['phone', 'laptop', 'tablet', 'desktop'], note: 'Buys working devices', ll: [12.9121, 77.6446] },
+  { n: 'Circuit Doctors', a: 'Indiranagar, 100 Ft Road', t: 'repair', d: 3.4, h: '11am – 9pm', acc: ['phone', 'laptop', 'tablet', 'desktop', 'tv'], ll: [12.9719, 77.6412] },
+  { n: 'Share-a-Device Drive', a: 'Jayanagar 4th Block', t: 'reuse', d: 4.6, h: 'Sat – Sun, 9am – 5pm', acc: ['phone', 'laptop', 'tablet', 'chargers'], note: 'Donates to schools', ll: [12.9254, 77.5832] },
+  { n: 'MetroMart Collection Box', a: 'MG Road Metro concourse', t: 'recycle', d: 5.0, h: '8am – 10pm', acc: ['phone', 'chargers', 'earbuds', 'small'], ll: [12.9756, 77.6066] },
+  { n: 'Ward Office Battery Bin', a: 'Malleshwaram 8th Cross', t: 'battery', d: 6.2, h: '9:30am – 5:30pm', acc: ['batteries', 'earbuds', 'chargers'], ll: [13.0031, 77.5697] },
+  { n: 'Appliance Care Centre', a: 'Banashankari 2nd Stage', t: 'repair', d: 7.8, h: '9am – 6pm', acc: ['small', 'large', 'tv'], pickup: true, ll: [12.9257, 77.5467] },
+  { n: 'Battery Safe Point', a: 'Whitefield, ITPL Main Road', t: 'battery', d: 11.3, h: '10am – 7pm', acc: ['batteries', 'earbuds', 'phone'], cert: true, ll: [12.9862, 77.7339] },
+  { n: 'GreenLoop Recyclers', a: 'Peenya Industrial Area', t: 'recycle', d: 14.2, h: '9am – 6pm', acc: ['phone', 'laptop', 'tablet', 'desktop', 'tv', 'small', 'large', 'chargers', 'other'], cert: true, pickup: true, ll: [13.0289, 77.5199] },
+  { n: 'E-Cycle Bengaluru', a: 'Electronic City Phase 1', t: 'recycle', d: 16.5, h: '9am – 5pm', acc: ALL, cert: true, pickup: true, ll: [12.8456, 77.6603] },
+];
+const TYPE_COLOR = { repair: '#1f8a5b', reuse: '#8aa313', recycle: '#0b6e6e', battery: '#d97706' };
+const TYPE_ICON = { repair: 'wrench', reuse: 'reuse', recycle: 'recycle', battery: 'batteries' };
+const CO2 = { phone: 12, laptop: 40, tablet: 20, desktop: 60, tv: 80, small: 8, large: 120, chargers: 1, batteries: 2, earbuds: 3, other: 5 };
+const VERDICTS = [
+  { v: 'repair', label: 'Repair it', title: 'Worth saving', cta: 'Find repair shops', icon: 'wrench' },
+  { v: 'reuse', label: 'Pass it on', title: 'A second life', cta: 'Find donation points', icon: 'reuse' },
+  { v: 'recycle', label: 'Recycle it', title: 'Safely, certified', cta: 'Find recyclers', icon: 'recycle' },
+];
+const GAP = [
+  { w: ['Repair', 'Is', 'Often', 'Cheap'], i: 'wrench', q: '“I don’t know if it’s worth fixing.”', b: 'Repair is invisible. People assume a cracked screen or a dying battery means the device is finished, when it’s often a cheap fix.' },
+  { w: ['Where', 'Does', 'It', 'Go?'], i: 'pin', q: '“I don’t know where it goes.”', b: 'Lists of recyclers don’t say which items each one accepts. A battery drop-off point is not the same as a TV recycler.' },
+  { w: ['Drawers', 'Hide', 'Gold', 'Inside'], i: 'clock', q: '“I’ll deal with it later.”', b: 'Unused phones and chargers pile up in drawers for years, and the valuable materials inside go with them.' },
+  { w: ['Cheap', 'Scrap', 'Costs', 'Lives'], i: 'warn', q: '“The scrap dealer comes to my door.”', b: 'Informal collection is convenient, but it often ends in open burning and acid baths that poison workers and soil.' },
+  { w: ['Small', 'Battery', 'Big', 'Fire'], i: 'fire', q: '“It’s just a small battery.”', b: 'Lithium-ion batteries in vapes, power banks and earbuds thrown into ordinary bins are a growing cause of fires in garbage trucks.' },
+];
+const PILLARS = [
+  { n: 'Decide', d: 'A 4-question device check recommends Repair, Reuse or Recycle, and explains why.', act: 'check' },
+  { n: 'Locate', d: 'Repair shops, donation points and certified recyclers, filtered by what they actually accept.', act: '#locator' },
+  { n: 'Act safely', d: 'A prep checklist for each device: back up, wipe your data, handle the battery.', act: 'check' },
+  { n: 'See your impact', d: 'Every drop-off adds to your record of CO₂ avoided and materials recovered.', act: '#locator' },
+];
+const SDGS = [
+  { n: '12', name: 'Responsible consumption & production', t: 'Target 12.5: reduce waste through prevention, reduction, recycling and reuse.', how: 'Repair-first recommendations and routing to certified recyclers.' },
+  { n: '11', name: 'Sustainable cities & communities', t: 'Target 11.6: reduce the environmental impact of cities, including waste management.', how: 'Keeps e-waste and batteries out of general municipal waste.' },
+  { n: '3', name: 'Good health & well-being', t: 'Target 3.9: reduce illness and death from hazardous chemicals and pollution.', how: 'Moves material away from unsafe informal burning and acid-stripping.' },
+  { n: '8', name: 'Decent work', t: 'Target 8.8: safe working environments for all workers.', how: 'Supports certified, safer recycling over hazardous informal work.' },
+];
+
+/* ================= HERO: verdict slider ================= */
+const vstack = $('#vstack');
+let vIdx = 0, vTimer = 0;
+function vCard(d) {
+  const el = document.createElement('div');
+  el.className = 'vcard glass';
+  el.innerHTML = `<div class="vthumb vt-${d.v}">${ic(d.icon)}</div><div class="vtext"><span class="vlabel">${d.label}</span><span class="vtitle">${d.title}</span><a class="vcta" href="#locator" data-loc="${d.v}">${d.cta} →</a></div>`;
+  return el;
+}
+const setVDots = makeDots($('#vdots'), VERDICTS.length, i => { showV(i); restartV(); }, 'Show verdict');
+function showV(i, first = false) {
+  const cfg = { tension: 210, friction: 24 };
+  const old = vstack.firstElementChild;
+  vIdx = (i + VERDICTS.length) % VERDICTS.length;
+  setVDots(vIdx);
+  const nu = vCard(VERDICTS[vIdx]);
+  vstack.appendChild(nu);
+  if (first) return;
+  if (old && old !== nu) {
+    old.classList.add('out');
+    vstack.appendChild(old); // keep it on top while fading
+    const so = makeSpring(old, { opacity: 1, y: 0, scale: 1 });
+    animate(so, { opacity: 0, y: 16, scale: 0.96 }, cfg);
+    setTimeout(() => old.remove(), 600);
+  }
+  const sn = makeSpring(nu, { opacity: 0, y: 16, scale: 0.96 });
+  animate(sn, { opacity: 1, y: 0, scale: 1 }, cfg);
+}
+function restartV() { clearInterval(vTimer); if (ready) vTimer = setInterval(() => showV(vIdx + 1), 3800); }
+showV(0, true);
+
+/* ================= GAP carousel ================= */
+const ghostEl = $('#ghost');
+const gws = $$('.gw', ghostEl);
+const coachIn = $('#coach-in');
+let gIdx = 0, ghostShown = false;
+const setGDots = makeDots($('#gap-dots'), GAP.length, i => showGap(i), 'Show reason');
+function fillGhost(words) {
+  gws.forEach((el, i) => { el.classList.remove('is-in'); el.innerHTML = `<span class="m"><span>${words[i]}</span></span>`; });
+}
+const coachSpring = makeSpring(coachIn, { opacity: 1 });
+function showGap(i, first = false) {
+  gIdx = (i + GAP.length) % GAP.length;
+  const g = GAP[gIdx];
+  setGDots(gIdx);
+  $('#gap-chip').textContent = '#' + String(gIdx + 1).padStart(2, '0');
+  fillGhost(g.w);
+  if (ghostShown) gws.forEach(playText);
+  coachIn.innerHTML = `<span class="coach-num">REASON ${String(gIdx + 1).padStart(2, '0')} / ${String(GAP.length).padStart(2, '0')}</span>
+    <div class="coach-ico">${ic(g.i)}</div>
+    <figcaption class="coach-cap"><strong>${g.q}</strong><span>${g.b}</span></figcaption>`;
+  if (!first) { setNow(coachSpring, { opacity: 0 }); animate(coachSpring, { opacity: 1 }, { tension: 260, friction: 26 }); }
+}
+showGap(0, true);
+/* size the ghost words so the longest one in any slide fits its column without touching the card */
+const ghostMeasure = document.createElement('span');
+ghostMeasure.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap;font-size:100px;font-weight:500;text-transform:uppercase;letter-spacing:-.02em;font-family:inherit';
+document.body.appendChild(ghostMeasure);
+function fitGhost() {
+  ghostEl.style.fontSize = '';
+  const cols = getComputedStyle($('.grow', ghostEl)).gridTemplateColumns.split(' ').map(parseFloat);
+  const col = Math.min(cols[0], cols[2]);
+  let widest = 0;
+  GAP.forEach(g => g.w.forEach(w => { ghostMeasure.textContent = w; widest = Math.max(widest, ghostMeasure.getBoundingClientRect().width); }));
+  const max = innerWidth * 0.082;
+  const fit = (col / 1.06) / (widest / 100); // 6% headroom for the sideways parallax
+  ghostEl.style.fontSize = Math.min(max, fit) + 'px';
+}
+fitGhost();
+document.fonts?.ready.then(fitGhost);
+addEventListener('resize', fitGhost);
+register(ghostEl, () => { ghostShown = true; gws.forEach(playText); });
+$('#gap-prev').addEventListener('click', () => showGap(gIdx - 1));
+$('#gap-next').addEventListener('click', () => showGap(gIdx + 1));
+
+/* ================= SOLUTION rows ================= */
+$('#plist').innerHTML = PILLARS.map((p, i) => `
+  <li><a class="prow" ${p.act === 'check' ? 'href="#check" data-open-check' : `href="${p.act}"`} data-hover="x:8,opacity:1" data-hover-from="opacity:0.55" data-hover-target=".pcirc .sp" data-ht="300" data-hf="20">
+    <div class="prow-in" data-iv="opacity:0,y:26" data-delay="${i * 90}" data-t="190" data-f="26">
+      <span class="pidx">0${i + 1}</span>
+      <span class="pbody"><span class="pname">${p.n}</span><span class="pdesc">${p.d}</span></span>
+      <span class="pcirc"><span class="sp">${ic('arrow')}</span></span>
+    </div></a></li>`).join('');
+
+/* ================= SDG cards ================= */
+$('#sdg-grid').innerHTML = SDGS.map((s, i) => `
+  <li data-iv="opacity:0,y:40" data-delay="${i * 120}" data-t="180" data-f="26">
+    <figure class="sdg-card" data-hover="y:-8" data-ht="300" data-hf="22">
+      <div><span class="sdg-n"><small>SDG</small>${s.n}</span><blockquote>${s.how}</blockquote></div>
+      <figcaption><strong>${s.name}</strong><span>${s.t}</span></figcaption>
+    </figure></li>`).join('');
+
+/* init inview + hover on everything that exists now */
+$$('[data-iv]').forEach(setupInview);
+$$('[data-hover]').forEach(bindHover);
+
+/* ================= LOCATOR ================= */
+const loc = { type: 'all', dev: 'all' };
+const chipBox = $('#type-chips'), devSel = $('#dev-select'), grid = $('#fac-grid');
+let here = null; // {lat,lng} once the visitor shares a location inside Bengaluru
+function renderFilters() {
+  chipBox.innerHTML = [['all', 'All places'], ...Object.entries(TYPES)].map(([k, l]) => `<button class="chip" type="button" data-type="${k}" aria-pressed="false">${t('type.' + k, l)}</button>`).join('');
+  devSel.innerHTML = `<option value="all">${t('dev.all', 'All devices')}</option>` + CATS.map(c => `<option value="${c.k}">${t('cat.' + c.k, c.l)}</option>`).join('');
+}
+renderFilters();
+const matches = (type, dev) => FAC.filter(f => (type === 'all' || f.t === type) && (dev === 'all' || f.acc.includes(dev)));
+function km(a, b) {
+  const R = 6371, r = x => x * Math.PI / 180, dLa = r(b[0] - a[0]), dLo = r(b[1] - a[1]);
+  const h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a[0])) * Math.cos(r(b[0])) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+const distOf = f => here ? km([here.lat, here.lng], f.ll) : f.d;
+function renderLoc() {
+  $$('.chip', chipBox).forEach(b => b.setAttribute('aria-pressed', b.dataset.type === loc.type ? 'true' : 'false'));
+  devSel.value = loc.dev;
+  const list = matches(loc.type, loc.dev).sort((a, b) => distOf(a) - distOf(b));
+  const n = list.length;
+  $('#fcount').textContent = !n ? '' : LANG === 'en'
+    ? `${n} place${n > 1 ? 's' : ''} found, nearest ${here ? 'to you ' : ''}first`
+    : fill(t(here ? 'fcount.me' : 'fcount', '{n}'), { n });
+  grid.innerHTML = n ? list.map((f, i) => `
+    <li class="fac" style="animation-delay:${i * 60}ms">
+      <div class="fac-top"><span class="tag ${f.t}">${t('type.' + f.t, TYPES[f.t])}</span><button class="dist-btn" type="button" data-fly="${FAC.indexOf(f)}" aria-label="Show ${f.n} on the map">${ic('pin')}${distOf(f).toFixed(1)} km</button></div>
+      <div><h3>${f.n}</h3><p class="area">${f.a}</p></div>
+      <ul class="accepts" aria-label="Accepts">${f.acc.map(k => `<li>${t('cat.' + k, CAT[k].l)}</li>`).join('')}</ul>
+      <p class="fac-meta"><span>${f.h}</span>${f.cert ? '<b>✓ Certified</b>' : ''}${f.pickup ? '<span>Pickup available</span>' : ''}${f.note ? `<span>${f.note}</span>` : ''}</p>
+      <div class="fac-foot"><span>${t('dropped', 'Dropped something here?')}</span><button class="logbtn" type="button" data-log="${FAC.indexOf(f)}">${t('log', 'Log drop-off')}</button></div>
+    </li>`).join('')
+    : `<li class="empty">${t('loc.empty', 'No places match these filters. Try widening the distance or clearing a filter.')}</li>`;
+  syncMap(list);
+}
+chipBox.addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; loc.type = b.dataset.type; renderLoc(); });
+devSel.addEventListener('change', () => { loc.dev = devSel.value; renderLoc(); });
+function setLocator(type, dev = 'all') {
+  if (dev !== 'all' && !matches(type, dev).length) dev = 'all';
+  loc.type = type; loc.dev = dev; renderLoc();
+}
+
+/* ---------- live map (Leaflet + CARTO tiles, loaded only when needed) ---------- */
+const mapWrap = $('#map-wrap');
+let map = null, L = null, markerLayer = null, meMarker = null, mapTried = false;
+const markerById = new Map();
+function loadLeaflet() {
+  return new Promise((res, rej) => {
+    if (window.L) return res(window.L);
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+    const s = document.createElement('script'); s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s.onload = () => window.L ? res(window.L) : rej(new Error('no L')); s.onerror = rej;
+    document.head.appendChild(s);
+    setTimeout(() => rej(new Error('timeout')), 9000);
+  });
+}
+const pinIcon = (f, i) => L.divIcon({ className: '', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -30],
+  html: `<span class="mk-drop" style="animation-delay:${i * 70}ms"><span class="mk" style="--c:${TYPE_COLOR[f.t]}">${ic(TYPE_ICON[f.t])}</span></span>` });
+function initMap() {
+  if (mapTried) return; mapTried = true;
+  loadLeaflet().then(lib => {
+    L = lib;
+    map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([12.9716, 77.6146], 11);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors' }).addTo(map);
+    markerLayer = L.layerGroup().addTo(map);
+    mapWrap.classList.remove('off');
+    map.on('click', () => map.scrollWheelZoom.enable());
+    map.on('mouseout', () => map.scrollWheelZoom.disable());
+    renderLoc();
+  }).catch(() => { $('#map-off').textContent = 'The map needs an internet connection. The list below works offline.'; });
+}
+function syncMap(list) {
+  if (!map) return;
+  markerLayer.clearLayers(); markerById.clear();
+  list.forEach((f, i) => {
+    const m = L.marker(f.ll, { icon: pinIcon(f, i), title: f.n, keyboard: true })
+      .bindPopup(`<b>${f.n}</b>${TYPES[f.t]} · ${f.h}<br><span style="color:#6b756f">${f.a} · ${distOf(f).toFixed(1)} km</span>`);
+    markerLayer.addLayer(m); markerById.set(FAC.indexOf(f), m);
+  });
+  const pts = list.map(f => f.ll); if (here) pts.push([here.lat, here.lng]);
+  if (pts.length > 1) map.flyToBounds(pts, { padding: [40, 40], duration: reduce ? 0 : .8, maxZoom: 14 });
+  else if (pts.length === 1) map.flyTo(pts[0], 14, { duration: reduce ? 0 : .8 });
+}
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { initMap(); o.disconnect(); } }, { rootMargin: '600px 0px' }).observe(mapWrap);
+grid.addEventListener('click', e => {
+  const b = e.target.closest('[data-fly]'); if (!b) return;
+  const m = markerById.get(+b.dataset.fly);
+  goTo(mapWrap);
+  if (m) setTimeout(() => { map.flyTo(m.getLatLng(), 15, { duration: reduce ? 0 : .9 }); setTimeout(() => m.openPopup(), reduce ? 0 : 950); }, 500);
+});
+$('#locate').addEventListener('click', () => {
+  if (!navigator.geolocation) { toast('Your browser can’t share a location.'); return; }
+  const btn = $('#locate'); btn.disabled = true;
+  navigator.geolocation.getCurrentPosition(p => {
+    btn.disabled = false;
+    const pos = { lat: p.coords.latitude, lng: p.coords.longitude };
+    if (km([pos.lat, pos.lng], [12.9716, 77.5946]) > 60) { toast('You seem to be outside Bengaluru.', 'Distances stay illustrative for this demo.'); return; }
+    here = pos;
+    if (map) { meMarker?.remove(); meMarker = L.marker([pos.lat, pos.lng], { icon: L.divIcon({ className: '', html: '<span class="me-dot"></span>', iconSize: [18, 18], iconAnchor: [9, 9] }), title: 'You are here' }).addTo(map); }
+    renderLoc();
+    toast('Sorted by real distance from you.', 'Your location stays in this browser.');
+  }, () => { btn.disabled = false; toast('Location not shared.', 'You can still browse every place on the map.'); }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 });
+});
+renderLoc();
+
+/* impact (per-viewer, localStorage) */
+const store = {
+  get() { try { return JSON.parse(localStorage.getItem('recircuit-impact')) || { n: 0, kg: 0, badges: [] }; } catch { return { n: 0, kg: 0, badges: [] }; } },
+  set(v) { try { localStorage.setItem('recircuit-impact', JSON.stringify(v)); } catch {} },
+};
+function renderImpact(prev) {
+  const s = store.get(), p = prev || s;
+  $('#impact').innerHTML = `<span class="impact-ico">${ic('leaf')}</span>` + (s.n
+    ? `<div><strong><span class="rn" id="imp-n" data-v="${p.n}">${p.n}</span> drop-off${s.n > 1 ? 's' : ''} · ~<span class="rn" id="imp-kg" data-v="${p.kg}">${p.kg}</span> kg CO₂</strong><span>kept out of the air so far${s.badges.length ? ` · Badges: ${s.badges.join(', ')}` : ''}</span><a class="impact-link" href="app.html#/impact">Track it in your dashboard →</a></div>`
+    : `<div><strong>Nothing logged yet.</strong><span>Your first drop-off is the hardest. Let's find one nearby.</span><a class="impact-link" href="app.html">${SIGNED_IN ? 'Open your dashboard →' : 'Log in to track your impact →'}</a></div>`);
+  if (prev && s.n) { rollNum($('#imp-n'), s.n); rollNum($('#imp-kg'), s.kg); }
+}
+renderImpact();
+const BADGES = {
+  'First Drop': 'You logged your first drop-off.',
+  'Fixer': 'Your first repair.',
+  'Battery Hero': 'You recycled a battery safely.',
+  'Circuit Breaker': '10 devices diverted.',
+};
+const BADGE_ICON = { 'First Drop': 'leaf', 'Fixer': 'wrench', 'Battery Hero': 'batteries', 'Circuit Breaker': 'recycle' };
+let toastTimer = 0;
+function toast(msg, sub = '', medal = '') {
+  const tEl = $('#toast');
+  tEl.classList.remove('show');
+  tEl.classList.toggle('has-medal', !!medal);
+  tEl.innerHTML = (medal ? `<span class="medal">${ic(medal)}</span>` : '') + `<div>${msg}${sub ? `<small>${sub}</small>` : ''}</div>`;
+  void tEl.offsetWidth;
+  tEl.classList.add('show'); clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => tEl.classList.remove('show'), medal ? 5200 : 4200);
+}
+grid.addEventListener('click', e => {
+  const b = e.target.closest('[data-log]'); if (!b) return;
+  const f = FAC[+b.dataset.log];
+  const cat = loc.dev !== 'all' && f.acc.includes(loc.dev) ? loc.dev : f.acc[0];
+  const kg = CO2[cat] ?? 5;
+  const s = store.get(), before = { n: s.n, kg: s.kg }; s.n++; s.kg += kg;
+  const earned = [];
+  const earn = name => { if (!s.badges.includes(name)) { s.badges.push(name); earned.push(name); } };
+  if (s.n === 1) earn('First Drop');
+  if (f.t === 'repair') earn('Fixer');
+  if (cat === 'batteries') earn('Battery Hero');
+  if (s.n >= 10) earn('Circuit Breaker');
+  store.set(s); renderImpact(before);
+  floatTag(b, `+${kg} kg CO₂`);
+  if (earned.length) toast(`New badge: ${earned[0]}`, `${BADGES[earned[0]]} Logged about ${kg} kg of CO₂ kept out of the air.`, BADGE_ICON[earned[0]]);
+  else toast(`Logged! That's about ${kg} kg of CO₂ kept out of the air.`);
+});
+
+/* ================= MENU ================= */
+const menu = $('#menu'), burger = $('#burger');
+const mBd = makeSpring($('#menu-bd'), { opacity: 0 });
+const mPanel = makeSpring($('#menu-panel'), { opacity: 0, y: -24 });
+const mLinks = $$('.menu-nav a').map(a => makeSpring(a, { opacity: 0, y: 28 }));
+let menuOpen = false, menuHide = 0;
+function openMenu() {
+  if (menuOpen) return; menuOpen = true; clearTimeout(menuHide);
+  menu.classList.add('vis', 'open'); menu.setAttribute('aria-hidden', 'false'); burger.setAttribute('aria-expanded', 'true');
+  lock();
+  animate(mBd, { opacity: 1 }, { tension: 260, friction: 30 });
+  animate(mPanel, { opacity: 1, y: 0 }, { tension: 220, friction: 28 });
+  mLinks.forEach((s, i) => { setNow(s, { opacity: 0, y: 28 }); animate(s, { opacity: 1, y: 0 }, { tension: 200, friction: 26 }, 120 + i * 70); });
+  setTimeout(() => $('#menu-close').focus(), 50);
+}
+function closeMenu(restoreFocus = true) {
+  if (!menuOpen) return; menuOpen = false;
+  menu.classList.remove('open'); menu.setAttribute('aria-hidden', 'true'); burger.setAttribute('aria-expanded', 'false');
+  animate(mBd, { opacity: 0 }, { tension: 260, friction: 30 });
+  animate(mPanel, { opacity: 0, y: -24 }, { tension: 220, friction: 28 });
+  mLinks.forEach(s => animate(s, { opacity: 0, y: 28 }, { tension: 260, friction: 30 }));
+  menuHide = setTimeout(() => menu.classList.remove('vis'), 650);
+  unlock();
+  if (restoreFocus) burger.focus({ preventScroll: true });
+}
+burger.addEventListener('click', openMenu);
+$('#menu-close').addEventListener('click', () => closeMenu());
+$('#menu-bd').addEventListener('click', () => closeMenu());
+
+/* ================= DEVICE CHECK ================= */
+const modal = $('#check'), body = $('#check-body');
+const cBd = makeSpring($('#check-bd'), { opacity: 0 });
+const cPanel = makeSpring($('#check-panel'), { opacity: 0, y: 28, scale: 0.96 });
+const checkTitle = $('#check-title');
+let checkOpen = false, opener = null, modalHide = 0;
+const NO_DATA = ['small', 'large', 'chargers', 'batteries', 'earbuds'];
+const STEPS = [
+  { key: 'cat', q: 'What is it?', opts: CATS.map(c => ({ k: c.k, l: c.l, s: c.s, i: c.k })) },
+  { key: 'cond', q: 'How is it doing?', list: true, opts: [
+    { k: 'fine', l: 'Works fine', s: 'I just don’t use it anymore' },
+    { k: 'issues', l: 'Works, with issues', s: 'Cracked screen, weak battery, slow' },
+    { k: 'dead', l: 'Doesn’t work', s: 'Won’t turn on or charge' },
+    { k: 'damaged', l: 'Damaged or swollen', s: 'Bent, leaking, or the battery is bulging', warn: true },
+  ] },
+  { key: 'age', q: 'How old is it?', opts: [{ k: 'u2', l: 'Under 2 years' }, { k: '2to5', l: '2 to 5 years' }, { k: 'o5', l: 'Over 5 years' }, { k: 'ns', l: 'Not sure' }] },
+  { key: 'data', q: 'Does it have your personal data on it?', opts: [{ k: 'yes', l: 'Yes' }, { k: 'no', l: 'No' }, { k: 'ns', l: 'Not sure' }] },
+];
+let ans = {}, stepI = 0;
+const stepsFor = () => STEPS.filter(s => s.key !== 'data' || !NO_DATA.includes(ans.cat));
+
+function decide({ cat, cond, age }) {
+  const repairable = ['phone', 'laptop', 'tablet', 'desktop', 'tv', 'large'];
+  if (cond === 'damaged') return { v: 'recycle', hazard: true, fac: 'battery', w: 'damaged', why: 'Damaged or swollen batteries are a fire risk, so this goes straight to a battery drop-off point.' };
+  if (cat === 'batteries') return { v: 'recycle', fac: 'battery', w: 'batteries', why: 'Batteries and power banks never go in a household bin, even when they look fine.' };
+  if (cat === 'chargers') return cond === 'fine'
+    ? { v: 'reuse', fac: 'reuse', w: 'chg_fine', why: 'Working chargers and cables are always useful to someone. Pass them on.' }
+    : { v: 'recycle', fac: 'recycle', w: 'chg_broken', why: 'Broken chargers and cables still hold copper worth recovering.' };
+  if (cond === 'fine') return age === 'o5'
+    ? { v: 'reuse', fac: 'reuse', w: 'fine_old', why: 'It works but it’s older, so donating it is the best next life. If it’s truly obsolete, recycle it.' }
+    : { v: 'reuse', fac: 'reuse', w: 'fine_new', why: 'It works and it’s fairly new. Sell it or donate it.' };
+  if (cond === 'issues') return { v: 'repair', fac: 'repair', w: 'issues', why: 'Cracked screens, weak batteries and slowdowns are usually far cheaper to fix than to replace.' };
+  if (age !== 'o5' && repairable.includes(cat)) return { v: 'repair', fac: 'repair', w: 'young', why: 'It’s under 5 years old and this kind of device is usually repairable. Get a diagnosis first.' };
+  return { v: 'recycle', fac: cat === 'earbuds' ? 'battery' : 'recycle', w: 'old', why: 'It’s older or hard to repair, so recovering its materials is the best next step.' };
+}
+const COPY = {
+  repair: { t: 'Repair it', i: 'wrench', p: 'Good news: this one’s worth saving. Issues like this are often fixable for far less than a replacement, and keeping a device in use is the single biggest way to cut its footprint.', b: 'Find repair shops near me' },
+  reuse: { t: 'Pass it on', i: 'reuse', p: 'It still works, so it shouldn’t be scrapped. Selling or donating it gives it a second life with someone who needs it, and keeps a new one from being manufactured.', b: 'Find donation & resale points' },
+  recycle: { t: 'Recycle it, safely', i: 'recycle', p: 'This device has reached the end of its road. A certified recycler can recover the copper, gold and other materials inside, and keep toxic parts out of soil and water.', b: 'Find certified recyclers' },
+};
+const CK = {
+  device: ['Back up your photos, contacts and files.', 'Sign out of all accounts (Google / Apple ID, email, banking apps).', 'Turn off “Find My Device” / activation lock.', 'Factory reset the device.', 'Remove your SIM and memory card.', 'Keep the charger with it if you’re donating.'],
+  battery: ['Don’t throw it in any household bin.', 'Tape over the metal terminals with clear tape.', 'Store it in a cool, dry place, away from metal objects.', 'Carry it in a non-metal container to the drop-off point.'],
+  large: ['Unplug it and let it cool for at least an hour.', 'Don’t break the screen or open the back panel (older sets contain lead and mercury).', 'Book a pickup if it’s too heavy to carry.'],
+  chargers: ['Bundle each cable with a tie or tape.', 'Keep chargers with their device if you’re donating.', 'Drop them at a collection point, never the household bin.'],
+  other: ['Unplug it and remove any batteries that come out easily.', 'Wipe any personal data if it stores some.', 'Take it to a certified recycler, not the household bin.'],
+};
+function checklist(a, r) {
+  let g = r.hazard || ['batteries', 'earbuds'].includes(a.cat) ? 'battery'
+    : ['phone', 'laptop', 'tablet'].includes(a.cat) ? 'device'
+    : ['tv', 'desktop', 'large', 'small'].includes(a.cat) ? 'large'
+    : a.cat === 'chargers' ? 'chargers' : 'other';
+  let items = [...CK[g]];
+  if (a.cat === 'small') items = items.filter(t => !t.startsWith('Book a pickup'));
+  const hasData = a.data === 'yes' || a.data === 'ns';
+  if (r.hazard && ['phone', 'laptop', 'tablet'].includes(a.cat)) items.unshift('Don’t power it on to wipe it. Tell the drop-off point it may hold personal data.');
+  else if (hasData && g !== 'device') items.unshift('Back up anything you want to keep.', 'Sign out of your accounts and factory reset it (or wipe the drive).');
+  return items;
+}
+
+function progress(i, total) {
+  return `<div class="prog" aria-hidden="true">${Array.from({ length: total }, (_, j) => `<i class="${j <= i ? 'on' : ''}"></i>`).join('')}</div>`;
+}
+function renderStep() {
+  const steps = stepsFor(), st = steps[stepI];
+  const lab = o => st.key === 'cat' ? t('cat.' + o.k, o.l) : t(`o.${st.key}.${o.k}`, o.l);
+  const sub = o => st.key === 'cat' ? t('cat.' + o.k + '.s', o.s) : t(`o.${st.key}.${o.k}.s`, o.s);
+  body.innerHTML = `${progress(stepI, steps.length)}
+    <div class="fade">
+      <div class="qmeta"><span>${fill(t('step', 'Step {a} of {b}'), { a: stepI + 1, b: steps.length })}</span>${stepI ? `<button class="back" type="button" id="back">${ic('arrow')} ${t('back', 'Back')}</button>` : ''}</div>
+      <p class="q" id="q">${t('q.' + st.key, st.q)}</p>
+      <div class="opts ${st.list ? 'list' : ''}" role="group" aria-labelledby="q">
+        ${st.opts.map(o => `<button class="opt ${o.warn ? 'warn' : ''} ${ans[st.key] === o.k ? 'sel' : ''}" type="button" data-k="${o.k}">
+          ${o.i ? `<span class="oi">${ic(o.i)}</span>` : o.warn ? `<span class="oi">${ic('warn')}</span>` : ''}
+          <span>${lab(o)}${o.s ? `<small>${sub(o)}</small>` : ''}</span></button>`).join('')}
+      </div>
+    </div>`;
+  $('#back', body)?.addEventListener('click', () => { stepI--; renderStep(); $('.opt', body)?.focus(); });
+  $$('.opt', body).forEach(b => b.addEventListener('click', () => {
+    ans[st.key] = b.dataset.k;
+    $$('.opt', body).forEach(x => x.classList.toggle('sel', x === b));
+    setTimeout(() => {
+      if (NO_DATA.includes(ans.cat)) ans.data = 'no';
+      const all = stepsFor();
+      if (stepI < all.length - 1) { stepI++; renderStep(); $('.opt', body)?.focus({ preventScroll: true }); }
+      else renderResult();
+    }, 180);
+  }));
+}
+function renderResult() {
+  const r = decide(ans), c = COPY[r.v], items = checklist(ans, r);
+  const btnLabel = r.fac === 'battery' ? t('v.battery.b', 'Find battery drop-off points') : t(`v.${r.v}.b`, c.b);
+  const HZ = '<strong>Stop: a swollen or damaged lithium battery can catch fire.</strong> Don’t charge it, puncture it, or put it in any bin. Place it in a cool spot away from anything flammable and take it to a battery drop-off point as soon as you can.';
+  body.innerHTML = `${progress(99, stepsFor().length)}
+    <div class="fade">
+      ${r.hazard ? `<div class="hazard nudge" role="alert">${ic('warn')}<p>${t('hazard', HZ)}</p></div>` : ''}
+      <div class="verdict vr v-${r.v}">
+        <span class="v-ico">${ic(c.i)}</span>
+        <h3 style="--i:0">${t(`v.${r.v}.t`, c.t)}</h3>
+        <p style="--i:1">${t(`v.${r.v}.p`, c.p)}</p>
+        <p class="why" style="--i:2"><b>${t('why', 'Why:')}</b> ${t('why.' + r.w, r.why)}</p>
+        <button class="pill light" type="button" id="to-loc" style="--i:3" data-hover="x:5" data-hover-target=".arr" data-ht="320" data-hf="20">${btnLabel} <span class="arr">${ic('arrow')}</span></button>
+      </div>
+      <div class="checklist">
+        <h4>${t('before', 'Before you go')} · ${t('cat.' + ans.cat, CAT[ans.cat].l)}</h4>
+        <ol class="stag-list">${items.map((x, i) => `<li style="--i:${i}"><label class="ck"><input type="checkbox"><span>${x}</span></label></li>`).join('')}</ol>
+      </div>
+      <div class="mfoot"><button class="linkbtn" type="button" id="restart">${t('again', 'Check another device')}</button><button class="linkbtn" type="button" id="done">${t('done', 'Done')}</button></div>
+    </div>`;
+  bindHover($('#to-loc'));
+  $('#to-loc').addEventListener('click', () => {
+    closeCheck(false);
+    setLocator(r.fac, r.hazard ? 'all' : ans.cat);
+    setTimeout(() => goTo('#locator'), 80);
+  });
+  $('#restart').addEventListener('click', resetCheck);
+  $('#done').addEventListener('click', () => closeCheck());
+  $('#check-panel').scrollTop = 0;
+  $('#to-loc').focus({ preventScroll: true });
+}
+function resetCheck() { ans = {}; stepI = 0; renderStep(); $('.opt', body)?.focus({ preventScroll: true }); }
+
+function openCheck(from) {
+  if (checkOpen) return;
+  if (menuOpen) closeMenu(false);
+  checkOpen = true; opener = from || document.activeElement; clearTimeout(modalHide);
+  ans = {}; stepI = 0; renderStep();
+  modal.classList.add('vis', 'open'); modal.setAttribute('aria-hidden', 'false');
+  lock();
+  buildLines(checkTitle); playText(checkTitle);
+  animate(cBd, { opacity: 1 }, { tension: 240, friction: 30 });
+  animate(cPanel, { opacity: 1, y: 0, scale: 1 }, { tension: 240, friction: 26 });
+  setTimeout(() => $('.opt', body)?.focus({ preventScroll: true }), 120);
+}
+function closeCheck(restoreFocus = true) {
+  if (!checkOpen) return; checkOpen = false;
+  modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
+  animate(cBd, { opacity: 0 }, { tension: 240, friction: 30 });
+  animate(cPanel, { opacity: 0, y: 28, scale: 0.96 }, { tension: 240, friction: 26 });
+  modalHide = setTimeout(() => { modal.classList.remove('vis'); body.innerHTML = ''; }, 350);
+  unlock();
+  if (restoreFocus && opener) opener.focus?.({ preventScroll: true });
+}
+$('#check-close').addEventListener('click', () => closeCheck());
+$('#check-bd').addEventListener('click', () => closeCheck());
+
+/* ================= global clicks & keys ================= */
+document.addEventListener('click', e => {
+  const oc = e.target.closest('[data-open-check]');
+  if (oc) { e.preventDefault(); if (SIGNED_IN) { location.href = 'app.html#/check?new=1'; return; } openCheck(oc); return; }
+  const lc = e.target.closest('[data-loc]');
+  if (lc) { e.preventDefault(); setLocator(lc.dataset.loc); goTo('#locator'); return; }
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const h = a.getAttribute('href');
+  if (h.length < 2 || !$(h)) return;
+  e.preventDefault();
+  if (menuOpen) { closeMenu(false); setTimeout(() => goTo(h), 60); }
+  else goTo(h);
+});
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (checkOpen) closeCheck(); else if (menuOpen) closeMenu();
+});
+
+/* ================= SCROLL SCENES ================= */
+/* exploding phone */
+const insideEl = $('#inside'), ph3d = $('#ph3d'), lys = $$('.ly', ph3d), partsEl = $$('#parts .part');
+const PART_LAYERS = [[3, 4], [2], [1], [0]]; // screen+glass, board, battery, frame
+let lastInP = -1, lastActive = -2;
+function setPhone(p) {
+  const tilt = clamp(p / .22), ex = clamp((p - .14) / .5);
+  const et = 1 - Math.pow(1 - tilt, 3), ee = ex < .5 ? 4 * ex ** 3 : 1 - Math.pow(-2 * ex + 2, 3) / 2;
+  ph3d.style.setProperty('--rx', (et * 58).toFixed(2) + 'deg');
+  ph3d.style.setProperty('--rz', (et * -38).toFixed(2) + 'deg');
+  const gap = 3 + ee * (innerWidth < 900 ? 40 : 68);
+  const active = p < .2 ? -1 : Math.min(3, Math.floor((p - .2) / .2));
+  lys.forEach((l, i) => {
+    const on = active >= 0 && PART_LAYERS[active].includes(i);
+    l.style.setProperty('--z', ((i - 2) * gap + (on ? 22 * ee : 0)).toFixed(1) + 'px');
+    l.classList.toggle('on', on);
+  });
+  if (active !== lastActive) { partsEl.forEach((el, i) => el.classList.toggle('on', i === active)); lastActive = active; }
+  $('#in-prog').style.transform = `scaleX(${p.toFixed(3)})`;
+  $('#in-hint').style.opacity = p > .06 ? 0 : 1;
+}
+function updateInside() {
+  const r = insideEl.getBoundingClientRect(), vh = innerHeight;
+  if (r.bottom < 0 || r.top > vh) return;
+  const p = clamp(-r.top / Math.max(1, r.height - vh));
+  if (Math.abs(p - lastInP) < .0008) return;
+  lastInP = p; setPhone(p);
+}
+if (reduce) { insideEl.classList.add('static'); setPhone(.75); lys.forEach(l => l.classList.remove('on')); $('#in-hint').hidden = true; }
+else setPhone(0);
+
+/* trucks around the equator */
+const trucksEl = $('#trucks'), glPath = $('#gl-path'), glMask = $('#gl-mpath'), glTruck = $('#gl-truck'), tkN = $('#tk-n'), tkBar = $('#tk-bar');
+const glLen = glPath.getTotalLength();
+let lastTk = -1;
+function setTrucks(p) {
+  glMask.setAttribute('stroke-dashoffset', (1 - p).toFixed(4));
+  const pt = glPath.getPointAtLength(glLen * Math.min(p, .9999));
+  const front = pt.y >= 199;
+  glTruck.setAttribute('transform', `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)}) scale(${front ? 1 : .7})`);
+  glTruck.setAttribute('opacity', p < .003 || p > .997 ? 0 : front ? 1 : .5);
+  tkN.textContent = (p * 1.55).toFixed(2) + 'M';
+  tkBar.style.transform = `scaleX(${p.toFixed(3)})`;
+}
+function updateTrucks() {
+  const r = trucksEl.getBoundingClientRect(), vh = innerHeight;
+  if (r.bottom < -100 || r.top > vh + 100) return;
+  const p = clamp((vh * .92 - r.top) / (r.height + vh * .25));
+  if (Math.abs(p - lastTk) < .0008) return;
+  lastTk = p; setTrucks(p);
+}
+if (reduce) setTrucks(1); else setTrucks(0);
+function updateScenes() { if (reduce) return; updateInside(); updateTrucks(); }
+
+/* ================= DRAWER CALCULATOR ================= */
+/* grams per device: indicative averages from published e-waste studies */
+const METAL = {
+  phone: { au: .034, ag: .34, cu: 15, pd: .015, co: 6 },
+  laptop: { au: .2, ag: .8, cu: 180, pd: .08, co: 40 },
+  tablet: { au: .07, ag: .6, cu: 40, pd: .03, co: 20 },
+  chargers: { au: 0, ag: .05, cu: 30, pd: 0, co: 0 },
+  batteries: { au: 0, ag: 0, cu: 8, pd: 0, co: 12 },
+};
+const PRICE = { au: 8000, ag: 95, cu: .9, pd: 3200, co: 3.2 }; // ₹ per gram, approx. 2025
+const DR_KEYS = Object.keys(METAL);
+const drStore = {
+  get() { try { return JSON.parse(localStorage.getItem('rc-drawer-calc')) || { phone: 2, chargers: 2 }; } catch { return { phone: 2, chargers: 2 }; } },
+  set(v) { try { localStorage.setItem('rc-drawer-calc', JSON.stringify(v)); } catch {} },
+};
+let drQ = drStore.get(), drPrev = {};
+function renderDrawerRows() {
+  $('#dr-rows').innerHTML = DR_KEYS.map(k => `
+    <li class="dr-row"><span class="oi">${ic(k)}</span><span id="drl-${k}">${t('cat.' + k, CAT[k].l)}</span>
+      <span class="qty"><button class="qbtn" type="button" data-dq="${k}" data-d="-1" aria-label="Remove one">−</button><output id="drq-${k}" aria-live="polite">${drQ[k] || 0}</output><button class="qbtn" type="button" data-dq="${k}" data-d="1" aria-label="Add one">+</button></span></li>`).join('');
+}
+function renderDrawerOut() {
+  const tot = { au: 0, ag: 0, cu: 0, pd: 0, co: 0 }; let co2 = 0, val = 0;
+  DR_KEYS.forEach(k => { const q = drQ[k] || 0; for (const m in tot) tot[m] += METAL[k][m] * q; co2 += (CO2[k] || 0) * q; });
+  for (const m in tot) val += tot[m] * PRICE[m];
+  const toks = [];
+  DR_KEYS.forEach(k => { const q = Math.min(drQ[k] || 0, 12); for (let i = 0; i < q; i++) toks.push(`<span class="dr-tok t-${k}" ${i < (drPrev[k] || 0) ? 'style="animation:none"' : `style="animation-delay:${(i - (drPrev[k] || 0)) * 50}ms"`}>${ic(k)}</span>`); });
+  $('#dr-box').innerHTML = toks.length ? toks.join('') : `<span class="dr-empty">${t('dr.empty', 'Add a device to see what’s inside.')}</span>`;
+  drPrev = { ...drQ };
+  rollNum($('#dr-val'), val, inr);
+  rollNum($('#dr-au'), tot.au * 1000, v => Math.round(v) + ' mg');
+  rollNum($('#dr-cu'), tot.cu, v => Math.round(v) + ' g');
+  rollNum($('#dr-co'), tot.co, v => Math.round(v) + ' g');
+  rollNum($('#dr-co2'), co2, v => Math.round(v) + ' kg');
+}
+$('#dr-rows').addEventListener('click', e => {
+  const b = e.target.closest('[data-dq]'); if (!b) return;
+  const k = b.dataset.dq; drQ[k] = clamp((drQ[k] || 0) + +b.dataset.d, 0, 20);
+  $('#drq-' + k).textContent = drQ[k]; drStore.set(drQ); renderDrawerOut();
+});
+renderDrawerRows(); renderDrawerOut();
+
+/* ================= LANGUAGE (English / Kannada / Hindi) ================= */
+window.I18N = {
+  hi: {
+    'nav.problem': 'समस्या', 'nav.how': 'यह कैसे काम करता है', 'nav.check': 'मेरा डिवाइस जाँचें',
+    'hero.title': 'कचरा नहीं।', 'hero.tag': 'आपका पुराना फ़ोन?|यह एक फ़ैसला है।',
+    'hero.sub': 'ReCircuit बताता है कि किसी भी इलेक्ट्रॉनिक डिवाइस को ठीक कराएँ, किसी और को दें या रीसायकल करें, और बेंगलुरु में उसे सुरक्षित रूप से कहाँ ले जाएँ।',
+    'hero.cta': 'मैं अपने डिवाइस का क्या करूँ?', 'hero.why': 'यह क्यों ज़रूरी है ↓', 'hero.mcap': 'दराज़ से सुरक्षित, नज़दीकी ड्रॉप-ऑफ़ तक',
+    'stats.eyebrow': 'समस्या', 'stats.title': 'सबसे तेज़ी से|बढ़ता कचरा',
+    'stats.intro': 'हम हर साल ज़्यादा इलेक्ट्रॉनिक्स ख़रीदते हैं और उन्हें कम समय तक रखते हैं। ज़्यादातर पुराने डिवाइस कभी सही रीसायकलर तक नहीं पहुँचते: वे दराज़ में पड़े रहते हैं, कूड़े में फेंक दिए जाते हैं, या कबाड़ीवालों को बेच दिए जाते हैं जो उन्हें जलाकर और एसिड में डुबोकर धातु निकालते हैं।',
+    'stat1': '2022 में दुनिया भर में पैदा हुआ ई-कचरा', 'stat2': 'ही औपचारिक रूप से इकट्ठा और रीसायकल हुआ', 'stat3': '2030 तक, अगर कुछ नहीं बदला', 'stat4': 'मूल्य की धातुएँ हर साल बर्बाद',
+    'tk.lead': 'ई-कचरा हमारी रीसायकल करने की क्षमता से लगभग पाँच गुना तेज़ी से बढ़ रहा है।', 'tk.unit': '40 टन वाले ट्रक',
+    'tk.body': '6.2 करोड़ टन ई-कचरे से लगभग 15.5 लाख ट्रक भर जाएँगे, इतने कि भूमध्य रेखा के चारों ओर एक-दूसरे से सटी कतार बन जाए।',
+    'gap.title': 'लोग परवाह करते हैं। सही कदम ढूँढना मुश्किल है।', 'gap.body': 'पाँच बातें जो हम बार-बार सुनते हैं, और हर एक कैसे डिवाइस को सही हाथों से दूर रखती है।',
+    'sol.eyebrow': 'हमारा समाधान', 'sol.title': 'एक साफ़, सुरक्षित,|नज़दीकी कदम', 'how.title': 'यह कैसे काम करता है', 'how.sub': 'तीन कदम, एक मिनट से कम।',
+    's1.t': 'अपने डिवाइस के बारे में बताएँ', 's1.p': 'चुनें कि यह क्या है और किस हालत में है: चालू, ख़राब या बंद।',
+    's2.t': 'अपना जवाब पाएँ', 's2.p': 'हम बताएँगे कि इसे ठीक कराएँ, आगे दें या रीसायकल करें, और क्यों।',
+    's3.t': 'इसे जमा करें', 's3.p': 'सबसे नज़दीकी सही जगह ढूँढें, तैयारी की सूची पूरी करें और अपना असर दर्ज करें।',
+    'repair.title': 'पहले|मरम्मत,|फिर रीसायकल',
+    'repair.body': 'ReCircuit कचरा पदानुक्रम का पालन करता है। सबसे अच्छा विकल्प वही है जो डिवाइस को सबसे लंबे समय तक इस्तेमाल में रखे। स्मार्टफ़ोन का ज़्यादातर कार्बन उसे बनाते समय ही निकलता है, इसलिए उसे एक-दो साल और चलाना अक्सर उसे पूरी तरह रीसायकल करने से ज़्यादा फ़ायदेमंद है।',
+    'in.eyebrow': 'अंदर क्या है', 'in.title': 'आपके पुराने फ़ोन|के अंदर क्या है',
+    'in.lead': 'स्क्रॉल करें और इसे खोलकर देखें। हर परत में ऐसी चीज़ें हैं जो खोदी, भेजी और साफ़ की गई थीं, और उनमें से ज़्यादातर वापस निकाली जा सकती हैं।',
+    'p1.n': 'स्क्रीन और काँच', 'p1.d': 'इंडियम टिन ऑक्साइड से टचस्क्रीन काम करती है। इंडियम दुर्लभ है और ज़्यादातर ज़िंक खनन से मिलता है।',
+    'p2.n': 'लॉजिक बोर्ड', 'p2.d': 'एक टन पुराने फ़ोन में एक टन सोने के अयस्क से कहीं ज़्यादा सोना होता है। प्रमाणित रीसायकलर इसे बिना जलाए निकालते हैं।',
+    'p3.n': 'बैटरी', 'p3.d': 'कोबाल्ट खनन असुरक्षित काम और बाल मज़दूरी से जुड़ा है। फूली बैटरी से आग भी लग सकती है, इसलिए यह कभी कूड़ेदान में नहीं जाती।',
+    'p4.n': 'फ़्रेम, कैमरा और स्पीकर', 'p4.d': 'रीसायकल किए गए एल्युमिनियम में नए की तुलना में लगभग 95% कम ऊर्जा लगती है। छोटे चुंबकों में दुर्लभ धातुएँ होती हैं।',
+    'in.foot': 'एक फ़ोन में लगभग 0.034 ग्राम सोना, 0.34 ग्राम चाँदी, 15 ग्राम ताँबा और 6 ग्राम कोबाल्ट होता है। अनुमानित आँकड़े।', 'in.hint': 'खोलने के लिए स्क्रॉल करें ↓',
+    'dr.eyebrow': 'दराज़ कैलकुलेटर', 'dr.title': 'आपकी दराज़ में|क्या छिपा है?',
+    'dr.body': 'घर में पड़े पुराने डिवाइस गिनें। देखें उनके अंदर लगभग क्या बंद है, और हर एक को नई ज़िंदगी देकर आप क्या बचाते हैं।',
+    'dr.val': 'की वापस निकाली जा सकने वाली धातु, लगभग', 'dr.au': 'सोना', 'dr.cu': 'ताँबा', 'dr.co': 'कोबाल्ट', 'dr.co2': 'दोबारा इस्तेमाल से बचा CO₂',
+    'dr.find': 'रीसायकलर ढूँढें', 'dr.empty': 'अंदर क्या है देखने के लिए कोई डिवाइस जोड़ें।',
+    'dr.note': 'अनुमानित: प्रकाशित अध्ययनों से औसत धातु मात्रा, 2025 की अनुमानित क़ीमतों पर। असली रिकवरी कम होती है, और सबसे बड़ी बचत डिवाइस को इस्तेमाल में रखना है।',
+    'loc.eyebrow': 'लोकेटर · बेंगलुरु', 'loc.title': 'सही जगह|पास में ढूँढें', 'loc.device': 'डिवाइस', 'map.me': 'मेरी लोकेशन',
+    'loc.note': 'डेमो डेटा: ऊपर की सभी जगहें काल्पनिक हैं। नक़्शे पर पिन सही इलाक़े में हैं, असली पते पर नहीं। CO₂ के आँकड़े अनुमानित हैं।',
+    'loc.empty': 'इन फ़िल्टर से कोई जगह नहीं मिली। कोई फ़िल्टर हटाकर देखें।',
+    'fcount': '{n} जगहें मिलीं, सबसे नज़दीकी पहले', 'fcount.me': '{n} जगहें मिलीं, आपसे सबसे नज़दीकी पहले',
+    'dropped': 'यहाँ कुछ जमा किया?', 'log': 'ड्रॉप-ऑफ़ दर्ज करें',
+    'type.all': 'सभी जगहें', 'type.repair': 'मरम्मत की दुकान', 'type.reuse': 'दान और रीसेल', 'type.recycle': 'प्रमाणित रीसायकलर', 'type.battery': 'बैटरी ड्रॉप-ऑफ़', 'dev.all': 'सभी डिवाइस',
+    'mem.eyebrow': 'मेंबर डैशबोर्ड', 'mem.title': 'आपकी दराज़,|व्यवस्थित।', 'mem.body': 'लॉग इन करें और घर से पिकअप बुक करें, तैयारी की सूचियाँ रखें, और हर डिवाइस के साथ अपना असर बढ़ता देखें।',
+    'sdg.eyebrow': 'वैश्विक लक्ष्य', 'sdg.title': 'SDGs के|इर्द-गिर्द बना', 'fcta': 'अपनी दराज़|ख़ाली करें?',
+    'chk.title': 'मैं इसका|क्या करूँ?', 'step': 'चरण {a} / {b}', 'back': 'पीछे',
+    'q.cat': 'यह क्या है?', 'q.cond': 'यह किस हालत में है?', 'q.age': 'यह कितना पुराना है?', 'q.data': 'क्या इसमें आपका निजी डेटा है?',
+    'cat.phone': 'स्मार्टफ़ोन', 'cat.laptop': 'लैपटॉप', 'cat.tablet': 'टैबलेट', 'cat.desktop': 'डेस्कटॉप / मॉनिटर', 'cat.tv': 'टीवी',
+    'cat.small': 'छोटा उपकरण', 'cat.small.s': 'केतली, मिक्सर, प्रेस', 'cat.large': 'बड़ा उपकरण', 'cat.large.s': 'फ्रिज, वॉशिंग मशीन',
+    'cat.chargers': 'चार्जर और केबल', 'cat.batteries': 'बैटरी और पावर बैंक', 'cat.earbuds': 'ईयरबड / हेडफ़ोन', 'cat.other': 'अन्य',
+    'o.cond.fine': 'ठीक चलता है', 'o.cond.fine.s': 'बस अब इस्तेमाल नहीं करता', 'o.cond.issues': 'चलता है, पर दिक़्क़तें हैं', 'o.cond.issues.s': 'टूटी स्क्रीन, कमज़ोर बैटरी, धीमा',
+    'o.cond.dead': 'काम नहीं करता', 'o.cond.dead.s': 'चालू या चार्ज नहीं होता', 'o.cond.damaged': 'टूटा या फूला हुआ', 'o.cond.damaged.s': 'मुड़ा हुआ, रिसता हुआ, या बैटरी फूली हुई',
+    'o.age.u2': '2 साल से कम', 'o.age.2to5': '2 से 5 साल', 'o.age.o5': '5 साल से ज़्यादा', 'o.age.ns': 'पता नहीं',
+    'o.data.yes': 'हाँ', 'o.data.no': 'नहीं', 'o.data.ns': 'पता नहीं',
+    'v.repair.t': 'इसे ठीक कराएँ', 'v.repair.p': 'अच्छी ख़बर: यह बचाने लायक है। ऐसी दिक़्क़तें अक्सर नए डिवाइस से काफ़ी कम ख़र्च में ठीक हो जाती हैं, और डिवाइस को इस्तेमाल में रखना उसका असर कम करने का सबसे बड़ा तरीका है।', 'v.repair.b': 'पास की मरम्मत की दुकानें',
+    'v.reuse.t': 'इसे आगे दें', 'v.reuse.p': 'यह अभी भी चलता है, इसलिए इसे कबाड़ नहीं बनना चाहिए। इसे बेचना या दान करना इसे किसी ज़रूरतमंद के पास दूसरी ज़िंदगी देता है, और एक नया डिवाइस बनने से बचाता है।', 'v.reuse.b': 'दान और रीसेल केंद्र',
+    'v.recycle.t': 'इसे सुरक्षित रीसायकल करें', 'v.recycle.p': 'इस डिवाइस का सफ़र पूरा हो चुका है। एक प्रमाणित रीसायकलर इसके अंदर का ताँबा, सोना और दूसरी धातुएँ निकाल सकता है, और ज़हरीले हिस्सों को मिट्टी और पानी से दूर रखता है।', 'v.recycle.b': 'प्रमाणित रीसायकलर',
+    'v.battery.b': 'बैटरी ड्रॉप-ऑफ़ केंद्र', 'why': 'क्यों:',
+    'why.damaged': 'फूली या टूटी बैटरी से आग लग सकती है, इसलिए यह सीधे बैटरी ड्रॉप-ऑफ़ केंद्र जाएगी।',
+    'why.batteries': 'बैटरी और पावर बैंक कभी भी घर के कूड़ेदान में नहीं जाते, चाहे वे ठीक दिखें।',
+    'why.chg_fine': 'चालू चार्जर और केबल हमेशा किसी के काम आते हैं। इन्हें आगे दें।',
+    'why.chg_broken': 'ख़राब चार्जर और केबल में भी ताँबा होता है जो निकाला जा सकता है।',
+    'why.fine_old': 'यह चलता है पर पुराना है, इसलिए दान करना सबसे अच्छा है। अगर यह सच में बेकार हो चुका है, तो रीसायकल करें।',
+    'why.fine_new': 'यह चलता है और काफ़ी नया है। इसे बेचें या दान करें।',
+    'why.issues': 'टूटी स्क्रीन, कमज़ोर बैटरी और धीमापन आमतौर पर बदलने से कहीं सस्ते में ठीक हो जाते हैं।',
+    'why.young': 'यह 5 साल से कम पुराना है और ऐसे डिवाइस आमतौर पर ठीक हो जाते हैं। पहले जाँच करवाएँ।',
+    'why.old': 'यह पुराना है या ठीक करना मुश्किल है, इसलिए इसकी धातुएँ निकालना सबसे अच्छा अगला कदम है।',
+    'hazard': '<strong>रुकें: फूली या टूटी लिथियम बैटरी में आग लग सकती है।</strong> इसे चार्ज न करें, इसमें छेद न करें, और किसी कूड़ेदान में न डालें। इसे ज्वलनशील चीज़ों से दूर किसी ठंडी जगह रखें और जल्द से जल्द बैटरी ड्रॉप-ऑफ़ केंद्र ले जाएँ।',
+    'before': 'जाने से पहले', 'again': 'दूसरा डिवाइस जाँचें', 'done': 'हो गया',
+  },
+  kn: {
+    'nav.problem': 'ಸಮಸ್ಯೆ', 'nav.how': 'ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ', 'nav.check': 'ನನ್ನ ಸಾಧನ ಪರಿಶೀಲಿಸಿ',
+    'hero.title': 'ಕಸವಲ್ಲ.', 'hero.tag': 'ನಿಮ್ಮ ಹಳೆಯ ಫೋನ್?|ಇದು ಒಂದು ನಿರ್ಧಾರ.',
+    'hero.sub': 'ಯಾವುದೇ ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಸಾಧನವನ್ನು ರಿಪೇರಿ ಮಾಡಿಸಬೇಕೇ, ಬೇರೆಯವರಿಗೆ ಕೊಡಬೇಕೇ ಅಥವಾ ರೀಸೈಕಲ್ ಮಾಡಬೇಕೇ ಎಂದು ReCircuit ಹೇಳುತ್ತದೆ, ಮತ್ತು ಬೆಂಗಳೂರಿನಲ್ಲಿ ಅದನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಎಲ್ಲಿಗೆ ಕೊಂಡೊಯ್ಯಬೇಕು ಎಂದು ತೋರಿಸುತ್ತದೆ.',
+    'hero.cta': 'ನನ್ನ ಸಾಧನವನ್ನು ಏನು ಮಾಡಲಿ?', 'hero.why': 'ಇದು ಏಕೆ ಮುಖ್ಯ ↓', 'hero.mcap': 'ಡ್ರಾಯರ್‌ನಿಂದ ಸುರಕ್ಷಿತ, ಹತ್ತಿರದ ಡ್ರಾಪ್-ಆಫ್‌ವರೆಗೆ',
+    'stats.eyebrow': 'ಸಮಸ್ಯೆ', 'stats.title': 'ಅತಿ ವೇಗವಾಗಿ|ಬೆಳೆಯುತ್ತಿರುವ|ತ್ಯಾಜ್ಯ',
+    'stats.intro': 'ನಾವು ಪ್ರತಿ ವರ್ಷ ಹೆಚ್ಚು ಎಲೆಕ್ಟ್ರಾನಿಕ್ಸ್ ಖರೀದಿಸುತ್ತೇವೆ ಮತ್ತು ಕಡಿಮೆ ಕಾಲ ಬಳಸುತ್ತೇವೆ. ಹೆಚ್ಚಿನ ಹಳೆಯ ಸಾಧನಗಳು ಸರಿಯಾದ ರೀಸೈಕ್ಲರ್ ಅನ್ನು ತಲುಪುವುದೇ ಇಲ್ಲ: ಡ್ರಾಯರ್‌ನಲ್ಲಿ ಉಳಿಯುತ್ತವೆ, ಕಸದ ಬುಟ್ಟಿಗೆ ಸೇರುತ್ತವೆ, ಅಥವಾ ಸುಟ್ಟು ಆಸಿಡ್‌ನಲ್ಲಿ ಲೋಹ ತೆಗೆಯುವ ಗುಜರಿ ವ್ಯಾಪಾರಿಗಳಿಗೆ ಮಾರಾಟವಾಗುತ್ತವೆ.',
+    'stat1': '2022ರಲ್ಲಿ ವಿಶ್ವದಾದ್ಯಂತ ಉತ್ಪತ್ತಿಯಾದ ಇ-ತ್ಯಾಜ್ಯ', 'stat2': 'ಮಾತ್ರ ಅಧಿಕೃತವಾಗಿ ಸಂಗ್ರಹಿಸಿ ರೀಸೈಕಲ್ ಮಾಡಲಾಗಿದೆ', 'stat3': '2030ರ ವೇಳೆಗೆ, ಏನೂ ಬದಲಾಗದಿದ್ದರೆ', 'stat4': 'ಮೌಲ್ಯದ ಲೋಹಗಳು ಪ್ರತಿ ವರ್ಷ ನಷ್ಟ',
+    'tk.lead': 'ಇ-ತ್ಯಾಜ್ಯ ನಮ್ಮ ರೀಸೈಕ್ಲಿಂಗ್ ಸಾಮರ್ಥ್ಯಕ್ಕಿಂತ ಸುಮಾರು ಐದು ಪಟ್ಟು ವೇಗವಾಗಿ ಬೆಳೆಯುತ್ತಿದೆ.', 'tk.unit': '40 ಟನ್ ಟ್ರಕ್‌ಗಳು',
+    'tk.body': '6.2 ಕೋಟಿ ಟನ್ ಇ-ತ್ಯಾಜ್ಯ ಸುಮಾರು 15.5 ಲಕ್ಷ ಟ್ರಕ್‌ಗಳನ್ನು ತುಂಬುತ್ತದೆ, ಸಮಭಾಜಕ ವೃತ್ತದ ಸುತ್ತ ಒಂದರ ಹಿಂದೊಂದು ಸಾಲು ನಿಲ್ಲುವಷ್ಟು.',
+    'gap.title': 'ಜನರಿಗೆ ಕಾಳಜಿ ಇದೆ. ಸರಿಯಾದ ಕ್ರಮ ಕಂಡುಹಿಡಿಯುವುದು ಕಷ್ಟ.', 'gap.body': 'ನಾವು ಮತ್ತೆ ಮತ್ತೆ ಕೇಳುವ ಐದು ಮಾತುಗಳು, ಮತ್ತು ಪ್ರತಿಯೊಂದೂ ಸಾಧನಗಳನ್ನು ಸರಿಯಾದ ಕೈಗಳಿಂದ ಹೇಗೆ ದೂರ ಇಡುತ್ತದೆ.',
+    'sol.eyebrow': 'ನಮ್ಮ ಪರಿಹಾರ', 'sol.title': 'ಒಂದು ಸ್ಪಷ್ಟ, ಸುರಕ್ಷಿತ,|ಹತ್ತಿರದ ಕ್ರಮ', 'how.title': 'ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ', 'how.sub': 'ಮೂರು ಹಂತಗಳು, ಒಂದು ನಿಮಿಷದೊಳಗೆ.',
+    's1.t': 'ನಿಮ್ಮ ಸಾಧನದ ಬಗ್ಗೆ ತಿಳಿಸಿ', 's1.p': 'ಅದು ಏನು ಮತ್ತು ಹೇಗಿದೆ ಎಂದು ಆಯ್ಕೆಮಾಡಿ: ಕೆಲಸ ಮಾಡುತ್ತಿದೆ, ಹಾಳಾಗಿದೆ ಅಥವಾ ಸತ್ತಿದೆ.',
+    's2.t': 'ನಿಮ್ಮ ಉತ್ತರ ಪಡೆಯಿರಿ', 's2.p': 'ರಿಪೇರಿ ಮಾಡಿಸಬೇಕೇ, ಬೇರೆಯವರಿಗೆ ಕೊಡಬೇಕೇ ಅಥವಾ ರೀಸೈಕಲ್ ಮಾಡಬೇಕೇ ಎಂದು, ಕಾರಣ ಸಹಿತ ತಿಳಿಸುತ್ತೇವೆ.',
+    's3.t': 'ಅದನ್ನು ತಲುಪಿಸಿ', 's3.p': 'ಅದನ್ನು ಸ್ವೀಕರಿಸುವ ಹತ್ತಿರದ ಸ್ಥಳ ಹುಡುಕಿ, ತಯಾರಿ ಪಟ್ಟಿ ಅನುಸರಿಸಿ, ನಿಮ್ಮ ಪರಿಣಾಮ ದಾಖಲಿಸಿ.',
+    'repair.title': 'ಮೊದಲು|ರಿಪೇರಿ,|ನಂತರ ರೀಸೈಕಲ್',
+    'repair.body': 'ReCircuit ತ್ಯಾಜ್ಯ ಶ್ರೇಣಿಯನ್ನು ಅನುಸರಿಸುತ್ತದೆ. ಸಾಧನವನ್ನು ಹೆಚ್ಚು ಕಾಲ ಬಳಕೆಯಲ್ಲಿ ಇಡುವ ಆಯ್ಕೆಯೇ ಉತ್ತಮ. ಸ್ಮಾರ್ಟ್‌ಫೋನ್‌ನ ಹೆಚ್ಚಿನ ಕಾರ್ಬನ್ ಹೆಜ್ಜೆಗುರುತು ಅದನ್ನು ತಯಾರಿಸುವಾಗಲೇ ಉಂಟಾಗುತ್ತದೆ, ಹಾಗಾಗಿ ಅದನ್ನು ಇನ್ನೊಂದೆರಡು ವರ್ಷ ಬಳಸುವುದು ಸಾಮಾನ್ಯವಾಗಿ ಪರಿಪೂರ್ಣ ರೀಸೈಕ್ಲಿಂಗ್‌ಗಿಂತ ಹೆಚ್ಚು ಒಳ್ಳೆಯದು.',
+    'in.eyebrow': 'ಒಳಗೆ ಏನಿದೆ', 'in.title': 'ನಿಮ್ಮ ಹಳೆಯ ಫೋನ್‌ನ|ಒಳಗೆ ಏನಿದೆ',
+    'in.lead': 'ಸ್ಕ್ರಾಲ್ ಮಾಡಿ, ಅದನ್ನು ಬಿಚ್ಚಿ ನೋಡಿ. ಪ್ರತಿಯೊಂದು ಪದರದಲ್ಲೂ ಗಣಿಗಾರಿಕೆ ಮಾಡಿ, ಸಾಗಿಸಿ, ಶುದ್ಧೀಕರಿಸಿದ ವಸ್ತುಗಳಿವೆ, ಮತ್ತು ಅವುಗಳಲ್ಲಿ ಹೆಚ್ಚಿನವನ್ನು ಹಿಂಪಡೆಯಬಹುದು.',
+    'p1.n': 'ಸ್ಕ್ರೀನ್ ಮತ್ತು ಗಾಜು', 'p1.d': 'ಇಂಡಿಯಂ ಟಿನ್ ಆಕ್ಸೈಡ್ ಟಚ್‌ಸ್ಕ್ರೀನ್ ಕೆಲಸ ಮಾಡುವಂತೆ ಮಾಡುತ್ತದೆ. ಇಂಡಿಯಂ ಅಪರೂಪ, ಹೆಚ್ಚಾಗಿ ಸತು ಗಣಿಗಾರಿಕೆಯಿಂದ ಸಿಗುತ್ತದೆ.',
+    'p2.n': 'ಲಾಜಿಕ್ ಬೋರ್ಡ್', 'p2.d': 'ಒಂದು ಟನ್ ಹಳೆಯ ಫೋನ್‌ಗಳಲ್ಲಿ ಒಂದು ಟನ್ ಚಿನ್ನದ ಅದಿರಿಗಿಂತ ಹೆಚ್ಚು ಚಿನ್ನವಿದೆ. ಪ್ರಮಾಣಿತ ರೀಸೈಕ್ಲರ್‌ಗಳು ಸುಡದೆ ಅದನ್ನು ಹಿಂಪಡೆಯುತ್ತಾರೆ.',
+    'p3.n': 'ಬ್ಯಾಟರಿ', 'p3.d': 'ಕೋಬಾಲ್ಟ್ ಗಣಿಗಾರಿಕೆ ಅಸುರಕ್ಷಿತ ಕೆಲಸ ಮತ್ತು ಬಾಲಕಾರ್ಮಿಕತೆಗೆ ಸಂಬಂಧಿಸಿದೆ. ಊದಿದ ಬ್ಯಾಟರಿ ಬೆಂಕಿಯ ಅಪಾಯವೂ ಹೌದು, ಹಾಗಾಗಿ ಅದು ಕಸದ ಬುಟ್ಟಿಗೆ ಹೋಗಬಾರದು.',
+    'p4.n': 'ಫ್ರೇಮ್, ಕ್ಯಾಮೆರಾ ಮತ್ತು ಸ್ಪೀಕರ್', 'p4.d': 'ಮರುಬಳಕೆಯ ಅಲ್ಯೂಮಿನಿಯಂಗೆ ಹೊಸದಕ್ಕಿಂತ ಸುಮಾರು 95% ಕಡಿಮೆ ಶಕ್ತಿ ಬೇಕು. ಸಣ್ಣ ಮ್ಯಾಗ್ನೆಟ್‌ಗಳಲ್ಲಿ ಅಪರೂಪದ ಭೂ ಲೋಹಗಳಿವೆ.',
+    'in.foot': 'ಒಂದು ಫೋನ್‌ನಲ್ಲಿ ಸುಮಾರು 0.034 ಗ್ರಾಂ ಚಿನ್ನ, 0.34 ಗ್ರಾಂ ಬೆಳ್ಳಿ, 15 ಗ್ರಾಂ ತಾಮ್ರ ಮತ್ತು 6 ಗ್ರಾಂ ಕೋಬಾಲ್ಟ್ ಇರುತ್ತದೆ. ಅಂದಾಜು ಅಂಕಿಗಳು.', 'in.hint': 'ಬಿಚ್ಚಲು ಸ್ಕ್ರಾಲ್ ಮಾಡಿ ↓',
+    'dr.eyebrow': 'ಡ್ರಾಯರ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್', 'dr.title': 'ನಿಮ್ಮ ಡ್ರಾಯರ್‌ನಲ್ಲಿ|ಏನು ಅಡಗಿದೆ?',
+    'dr.body': 'ಮನೆಯಲ್ಲಿರುವ ಹಳೆಯ ಸಾಧನಗಳನ್ನು ಎಣಿಸಿ. ಅವುಗಳೊಳಗೆ ಸುಮಾರು ಏನೆಲ್ಲ ಇದೆ, ಮತ್ತು ಪ್ರತಿಯೊಂದಕ್ಕೂ ಮುಂದಿನ ಜೀವನ ಕೊಟ್ಟರೆ ಏನು ಉಳಿಸುತ್ತೀರಿ ಎಂದು ನೋಡಿ.',
+    'dr.val': 'ಮೌಲ್ಯದ ಹಿಂಪಡೆಯಬಹುದಾದ ಲೋಹ, ಸುಮಾರು', 'dr.au': 'ಚಿನ್ನ', 'dr.cu': 'ತಾಮ್ರ', 'dr.co': 'ಕೋಬಾಲ್ಟ್', 'dr.co2': 'ಮರುಬಳಕೆಯಿಂದ ತಪ್ಪಿದ CO₂',
+    'dr.find': 'ರೀಸೈಕ್ಲರ್ ಹುಡುಕಿ', 'dr.empty': 'ಒಳಗೆ ಏನಿದೆ ನೋಡಲು ಒಂದು ಸಾಧನ ಸೇರಿಸಿ.',
+    'dr.note': 'ಅಂದಾಜು: ಪ್ರಕಟಿತ ಅಧ್ಯಯನಗಳ ಸರಾಸರಿ ಲೋಹದ ಪ್ರಮಾಣ, 2025ರ ಅಂದಾಜು ಬೆಲೆಗಳಲ್ಲಿ. ನಿಜವಾದ ಹಿಂಪಡೆಯುವಿಕೆ ಕಡಿಮೆ, ಮತ್ತು ದೊಡ್ಡ ಉಳಿತಾಯ ಎಂದರೆ ಸಾಧನವನ್ನು ಬಳಕೆಯಲ್ಲಿ ಇಡುವುದು.',
+    'loc.eyebrow': 'ಲೊಕೇಟರ್ · ಬೆಂಗಳೂರು', 'loc.title': 'ಹತ್ತಿರದ ಸರಿಯಾದ|ಸ್ಥಳ ಹುಡುಕಿ', 'loc.device': 'ಸಾಧನ', 'map.me': 'ನನ್ನ ಸ್ಥಳ',
+    'loc.note': 'ಡೆಮೊ ಡೇಟಾ: ಮೇಲಿನ ಎಲ್ಲಾ ಸ್ಥಳಗಳು ಕಾಲ್ಪನಿಕ. ನಕ್ಷೆಯ ಪಿನ್‌ಗಳು ಸರಿಯಾದ ಬಡಾವಣೆಯಲ್ಲಿವೆ, ನಿಜವಾದ ವಿಳಾಸದಲ್ಲಲ್ಲ. CO₂ ಅಂಕಿಗಳು ಅಂದಾಜು ಮಾತ್ರ.',
+    'loc.empty': 'ಈ ಫಿಲ್ಟರ್‌ಗಳಿಗೆ ಯಾವುದೇ ಸ್ಥಳ ಸಿಗಲಿಲ್ಲ. ಒಂದು ಫಿಲ್ಟರ್ ತೆಗೆದು ನೋಡಿ.',
+    'fcount': '{n} ಸ್ಥಳಗಳು ಸಿಕ್ಕಿವೆ, ಹತ್ತಿರದವು ಮೊದಲು', 'fcount.me': '{n} ಸ್ಥಳಗಳು ಸಿಕ್ಕಿವೆ, ನಿಮಗೆ ಹತ್ತಿರದವು ಮೊದಲು',
+    'dropped': 'ಇಲ್ಲಿ ಏನಾದರೂ ಕೊಟ್ಟಿರಾ?', 'log': 'ಡ್ರಾಪ್-ಆಫ್ ದಾಖಲಿಸಿ',
+    'type.all': 'ಎಲ್ಲಾ ಸ್ಥಳಗಳು', 'type.repair': 'ರಿಪೇರಿ ಅಂಗಡಿ', 'type.reuse': 'ದಾನ ಮತ್ತು ಮರುಮಾರಾಟ', 'type.recycle': 'ಪ್ರಮಾಣಿತ ರೀಸೈಕ್ಲರ್', 'type.battery': 'ಬ್ಯಾಟರಿ ಡ್ರಾಪ್-ಆಫ್', 'dev.all': 'ಎಲ್ಲಾ ಸಾಧನಗಳು',
+    'mem.eyebrow': 'ಸದಸ್ಯರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', 'mem.title': 'ನಿಮ್ಮ ಡ್ರಾಯರ್,|ಸುವ್ಯವಸ್ಥಿತ.', 'mem.body': 'ಲಾಗ್ ಇನ್ ಮಾಡಿ ಮನೆಬಾಗಿಲಿನ ಪಿಕಪ್ ಬುಕ್ ಮಾಡಿ, ತಯಾರಿ ಪಟ್ಟಿಗಳನ್ನು ಇಟ್ಟುಕೊಳ್ಳಿ, ಮತ್ತು ಪ್ರತಿ ಸಾಧನದೊಂದಿಗೆ ನಿಮ್ಮ ಪರಿಣಾಮ ಬೆಳೆಯುವುದನ್ನು ನೋಡಿ.',
+    'sdg.eyebrow': 'ಜಾಗತಿಕ ಗುರಿಗಳು', 'sdg.title': 'SDGಗಳ ಸುತ್ತ|ನಿರ್ಮಿತ', 'fcta': 'ನಿಮ್ಮ ಡ್ರಾಯರ್|ಖಾಲಿ ಮಾಡುವಿರಾ?',
+    'chk.title': 'ಇದನ್ನು ನಾನು|ಏನು ಮಾಡಲಿ?', 'step': 'ಹಂತ {a} / {b}', 'back': 'ಹಿಂದೆ',
+    'q.cat': 'ಇದು ಏನು?', 'q.cond': 'ಇದು ಹೇಗಿದೆ?', 'q.age': 'ಇದು ಎಷ್ಟು ಹಳೆಯದು?', 'q.data': 'ಇದರಲ್ಲಿ ನಿಮ್ಮ ವೈಯಕ್ತಿಕ ಡೇಟಾ ಇದೆಯೇ?',
+    'cat.phone': 'ಸ್ಮಾರ್ಟ್‌ಫೋನ್', 'cat.laptop': 'ಲ್ಯಾಪ್‌ಟಾಪ್', 'cat.tablet': 'ಟ್ಯಾಬ್ಲೆಟ್', 'cat.desktop': 'ಡೆಸ್ಕ್‌ಟಾಪ್ / ಮಾನಿಟರ್', 'cat.tv': 'ಟಿವಿ',
+    'cat.small': 'ಸಣ್ಣ ಉಪಕರಣ', 'cat.small.s': 'ಕೆಟಲ್, ಮಿಕ್ಸರ್, ಇಸ್ತ್ರಿ', 'cat.large': 'ದೊಡ್ಡ ಉಪಕರಣ', 'cat.large.s': 'ಫ್ರಿಜ್, ವಾಷಿಂಗ್ ಮೆಷಿನ್',
+    'cat.chargers': 'ಚಾರ್ಜರ್ ಮತ್ತು ಕೇಬಲ್', 'cat.batteries': 'ಬ್ಯಾಟರಿ ಮತ್ತು ಪವರ್ ಬ್ಯಾಂಕ್', 'cat.earbuds': 'ಇಯರ್‌ಬಡ್ / ಹೆಡ್‌ಫೋನ್', 'cat.other': 'ಇತರೆ',
+    'o.cond.fine': 'ಚೆನ್ನಾಗಿ ಕೆಲಸ ಮಾಡುತ್ತದೆ', 'o.cond.fine.s': 'ಈಗ ಬಳಸುತ್ತಿಲ್ಲ ಅಷ್ಟೇ', 'o.cond.issues': 'ಕೆಲಸ ಮಾಡುತ್ತದೆ, ಆದರೆ ಸಮಸ್ಯೆಗಳಿವೆ', 'o.cond.issues.s': 'ಒಡೆದ ಸ್ಕ್ರೀನ್, ದುರ್ಬಲ ಬ್ಯಾಟರಿ, ನಿಧಾನ',
+    'o.cond.dead': 'ಕೆಲಸ ಮಾಡುವುದಿಲ್ಲ', 'o.cond.dead.s': 'ಆನ್ ಆಗುವುದಿಲ್ಲ ಅಥವಾ ಚಾರ್ಜ್ ಆಗುವುದಿಲ್ಲ', 'o.cond.damaged': 'ಹಾನಿಯಾಗಿದೆ ಅಥವಾ ಊದಿಕೊಂಡಿದೆ', 'o.cond.damaged.s': 'ಬಾಗಿದೆ, ಸೋರುತ್ತಿದೆ, ಅಥವಾ ಬ್ಯಾಟರಿ ಉಬ್ಬಿದೆ',
+    'o.age.u2': '2 ವರ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ', 'o.age.2to5': '2 ರಿಂದ 5 ವರ್ಷ', 'o.age.o5': '5 ವರ್ಷಕ್ಕಿಂತ ಹೆಚ್ಚು', 'o.age.ns': 'ಗೊತ್ತಿಲ್ಲ',
+    'o.data.yes': 'ಹೌದು', 'o.data.no': 'ಇಲ್ಲ', 'o.data.ns': 'ಗೊತ್ತಿಲ್ಲ',
+    'v.repair.t': 'ರಿಪೇರಿ ಮಾಡಿಸಿ', 'v.repair.p': 'ಒಳ್ಳೆಯ ಸುದ್ದಿ: ಇದು ಉಳಿಸಲು ಯೋಗ್ಯ. ಇಂತಹ ಸಮಸ್ಯೆಗಳನ್ನು ಹೊಸದು ಕೊಳ್ಳುವುದಕ್ಕಿಂತ ಬಹಳ ಕಡಿಮೆ ಖರ್ಚಿನಲ್ಲಿ ಸರಿಪಡಿಸಬಹುದು, ಮತ್ತು ಸಾಧನವನ್ನು ಬಳಕೆಯಲ್ಲಿ ಇಡುವುದೇ ಅದರ ಪರಿಣಾಮ ಕಡಿಮೆ ಮಾಡುವ ದೊಡ್ಡ ದಾರಿ.', 'v.repair.b': 'ಹತ್ತಿರದ ರಿಪೇರಿ ಅಂಗಡಿಗಳು',
+    'v.reuse.t': 'ಬೇರೆಯವರಿಗೆ ಕೊಡಿ', 'v.reuse.p': 'ಇದು ಇನ್ನೂ ಕೆಲಸ ಮಾಡುತ್ತದೆ, ಹಾಗಾಗಿ ಗುಜರಿಗೆ ಹಾಕಬಾರದು. ಮಾರಾಟ ಅಥವಾ ದಾನ ಮಾಡಿದರೆ ಅಗತ್ಯವಿರುವವರ ಕೈಯಲ್ಲಿ ಎರಡನೇ ಜೀವನ ಸಿಗುತ್ತದೆ, ಮತ್ತು ಹೊಸದೊಂದು ತಯಾರಾಗುವುದು ತಪ್ಪುತ್ತದೆ.', 'v.reuse.b': 'ದಾನ ಮತ್ತು ಮರುಮಾರಾಟ ಕೇಂದ್ರಗಳು',
+    'v.recycle.t': 'ಸುರಕ್ಷಿತವಾಗಿ ರೀಸೈಕಲ್ ಮಾಡಿ', 'v.recycle.p': 'ಈ ಸಾಧನದ ಪಯಣ ಮುಗಿದಿದೆ. ಪ್ರಮಾಣಿತ ರೀಸೈಕ್ಲರ್ ಒಳಗಿನ ತಾಮ್ರ, ಚಿನ್ನ ಮತ್ತು ಇತರ ಲೋಹಗಳನ್ನು ಹಿಂಪಡೆಯಬಹುದು, ಮತ್ತು ವಿಷಕಾರಿ ಭಾಗಗಳನ್ನು ಮಣ್ಣು ಮತ್ತು ನೀರಿನಿಂದ ದೂರ ಇಡುತ್ತಾರೆ.', 'v.recycle.b': 'ಪ್ರಮಾಣಿತ ರೀಸೈಕ್ಲರ್‌ಗಳು',
+    'v.battery.b': 'ಬ್ಯಾಟರಿ ಡ್ರಾಪ್-ಆಫ್ ಸ್ಥಳಗಳು', 'why': 'ಏಕೆ:',
+    'why.damaged': 'ಊದಿದ ಅಥವಾ ಹಾನಿಗೊಂಡ ಬ್ಯಾಟರಿಗಳು ಬೆಂಕಿಯ ಅಪಾಯ, ಹಾಗಾಗಿ ಇದು ನೇರವಾಗಿ ಬ್ಯಾಟರಿ ಡ್ರಾಪ್-ಆಫ್ ಸ್ಥಳಕ್ಕೆ ಹೋಗಬೇಕು.',
+    'why.batteries': 'ಬ್ಯಾಟರಿ ಮತ್ತು ಪವರ್ ಬ್ಯಾಂಕ್‌ಗಳು ಸರಿಯಾಗಿ ಕಂಡರೂ ಮನೆಯ ಕಸದ ಬುಟ್ಟಿಗೆ ಹೋಗಬಾರದು.',
+    'why.chg_fine': 'ಕೆಲಸ ಮಾಡುವ ಚಾರ್ಜರ್ ಮತ್ತು ಕೇಬಲ್‌ಗಳು ಯಾರಿಗಾದರೂ ಉಪಯೋಗವಾಗುತ್ತವೆ. ಬೇರೆಯವರಿಗೆ ಕೊಡಿ.',
+    'why.chg_broken': 'ಹಾಳಾದ ಚಾರ್ಜರ್ ಮತ್ತು ಕೇಬಲ್‌ಗಳಲ್ಲೂ ಹಿಂಪಡೆಯಬಹುದಾದ ತಾಮ್ರ ಇರುತ್ತದೆ.',
+    'why.fine_old': 'ಇದು ಕೆಲಸ ಮಾಡುತ್ತದೆ ಆದರೆ ಹಳೆಯದು, ಹಾಗಾಗಿ ದಾನ ಮಾಡುವುದು ಉತ್ತಮ. ನಿಜಕ್ಕೂ ಬಳಕೆಗೆ ಬಾರದಿದ್ದರೆ ರೀಸೈಕಲ್ ಮಾಡಿ.',
+    'why.fine_new': 'ಇದು ಕೆಲಸ ಮಾಡುತ್ತದೆ ಮತ್ತು ಸಾಕಷ್ಟು ಹೊಸದು. ಮಾರಾಟ ಅಥವಾ ದಾನ ಮಾಡಿ.',
+    'why.issues': 'ಒಡೆದ ಸ್ಕ್ರೀನ್, ದುರ್ಬಲ ಬ್ಯಾಟರಿ ಮತ್ತು ನಿಧಾನಗತಿಯನ್ನು ಹೊಸದು ಕೊಳ್ಳುವುದಕ್ಕಿಂತ ಬಹಳ ಕಡಿಮೆ ಖರ್ಚಿನಲ್ಲಿ ಸರಿಪಡಿಸಬಹುದು.',
+    'why.young': 'ಇದು 5 ವರ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ ಹಳೆಯದು ಮತ್ತು ಇಂತಹ ಸಾಧನಗಳನ್ನು ಸಾಮಾನ್ಯವಾಗಿ ರಿಪೇರಿ ಮಾಡಬಹುದು. ಮೊದಲು ಪರೀಕ್ಷಿಸಿ.',
+    'why.old': 'ಇದು ಹಳೆಯದು ಅಥವಾ ರಿಪೇರಿ ಕಷ್ಟ, ಹಾಗಾಗಿ ಇದರ ಲೋಹಗಳನ್ನು ಹಿಂಪಡೆಯುವುದೇ ಮುಂದಿನ ಉತ್ತಮ ಹೆಜ್ಜೆ.',
+    'hazard': '<strong>ನಿಲ್ಲಿ: ಊದಿದ ಅಥವಾ ಹಾನಿಗೊಂಡ ಲಿಥಿಯಂ ಬ್ಯಾಟರಿಗೆ ಬೆಂಕಿ ಹತ್ತಬಹುದು.</strong> ಅದನ್ನು ಚಾರ್ಜ್ ಮಾಡಬೇಡಿ, ಚುಚ್ಚಬೇಡಿ, ಯಾವುದೇ ಕಸದ ಬುಟ್ಟಿಗೆ ಹಾಕಬೇಡಿ. ಸುಡುವ ವಸ್ತುಗಳಿಂದ ದೂರ, ತಂಪಾದ ಜಾಗದಲ್ಲಿ ಇಟ್ಟು, ಆದಷ್ಟು ಬೇಗ ಬ್ಯಾಟರಿ ಡ್ರಾಪ್-ಆಫ್ ಸ್ಥಳಕ್ಕೆ ಕೊಂಡೊಯ್ಯಿರಿ.',
+    'before': 'ಹೊರಡುವ ಮೊದಲು', 'again': 'ಇನ್ನೊಂದು ಸಾಧನ ಪರಿಶೀಲಿಸಿ', 'done': 'ಮುಗಿಯಿತು',
+  },
+};
+const FONT_URL = { kn: 'Noto+Sans+Kannada:wght@400;500', hi: 'Noto+Sans+Devanagari:wght@400;500' };
+function loadIndicFont(lang) {
+  if (!FONT_URL[lang] || $(`link[data-font="${lang}"]`)) return;
+  const l = document.createElement('link'); l.rel = 'stylesheet'; l.dataset.font = lang;
+  l.href = `https://fonts.googleapis.com/css2?family=${FONT_URL[lang]}&display=swap`;
+  document.head.appendChild(l);
+}
+function applyLang(lang) {
+  if (lang !== 'en' && !window.I18N[lang]) lang = 'en';
+  LANG = lang;
+  const D = window.I18N[lang] || {};
+  html.lang = lang;
+  if (lang !== 'en') loadIndicFont(lang);
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false'));
+  $$('[data-i18n]').forEach(el => { el.dataset.en ??= el.innerHTML; el.innerHTML = D[el.dataset.i18n] ?? el.dataset.en; });
+  $$('[data-i18n-lines]').forEach(el => {
+    el.dataset.en ??= el.dataset.src;
+    el.dataset.src = D[el.dataset.i18nLines] ?? el.dataset.en;
+    const shown = el.classList.contains('is-in'); buildLines(el); if (shown) playText(el);
+  });
+  $$('[data-i18n-words]').forEach(el => {
+    el.dataset.en ??= el.dataset.src;
+    el.dataset.src = D[el.dataset.i18nWords] ?? el.dataset.en;
+    const shown = el.classList.contains('is-in'); buildWords(el); if (shown) playText(el);
+  });
+  $$('[data-i18n-fade]').forEach(el => {
+    el.textContent = D[el.dataset.i18nFade] ?? el.dataset.en;
+    const shown = el.classList.contains('is-in'); buildFade(el); if (shown) playText(el);
+  });
+  renderFilters(); renderLoc(); renderDrawerRows(); renderDrawerOut();
+  if (checkOpen) { $('.verdict', body) ? renderResult() : renderStep(); }
+  try { localStorage.setItem('rc-lang', lang); } catch {}
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-lang]'); if (b && b.dataset.lang !== LANG) applyLang(b.dataset.lang); });
+if (LANG !== 'en') applyLang(LANG);
+
+/* ================= SIGNED-IN STATE + FLOATING BAR ================= */
+function applySignedIn() {
+  if (!SIGNED_IN) return;
+  const first = String(SIGNED_IN.name || 'Member').split(' ')[0];
+  const ini = String(SIGNED_IN.name || 'RC').split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
+  $$('[data-login]').forEach(a => {
+    a.href = 'app.html#/overview';
+    const t = $('[data-login-t]', a); if (t) t.textContent = a.classList.contains('hlogin') ? first : 'My dashboard';
+    const av = $('.av', a); if (av) { av.classList.add('ini'); av.textContent = ini; }
+    a.setAttribute('aria-label', `Open ${first}'s dashboard`);
+  });
+  $$('[data-signup]').forEach(a => { a.href = 'app.html#/check?new=1'; a.textContent = 'Check a device'; });
+}
+applySignedIn();
+const stick = $('#stick');
+new IntersectionObserver(([e]) => {
+  const show = !e.isIntersecting;
+  stick.classList.toggle('show', show);
+  stick.toggleAttribute('inert', !show);
+}, { threshold: 0 }).observe($('.hero .site-header'));
+
+/* ================= LOADER ================= */
+const loader = $('#loader');
+const MIN_VISIBLE_MS = reduce ? 200 : 1400, MAX_VISIBLE_MS = 2600, EXIT_MS = reduce ? 0 : 850;
+lock();
+animate(makeSpring($('#ld-mark'), { opacity: 0, y: 16 }), { opacity: 1, y: 0 }, { tension: 200, friction: 22 });
+requestAnimationFrame(() => requestAnimationFrame(() => $('#ld-fill').classList.add('go')));
+let started = false;
+function startCountdown() { if (started) return; started = true; setTimeout(finishLoader, MIN_VISIBLE_MS); }
+function finishLoader() {
+  ready = true;
+  gated.forEach(el => el._play());
+  restartV();
+  unlock();
+  window.scrollTo(0, 0);
+  const h = location.hash;
+  if (h === '#check') setTimeout(() => openCheck(), 400);
+  else if (h.length > 1 && $(h)) setTimeout(() => goTo(h), 500);
+  loader.style.transition = `transform ${EXIT_MS}ms var(--e-cubic)`;
+  loader.style.transform = 'translateY(-105%)';
+  setTimeout(() => loader.remove(), EXIT_MS + 30);
+}
+if (document.readyState === 'complete') startCountdown(); else addEventListener('load', startCountdown);
+setTimeout(startCountdown, MAX_VISIBLE_MS);
+</script>
+</body>
+</html>
